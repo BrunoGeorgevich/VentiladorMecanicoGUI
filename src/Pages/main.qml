@@ -7,20 +7,26 @@ import "qrc:/components/"
 ApplicationWindow {
     id: root
     visible: true
-    width: 800; height: 600
+    width: 800; height: 480
     
-    property real footerBarHeight: 100
+    property real footerBarHeight: 90
    
     ListModel {
         id: closedMenuModel
-        ListElement { type: "button"; label: "A"; actionName: "toggleMenu" }
-        ListElement { type: "item"; label: "A"; }
+        ListElement { type: "button"; label: "Menu"; actionName: "toggleMenu"; width: 120 }
+        ListElement { type: "item"; label: "Resp. Rate"; value: '12'; min: '4'; max: '60'; unit: 'b/min' }
+        ListElement { type: "item"; label: "Insp./Expir."; value: '1 : 2'; min: '1'; max: '4'; unit: 'ratio' }
+        ListElement { type: "item"; label: "Insp. Pressure"; value: '15'; min: '2'; max: '40'; unit: '[cmH<sub>2</sub>O]' }
+        ListElement { type: "status"; action: "Stopped"; mode: 'PCV' }
     }
    
     ListModel {
         id: openedMenuModel
-        ListElement { type: "button"; label: "B"; actionName: "toggleMenu" }
-        ListElement { type: "item"; label: "B"; }
+        ListElement { type: "button"; label: "Back"; actionName: "toggleMenu"; width: 120 }
+        ListElement { type: "button"; label: "Settings"; actionName: "toggleMenu" }
+        ListElement { type: "button"; label: "Special Operations"; actionName: "toggleMenu" }
+        ListElement { type: "button"; label: "Set\nPSV"; actionName: "toggleMenu" }
+        ListElement { type: "button"; label: "Start\nPCV"; actionName: "toggleMenu" }
     }
     
     Rectangle {
@@ -44,6 +50,7 @@ ApplicationWindow {
         
         RowLayout {
             anchors.fill: parent            
+            spacing: 2
             Repeater {
                 model: closedMenuModel
                 delegate: MenuItem {

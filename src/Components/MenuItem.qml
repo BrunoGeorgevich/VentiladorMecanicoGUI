@@ -2,29 +2,128 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
-Item {
+Rectangle {
+    id: rootMenuItem
     Layout.fillWidth: true
     Layout.fillHeight: true
+    Layout.maximumWidth: settings.width || -1
     
     property var settings
     property var clickAction
     
-    ToolButton {
-        anchors.fill: parent
-        visible: settings.type === 'button'
-        text: settings['label']
-        onClicked: clickAction()
-    }
-    
     Item {
-        anchors.fill: parent
-        visible: settings.type === 'item'
+        property real margin: settings.type === 'status' ? 0 : 5
+        height: parent.height - 2 * margin
+        width: parent.width - 2 * margin
+        anchors.centerIn: parent
         
-        Label {
+        // Type: button
+        Item {
+            id: statusTemplate
             anchors.fill: parent
-            horizontalAlignment: 'AlignHCenter'
-            verticalAlignment: 'AlignVCenter'
-            text: settings.label 
+            visible: settings.type === 'status'
+            
+            Rectangle {
+                anchors.fill: parent
+                color: settings.action === 'Stopped' ? '#F00' : '#0F0'
+            
+                Label {
+                    anchors.fill: parent
+                    horizontalAlignment: 'AlignHCenter'
+                    verticalAlignment: 'AlignVCenter'
+                    wrapMode: Text.Wrap
+                    color: "#FF0"
+                    font { bold: true; pointSize: 14 }
+                    text: `Status: ${settings.action} ${settings.mode}` 
+                }
+            }
+        }
+        
+        // Type: button
+        Item {
+            id: buttonTemplate
+            anchors.fill: parent
+            visible: settings.type === 'button'
+            
+            Label {
+                id: buttonLabel
+                anchors.fill: parent
+                horizontalAlignment: 'AlignHCenter'
+                verticalAlignment: 'AlignVCenter'
+                wrapMode: Text.Wrap
+                font { bold: true; pointSize: 14 }
+                text: settings.label || ''
+            }
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor        
+                onClicked: clickAction()
+            }
+        }
+            
+        // Type: item
+        Item {
+            id: itemTemplate
+            anchors.fill: parent
+            visible: settings.type === 'item'
+            
+            Column {
+                anchors.fill: parent
+                Label {
+                    id: itemLabel
+                    width: parent.width
+                    height: parent.height*0.1
+                    horizontalAlignment: 'AlignHCenter'
+                    verticalAlignment: 'AlignVCenter'
+                    font.bold: true
+                    text: settings.label || ''
+                }
+                Label {
+                    width: parent.width
+                    height: parent.height*0.6
+                    horizontalAlignment: 'AlignHCenter'
+                    verticalAlignment: 'AlignVCenter'
+                    font { pointSize:25 }
+                    text: settings.value || ''
+                }
+                
+                Item {
+                    width: parent.width
+                    height: parent.height*0.2
+                    Row {
+                        anchors.fill: parent
+                        Label {
+                            height: parent.height
+                            width: parent.width/3  
+                            verticalAlignment: 'AlignVCenter'
+                            text: settings.min || ''
+                        }
+                        Label {
+                            height: parent.height
+                            width: parent.width/3    
+                            textFormat: Text.RichText
+                            verticalAlignment: 'AlignVCenter'
+                            horizontalAlignment: 'AlignHCenter'
+                            font.bold: true
+                            text: settings.unit || ''
+                        }
+                        Label {
+                            height: parent.height
+                            width: parent.width/3  
+                            verticalAlignment: 'AlignVCenter'
+                            horizontalAlignment: 'AlignRight'
+                            text: settings.max || ''
+                        }
+                    }
+                }
+                
+                ProgressBar {
+                    value: 0.5
+                    width: parent.width
+                    height: parent.height*0.1
+                }
+            }
         }
     }
 }
