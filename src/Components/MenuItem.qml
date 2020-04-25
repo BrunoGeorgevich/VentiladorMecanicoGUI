@@ -17,7 +17,7 @@ Rectangle {
         width: parent.width - 2 * margin
         anchors.centerIn: parent
         
-        // Type: button
+        // Type: status
         Item {
             id: statusTemplate
             anchors.fill: parent
@@ -81,29 +81,29 @@ Rectangle {
                 }
                 Label {
                     width: parent.width
-                    height: parent.height*0.6
+                    height: parent.height*0.60
                     horizontalAlignment: 'AlignHCenter'
                     verticalAlignment: 'AlignVCenter'
-                    font { pointSize:25 }
+                    font { bold: true; pointSize:22 }
                     text: settings.value || ''
                 }
                 
                 Item {
                     width: parent.width
-                    height: parent.height*0.2
+                    height: parent.height*0.25
                     Row {
                         anchors.fill: parent
                         Label {
                             height: parent.height
                             width: parent.width/3  
-                            verticalAlignment: 'AlignVCenter'
+                            verticalAlignment: 'AlignTop'
                             text: settings.min || ''
                         }
                         Label {
                             height: parent.height
                             width: parent.width/3    
                             textFormat: Text.RichText
-                            verticalAlignment: 'AlignVCenter'
+                            verticalAlignment: 'AlignTop'
                             horizontalAlignment: 'AlignHCenter'
                             font.bold: true
                             text: settings.unit || ''
@@ -111,7 +111,7 @@ Rectangle {
                         Label {
                             height: parent.height
                             width: parent.width/3  
-                            verticalAlignment: 'AlignVCenter'
+                            verticalAlignment: 'AlignTop'
                             horizontalAlignment: 'AlignRight'
                             text: settings.max || ''
                         }
@@ -121,7 +121,6 @@ Rectangle {
                 ProgressBar {
                     value: 0.5
                     width: parent.width
-                    height: parent.height*0.1
                 }
             }
         }
