@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/pages/">
+        <file alias="main.qml">Pages/main.qml</file>
+    </qresource>
+    <qresource prefix="/components/">
+        <file alias="MenuItem.qml">Components/MenuItem.qml</file>
+    </qresource>
+</RCC>
