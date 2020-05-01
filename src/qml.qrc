@@ -1,8 +1,16 @@
 <RCC>
-    <qresource prefix="/pages/">
+    <qresource prefix="/pages">
         <file alias="main.qml">Pages/main.qml</file>
+        <file alias="DashboardPage.qml">Pages/DashboardPage.qml</file>
+        <file alias="ModeSettingsPage.qml">Pages/ModeSettingsPage.qml</file>
+        <file alias="PersonSettingsPage.qml">Pages/PersonSettingsPage.qml</file>
     </qresource>
-    <qresource prefix="/components/">
+    <qresource prefix="/components">
+        <file alias="Field.qml">Components/Field.qml</file>
+        <file alias="TopBar.qml">Components/TopBar.qml</file>
+        <file alias="Chooser.qml">Components/Chooser.qml</file>
         <file alias="MenuItem.qml">Components/MenuItem.qml</file>
+        <file alias="BottomBar.qml">Components/BottomBar.qml</file>
+        <file alias="TouchSpinBox.qml">Components/TouchSpinBox.qml</file>
     </qresource>
 </RCC>
