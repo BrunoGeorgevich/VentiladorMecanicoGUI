@@ -6,7 +6,7 @@ ToolBar {
 
     property alias text: topBarLabel.text
 
-    height: 60
+    height: 45
     background: Rectangle {
         color: root.accentColor
     }

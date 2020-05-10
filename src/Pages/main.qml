@@ -11,10 +11,31 @@ ApplicationWindow {
     width: 800; height: 480
 
     property string accentColor : "#19212B"
+    property string foregroundColor : "#FFFFFF"
+    
+    header: TopBar{
+        id:rootTopBar
+    }
 
     StackView {
         id:pageStack
         anchors.fill: parent
         initialItem: PersonSettingsPage {}
+        onCurrentItemChanged: {
+            switch (currentItem.objectName) {
+                case "PersonPage":
+                    rootTopBar.visible = true
+                    rootTopBar.text = "Configurações do Paciente"        
+                    break;
+                case "ModePage":
+                    rootTopBar.visible = true
+                    rootTopBar.text = "Configurações do Modo de Operação"        
+                    break;
+                default:
+                    rootTopBar.visible = false
+                    break;
+            }
+            
+        }
     }
 }

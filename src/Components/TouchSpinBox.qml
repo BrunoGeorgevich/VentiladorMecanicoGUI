@@ -28,7 +28,7 @@ RowLayout {
         onClicked: value = (value - 1 < min ? min : value - 1)
         onPressAndHold: {
             buttonPressedTimer.start()
-            buttonPressedTimer.increment = -10
+            buttonPressedTimer.increment = -5
         }
         onReleased: buttonPressedTimer.stop()
     }
@@ -55,7 +55,7 @@ RowLayout {
         onClicked: value = (value + 1 > max ? max : value + 1)
         onPressAndHold: {
             buttonPressedTimer.start()
-            buttonPressedTimer.increment = 10
+            buttonPressedTimer.increment = 5
         }
         onReleased: buttonPressedTimer.stop()
     }   

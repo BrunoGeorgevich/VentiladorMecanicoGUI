@@ -6,75 +6,94 @@ import "qrc:/components"
 import "qrc:/pages"
 
 Page {
+    objectName: "ModePage"
     id:modeSettingsPageRoot
     property var person: {}
     property var operationMode: { "mode": "", "settings": {} }
-    
-    property var models: {
-                "pcvModel": pcvModel
-            }
+    property var models: [ pcvModel ]
 
     ListModel {
         id: pcvModel
-        ListElement { elementName: "I:E"; 
+        ListElement {   elementLabel: "ie";
+                        elementName: "I:E"; 
                         elementValue: 2;  
                         elementMin: 2;  
                         elementMax: 8;  
-                        elementPreffix: '1:' }
-        ListElement { elementName: "RR";  
+                        elementPreffix: '1:' 
+                    }
+        ListElement {   elementLabel: "rr";
+                        elementName: "RR";  
                         elementValue: 12;  
                         elementMin: 5;  
                         elementMax: 20;  
-                        elementPreffix: '' }
-        ListElement { elementName: "Pressão Pico";  
+                        elementPreffix: ''
+                    }
+        ListElement {   elementLabel: "pp";
+                        elementName: "Pressão Pico";  
                         elementValue: 30;  
                         elementMin: 5;  
                         elementMax: 60;  
-                        elementPreffix: '' }
-        ListElement { elementName: "PEEP";  
+                        elementPreffix: '' 
+                    }
+        ListElement {   elementLabel: "peep";
+                        elementName: "PEEP";  
                         elementValue: 12;  
                         elementMin: 5;  
                         elementMax: 25;  
-                        elementPreffix: '' }
+                        elementPreffix: '' 
+                    }
     }
-
-    header: TopBar{
-        text: "Configurações do Modo de Operação" 
-    }
+    
     footer: BottomBar { 
         leftButtonAction: () => { 
             pageStack.pop()
         }
         rightButtonAction: () => { 
-            pageStack.push("qrc:/pages/DashboardPage.qml", { person: person })
+            pageStack.push("qrc:/pages/DashboardPage.qml", { person: person, operationMode: operationMode })
         }
     }
 
     ColumnLayout {
         anchors.fill: parent
-
+        
         Item {
+            Layout.preferredHeight: 80
             Layout.fillWidth: true
-            Layout.preferredHeight: 140
 
-            Field {
-                anchors.centerIn: parent
-                name: "Modo de Operação"
-                width: 280; height: 140
-                control: Chooser{ 
-                    options: ListModel {
-                        ListElement { elementText: "PCV"; elementValue: "pcv"; elementIsEnable: true}
-                        ListElement { elementText: "PSV"; elementValue: "psv"; elementIsEnable: false}
+            TabBar {
+                anchors.fill: parent
+
+                ListModel {
+                    id: tabsModel
+                    ListElement {
+                        elementText: "PCV";
+                        elementFullSizeText: "Pressure-Controller Ventilation";
+                        elementEnabled: true;
                     }
-                    fontSize: 18
-                    numOfItens: 2
-                    onValueChanged: {
-                        operationMode['mode'] = value 
-                        operationModeRepeater.model = models[`${operationMode.mode}Model`]
+                    ListElement {
+                        elementText: "PSV";
+                        elementFullSizeText: "Pressure Supported Ventilation";
+                        elementEnabled: false;
+                    }
+                }
+
+                onCurrentIndexChanged: {
+                    let currentElement = tabsModel.get(currentIndex)
+                    operationMode['mode'] = currentElement.elementText
+                    operationModeRepeater.model = models[currentIndex]
+                }
+                
+                Repeater {
+                    model: tabsModel
+                    delegate: Tab {
+                        text: elementText
+                        enabled: elementEnabled
+                        fullSizeText: elementFullSizeText
                     }
                 }
             }
         }
+
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -99,9 +118,9 @@ Page {
                                 scale: 0.8
                                 min: elementMin
                                 max: elementMax
-                                value: elementValue
                                 preffix: elementPreffix
-                                onValueChanged: person['height'] = value
+                                value: operationMode['settings'][elementLabel] || elementValue
+                                onValueChanged: operationMode['settings'][elementLabel] = value
                             }
                         }
                     }

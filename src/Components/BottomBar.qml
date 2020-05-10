@@ -15,6 +15,7 @@ ToolBar {
 
     RowLayout {
         anchors { fill: parent; margins: 7 }
+        implicitWidth: root.width
         RoundButton {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: parent.height
