@@ -8,7 +8,6 @@ import "qrc:/pages"
 Page {
     objectName: "ModePage"
     id:modeSettingsPageRoot
-    property var person: {}
     property var operationMode: { "mode": "", "settings": {} }
     property var models: [ pcvModel ]
 
@@ -49,7 +48,7 @@ Page {
             pageStack.pop()
         }
         rightButtonAction: () => { 
-            pageStack.push("qrc:/pages/DashboardPage.qml", { person: person, operationMode: operationMode })
+            pageStack.push("qrc:/pages/DashboardPage.qml", { operationMode: operationMode })
         }
     }
 

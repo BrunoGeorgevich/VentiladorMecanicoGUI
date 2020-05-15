@@ -7,12 +7,16 @@ import "qrc:/pages"
 
 Page {  
     objectName: "PersonPage"
-    property var person: { 'gender': -1, 'height': 160, 'name': '' }
     
     footer: BottomBar { 
         hasLeftButton: false
         rightButtonAction: () => { 
-            pageStack.push("qrc:/pages/ModeSettingsPage.qml", { person: person })
+            console.log("Person: {",
+                system.person_controller.person.height, 
+                system.person_controller.person.gender, 
+                system.person_controller.person.name, "}")
+
+            pageStack.push("qrc:/pages/ModeSettingsPage.qml")
         }
     }
 
@@ -34,8 +38,8 @@ Page {
                     font.pointSize: 18
                     maximumLength: 30
                     placeholderText: qsTr("Ex.: João") 
-                    text: person['name']
-                    onTextChanged: person['name'] = text
+                    text: system.person_controller.person.name
+                    onTextChanged: system.person_controller.person.name = text
                 }
             }
         }
@@ -45,13 +49,29 @@ Page {
             Layout.fillHeight: true
 
             Field {
+                id: heightField
                 anchors.centerIn: parent
                 name: "Altura"
                 width: 280; height: 120
                 control: TouchSpinBox{ 
-                    value: person['height']
-                    onValueChanged: person['height'] = value
+                    id: heightControl
+                    value: system.person_controller.person.height
+                    onValueChanged: system.person_controller.person.height = heightControl.value
                 }
+            }
+
+            Label {
+                anchors {
+                    right: parent.right
+                    bottom: heightField.bottom
+                    rightMargin: 60
+                    bottomMargin: 15
+                }
+
+                verticalAlignment: "AlignVCenter"
+                font.pointSize: 20
+
+                text: "4 Litros/kg"
             }
         }
 
@@ -69,8 +89,8 @@ Page {
                         ListElement { elementText: "♀"; elementValue: "female"; elementIsEnable: true}
                     }
                     numOfItens: 2
-                    value: person['gender']
-                    onValueChanged: person['gender'] = value 
+                    value: system.person_controller.person.gender
+                    onValueChanged: system.person_controller.person.gender = value
                 }
             }
         }

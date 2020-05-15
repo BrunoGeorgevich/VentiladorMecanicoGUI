@@ -6,8 +6,8 @@ import QtCharts 2.12
 import "qrc:/components"
 
 Page {
+    objectName: "DashboardPage"
     id: dashboardPageRoot
-    property var person: {}
     property var operationMode: {}
     property real sideBarWidth: 150
     property var models: {
@@ -15,9 +15,7 @@ Page {
                 "openedMenu": openedMenuModel,
             }
    
-   header: PersonDetailsTopBar {
-       person: dashboardPageRoot.person
-   }
+   header: PersonDetailsTopBar { }
 
     ListModel {
         id: closedMenuModel
@@ -31,7 +29,7 @@ Page {
     ListModel {
         id: openedMenuModel
         ListElement { type: "button"; label: "Voltar"; actionName: "closeMenu"; }
-        ListElement { type: "button"; label: "Mudar\ndo Paciente"; actionName: "openPersonSettingsPage" }
+        ListElement { type: "button"; label: "Mudar\nPaciente"; actionName: "openPersonSettingsPage" }
         ListElement { type: "button"; label: "Mudar\nModo de\nOperação"; actionName: "openOperationModePage" }
     }
    
@@ -78,6 +76,16 @@ Page {
                       max: 100 
                     }
     }
+
+    Connections {
+        target: chartUpdateTimer
+        onTriggered: {
+            console.log("CHART UPDATE TIMER TRIGGERED!")
+            chart1.addRandomPoint()
+            chart2.addRandomPoint()
+            chart3.addRandomPoint()
+        }
+    }
     
     Rectangle {
         anchors.fill: parent
@@ -97,10 +105,10 @@ Page {
                 "openMenu": () => { rightSideToolBar.currentModel = "openedMenu" },
                 "closeMenu": () => { rightSideToolBar.currentModel = "closedMenu" },
                 "openPersonSettingsPage": () => { 
-                    pageStack.push("qrc:/pages/PersonSettingsPage.qml", { person: person }) 
+                    pageStack.push("qrc:/pages/PersonSettingsPage.qml") 
                 },
                 "openOperationModePage": () => { 
-                    pageStack.push("qrc:/pages/ModeSettingsPage.qml", { person: person, operationMode: operationMode })
+                    pageStack.push("qrc:/pages/ModeSettingsPage.qml")
                 },
             }
             
@@ -155,17 +163,6 @@ Page {
                     }
                 }
             }
-        }
-    }
-
-    Timer {
-        interval: 166
-        repeat: true
-        running: true
-        onTriggered: {
-            chart1.addRandomPoint()
-            chart2.addRandomPoint()
-            chart3.addRandomPoint()
         }
     }
 }

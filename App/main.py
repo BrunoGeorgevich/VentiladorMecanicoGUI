@@ -6,6 +6,8 @@ Created on Fri Apr 17 17:29:24 2020
 @author: bruno
 """
 
+from Backend.System import System
+
 import sys
 import os
 
@@ -19,16 +21,14 @@ if __name__ == "__main__":
     app.setApplicationName("MechanicalRespiratorSoftware")
     app.setOrganizationName("UFAL")
     
-    # QResource.registerResource("main.rcc")
-    # QResource.registerResource("assets.rcc")
     QResource.registerResource("qml.rcc")
 
     engine = QQmlApplicationEngine()
 
-    # system = System(engine, app)
+    system = System()
 
     ctx = engine.rootContext()
-    # ctx.setContextProperty("system", system)
+    ctx.setContextProperty("system", system)
     
     engine.load('qrc:/pages/main.qml')
 

@@ -22,6 +22,15 @@ ApplicationWindow {
         anchors.fill: parent
         initialItem: PersonSettingsPage {}
         onCurrentItemChanged: {
+
+            if (currentItem.objectName === "DashboardPage") {
+                console.log("CHART UPDATE TIMER RESTARTED!")
+                chartUpdateTimer.restart()
+            } else {
+                console.log("CHART UPDATE TIMER STOPPED!")
+                chartUpdateTimer.stop()
+            }
+
             switch (currentItem.objectName) {
                 case "PersonPage":
                     rootTopBar.visible = true
@@ -37,5 +46,11 @@ ApplicationWindow {
             }
             
         }
+    }
+    
+    Timer {
+        id: chartUpdateTimer
+        interval: 166
+        repeat: true
     }
 }

@@ -4,8 +4,9 @@ import QtQuick.Layouts 1.12
 import QtCharts 2.12
 
 Item {
-    property real numOfPoints: 100
-    property alias color: ls.color
+    id: chartRoot
+    property real numOfPoints: 60
+    property var color: undefined
     property alias title: yAxis.titleText
     
     function addRandomPoint() {
@@ -16,6 +17,8 @@ Item {
             if (ls.currentIndex >= numOfPoints - 1) ls.currentIndex = 0
             ls.replace(ls.currentIndex, ls.at(ls.currentIndex).y , ls.currentIndex, ls.lastVal)
         }
+        ss.remove(0)
+        ss.insert(0, ls.currentIndex, ls.lastVal)
         ls.currentIndex += 1
     }
 
@@ -72,9 +75,17 @@ Item {
                 axisY: yAxis
                 width: 2
                 capStyle: "RoundCap"
+                color: chartRoot.color
 
                 onPointAdded: refreshYMax()
                 onPointReplaced: refreshYMax()
+            }
+
+            ScatterSeries {
+                id:ss
+                axisX: xAxis
+                axisY: yAxis         
+                color: chartRoot.color
             }
         }
         Label {
