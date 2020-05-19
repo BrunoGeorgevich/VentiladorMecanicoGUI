@@ -10,15 +10,21 @@ ApplicationWindow {
     visible: true
     width: 800; height: 480
 
-    property string accentColor : "#19212B"
+    property string accentColor : "#ecdeb2"
+    property string primaryColor : "#17202a"
+    property string secondaryColor: "#a30f0f"
+    property string backgroundColor : "#40464c"
     property string foregroundColor : "#FFFFFF"
     
     header: TopBar{
         id:rootTopBar
     }
 
+    footer: BottomBar {}
+
     StackView {
         id:pageStack
+
         anchors.fill: parent
         initialItem: PersonSettingsPage {}
         onCurrentItemChanged: {
@@ -34,14 +40,21 @@ ApplicationWindow {
             switch (currentItem.objectName) {
                 case "PersonPage":
                     rootTopBar.visible = true
-                    rootTopBar.text = "Configurações do Paciente"        
+                    rootTopBar.leftButtonVisible = false
+                    rootTopBar.rightButtonVisible = true
+                    rootTopBar.text = "Recepção do paciente"        
                     break;
                 case "ModePage":
                     rootTopBar.visible = true
-                    rootTopBar.text = "Configurações do Modo de Operação"        
+                    rootTopBar.leftButtonVisible = true
+                    rootTopBar.rightButtonVisible = true
+                    rootTopBar.text = "Modo de operação"        
                     break;
                 default:
-                    rootTopBar.visible = false
+                    rootTopBar.visible = true
+                    rootTopBar.leftButtonVisible = false
+                    rootTopBar.rightButtonVisible = false
+                    rootTopBar.text = system.person_controller.details()
                     break;
             }
             

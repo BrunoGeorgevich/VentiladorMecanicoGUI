@@ -17,6 +17,7 @@ Item {
             horizontalAlignment: "AlignHCenter"
 
             text: fieldRoot.name
+            color: root.secondaryColor
             font { pointSize: fontSize; bold: true }
         }
         Item {

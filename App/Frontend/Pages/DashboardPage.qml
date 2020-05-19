@@ -14,8 +14,6 @@ Page {
                 "closedMenu": closedMenuModel,
                 "openedMenu": openedMenuModel,
             }
-   
-   header: PersonDetailsTopBar { }
 
     ListModel {
         id: closedMenuModel
@@ -23,7 +21,7 @@ Page {
         ListElement { type: "item"; label: "Resp. Rate"; value: '12'; min: '4'; max: '60'; unit: 'b/min' }
         ListElement { type: "item"; label: "Insp./Expir."; value: '1 : 2'; min: '1'; max: '4'; unit: 'ratio' }
         ListElement { type: "item"; label: "Insp. Pressure"; value: '15'; min: '2'; max: '40'; unit: '[cmH<sub>2</sub>O]' }
-        ListElement { type: "status"; action: "Stopped"; mode: 'PCV' }
+        // ListElement { type: "status"; action: "Stopped"; mode: 'PCV' }
     }
 
     ListModel {
@@ -37,7 +35,6 @@ Page {
         id: indicatorsModel
         ListElement { type: "indicator"; 
                       name: "MEAS RR"; 
-                      color: "#7FFFD4";
                       unit: "bpm"; 
                       value: 56; 
                       min: 0; 
@@ -45,7 +42,6 @@ Page {
                     }
         ListElement { type: "indicator"; 
                       name: "MAX P<sub>insp</sub>"; 
-                      color: "#f08080";
                       unit: "cmH<sub>2</sub>O"; 
                       value: 101; 
                       min: 5; 
@@ -53,7 +49,6 @@ Page {
                     }
         ListElement { type: "indicator"; 
                       name: "PEEP"; 
-                      color: "#87cefa";
                       unit: "cmH<sub>2</sub>O"; 
                       value: 19; 
                       min: -30; 
@@ -61,7 +56,6 @@ Page {
                     }
         ListElement { type: "indicator"; 
                       name: "V<sub>e</sub>"; 
-                      color: "#FFFFCC";
                       unit: "slpm"; 
                       value: 30.3; 
                       min: 2; 
@@ -69,7 +63,6 @@ Page {
                     }
         ListElement { type: "indicator"; 
                       name: "FIO<sub>2</sub>"; 
-                      color: "#FFAAAA";
                       unit: "%"; 
                       value: 91; 
                       min: 21; 
@@ -94,6 +87,7 @@ Page {
     
     RowLayout {
         anchors.fill: parent
+        spacing: 1
         ToolBar {
             id: rightSideToolBar
 
@@ -125,25 +119,27 @@ Page {
                 }
             }
         }
-        Item {
+        Rectangle {
             Layout.fillHeight: true
             Layout.fillWidth: true
 
+            color: root.backgroundColor
+
             ColumnLayout {
-                anchors.fill: parent
+                anchors {
+                    fill: parent
+                    rightMargin: 3
+                }
                 LineChart {
                     id: chart1
-                    color: "#AAAA00"
                     title: "PAW<br>[cmH<sub>2</sub>O]"
                 }
                 LineChart {
                     id: chart2
-                    color: "#00AA00"
                     title: "V<sub>tidal</sub><br>[ml]"
                 }
                 LineChart {
                     id: chart3
-                    color: "#0000AA"
                     title: "Flow<br>[slpm]"
                 }
             }

@@ -8,14 +8,9 @@ import "qrc:/pages"
 Page {  
     objectName: "PersonPage"
     
-    footer: BottomBar { 
-        hasLeftButton: false
-        rightButtonAction: () => { 
-            console.log("Person: {",
-                system.person_controller.person.height, 
-                system.person_controller.person.gender, 
-                system.person_controller.person.name, "}")
-
+    Connections {
+        target: rootTopBar
+        onRightButtonClicked:  {
             pageStack.push("qrc:/pages/ModeSettingsPage.qml")
         }
     }
@@ -23,7 +18,10 @@ Page {
     Rectangle { anchors.fill: parent; color: "white" }
     
     ColumnLayout {
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            bottomMargin: 20
+        }
 
         Item {
             Layout.fillWidth: true

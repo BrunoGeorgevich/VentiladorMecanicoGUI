@@ -5,6 +5,10 @@
         <file alias="ModeSettingsPage.qml">Pages/ModeSettingsPage.qml</file>
         <file alias="PersonSettingsPage.qml">Pages/PersonSettingsPage.qml</file>
     </qresource>
+    <qresource prefix="/images">
+        <file alias="arrow_left">assets/arrow_left.png</file>
+        <file alias="arrow_right">assets/arrow_right.png</file>
+    </qresource>
     <qresource prefix="/components">
         <file alias="Tab.qml">Components/Tab.qml</file>
         <file alias="Field.qml">Components/Field.qml</file>

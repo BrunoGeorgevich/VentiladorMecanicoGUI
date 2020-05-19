@@ -14,7 +14,7 @@ Rectangle {
     Rectangle {
         property real margin: settings.type === 'status' ? 0 : 8
         anchors.fill: parent
-        color: root.accentColor
+        color: root.primaryColor
         
         Item {
             height: parent.height - 2 * parent.margin
@@ -52,7 +52,7 @@ Rectangle {
                 Label {
                     id: buttonLabel
                     anchors.fill: parent
-                    color: root.foregroundColor
+                    color: root.accentColor
                     horizontalAlignment: 'AlignHCenter'
                     verticalAlignment: 'AlignVCenter'
                     wrapMode: Text.Wrap
@@ -88,10 +88,10 @@ Rectangle {
                     Label {
                         width: parent.width
                         height: parent.height*0.60
-                        color: root.foregroundColor
+                        color: root.accentColor
                         horizontalAlignment: 'AlignHCenter'
                         verticalAlignment: 'AlignVCenter'
-                        font { bold: true; pointSize:22 }
+                        font { bold: true; pointSize:18 }
                         text: settings.value || ''
                     }
                     
@@ -185,7 +185,7 @@ Rectangle {
 
                                 text: `${settings.value}` || ''
                                 font { pointSize: 22; bold: true }
-                                color: settings.color || root.foregroundColor
+                                color: root.accentColor
                                 verticalAlignment: "AlignVCenter"
                                 horizontalAlignment: "AlignHCenter"
                             }

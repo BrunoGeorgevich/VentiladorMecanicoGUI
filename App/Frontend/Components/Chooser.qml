@@ -8,7 +8,7 @@ Item {
     property var options: ListModel {}
     property real buttonRadius: 70
     property real numOfItens: -1
-    property real fontSize: 25
+    property real fontSize: 30
     property var value: -1
 
     width: numOfItens*(buttonRadius + spacing) - spacing; height: buttonRadius
@@ -26,13 +26,18 @@ Item {
 
                 checked: value == elementValue
                 enabled: elementIsEnable
+        
+                background: Rectangle {
+                    radius: parent.height/2
+                    color: parent.checked ? root.accentColor : root.backgroundColor
+                }
 
                 contentItem: Label {
                     anchors.fill: parent
                     horizontalAlignment: "AlignHCenter"
                     verticalAlignment: "AlignVCenter"
-                    font.pointSize: fontSize
-                    color: parent.checked ? "white" : root.accentColor
+                    font { pointSize: fontSize; bold: true }
+                    color: parent.checked ? root.backgroundColor : root.accentColor
                     text: elementText
                 }
 

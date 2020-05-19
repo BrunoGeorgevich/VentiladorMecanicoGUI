@@ -29,4 +29,4 @@ class PersonController(QObject):
 		name = "Paciente" if self._person.name == "" else self._person.name
 		gender = self.parse_gender()
 		height = self._person.height
-		return f"{name} ({gender}) [{height} cm]"
+		return f"{name}, {gender}, {height} cm"

@@ -6,8 +6,7 @@ import QtCharts 2.12
 Item {
     id: chartRoot
     property real numOfPoints: 60
-    property var color: undefined
-    property alias title: yAxis.titleText
+    property alias title: chartTitle.text
     
     function addRandomPoint() {
         ls.lastVal = Math.random()*100
@@ -27,10 +26,29 @@ Item {
 
     RowLayout {
         anchors.fill: parent
+
+        Item {
+            Layout.fillHeight: true
+            Layout.preferredWidth: 60
+            Label {
+                id:chartTitle
+                anchors.fill: parent
+                text: `${ls.lastVal.toFixed(0)}` || ''
+                font { pointSize: 15; bold: true }
+                fontSizeMode: "Fit"
+                color: root.accentColor
+                verticalAlignment: "AlignVCenter"
+                horizontalAlignment: "AlignHCenter"
+                transform: Rotation { origin.x: chartTitle.width/2; origin.y: chartTitle.height/2; angle: -90}
+            }
+        }
+
         ChartView {            
             Layout.fillHeight: true
             Layout.fillWidth: true
             
+            backgroundColor: "transparent"
+
             antialiasing: true
             legend.visible: false
             margins { 
@@ -51,7 +69,8 @@ Item {
             ValueAxis {
                 id: yAxis
                 max: ls.yMax
-                titleFont.pointSize: 11
+                labelsFont.pointSize: 6
+                labelsColor: root.accentColor
             }
 
             LineSeries {
@@ -75,7 +94,7 @@ Item {
                 axisY: yAxis
                 width: 2
                 capStyle: "RoundCap"
-                color: chartRoot.color
+                color: root.foregroundColor
 
                 onPointAdded: refreshYMax()
                 onPointReplaced: refreshYMax()
@@ -85,7 +104,7 @@ Item {
                 id:ss
                 axisX: xAxis
                 axisY: yAxis         
-                color: chartRoot.color
+                color: root.accentColor
             }
         }
         Label {
@@ -95,7 +114,7 @@ Item {
             text: `${ls.lastVal.toFixed(0)}` || ''
             font { pointSize: 35; bold: true }
             fontSizeMode: "Fit"
-            color: ls.color || root.accentColor
+            color: ls.color || root.primaryColor
             verticalAlignment: "AlignVCenter"
             horizontalAlignment: "AlignHCenter"
         }

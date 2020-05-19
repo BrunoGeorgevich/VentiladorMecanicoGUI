@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 RowLayout {
     id:touchSpinBoxRoot
 
-    property real fontSize: 20
+    property real fontSize: 30
     property string preffix: ''
     property real scale: 1 
     property real value: 160
@@ -19,10 +19,16 @@ RowLayout {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.height
         
+        background: Rectangle {
+            radius: parent.height/2
+            color: parent.pressed ? Qt.lighter(root.backgroundColor, 2) : root.backgroundColor
+        }
+
         contentItem: Label { 
             horizontalAlignment: "AlignHCenter"
             verticalAlignment: "AlignVCenter"
-            font.pointSize: 20
+            font { pointSize: fontSize; bold: true }
+            color: parent.pressed ? Qt.lighter(root.accentColor, 2) : root.accentColor
             text: "-"
         }
         onClicked: value = (value - 1 < min ? min : value - 1)
@@ -40,16 +46,23 @@ RowLayout {
         verticalAlignment: "AlignVCenter"
         
         text: `${preffix}${touchSpinBoxRoot.value}`
-        font.pointSize: 20
+        color: Qt.darker(root.secondaryColor)
+        font.pointSize: fontSize * 0.75
     }
     RoundButton {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.height
+        
+        background: Rectangle {
+            radius: parent.height/2
+            color: parent.pressed ? Qt.lighter(root.backgroundColor, 2) : root.backgroundColor
+        }
 
         contentItem: Label { 
             horizontalAlignment: "AlignHCenter"
             verticalAlignment: "AlignVCenter"
-            font.pointSize: 20
+            font { pointSize: fontSize; bold: true }
+            color: parent.pressed ? Qt.lighter(root.accentColor, 2) : root.accentColor
             text: "+"
         }
         onClicked: value = (value + 1 > max ? max : value + 1)

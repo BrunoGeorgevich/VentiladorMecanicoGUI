@@ -10,7 +10,7 @@ TabButton {
 
     background: Rectangle {
         anchors.fill: parent
-        color: tabButton.checked ? root.foregroundColor : root.accentColor
+        color: tabButton.checked ? root.foregroudColor : root.backgroundColor
 
         Rectangle {
             anchors {
@@ -22,7 +22,7 @@ TabButton {
             width: 20; height: width
             radius: width/2
             
-            color: root.accentColor
+            color: root.backgroundColor
         }
     }
 
@@ -33,7 +33,7 @@ TabButton {
             Layout.fillHeight: true
             horizontalAlignment: "AlignHCenter"
             verticalAlignment: "AlignVCenter"
-            color: tabButton.checked ? root.accentColor : root.foregroundColor
+            color: tabButton.checked ? root.backgroundColor : root.accentColor
             font { bold: true; pointSize: 20 }
             text: tabButton.text
         }
@@ -41,7 +41,7 @@ TabButton {
             Layout.fillWidth: true
             Layout.preferredHeight: 30
             horizontalAlignment: "AlignHCenter"
-            color: tabButton.checked ? root.accentColor : root.foregroundColor
+            color: tabButton.checked ? root.backgroundColor : root.accentColor
             font.pointSize: 12
             text: tabButton.fullSizeText
         }

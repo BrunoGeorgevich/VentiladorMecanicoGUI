@@ -10,6 +10,16 @@ Page {
     id:modeSettingsPageRoot
     property var operationMode: { "mode": "", "settings": {} }
     property var models: [ pcvModel ]
+    
+    Connections {
+        target: rootTopBar
+        onRightButtonClicked:  {
+            pageStack.push("qrc:/pages/DashboardPage.qml", { operationMode: operationMode })
+        }
+        onLeftButtonClicked:  {
+            pageStack.pop()
+        }
+    }
 
     ListModel {
         id: pcvModel
@@ -41,15 +51,6 @@ Page {
                         elementMax: 25;  
                         elementPreffix: '' 
                     }
-    }
-    
-    footer: BottomBar { 
-        leftButtonAction: () => { 
-            pageStack.pop()
-        }
-        rightButtonAction: () => { 
-            pageStack.push("qrc:/pages/DashboardPage.qml", { operationMode: operationMode })
-        }
     }
 
     ColumnLayout {

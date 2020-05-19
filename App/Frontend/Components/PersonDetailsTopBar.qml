@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 ToolBar {
     height: 45
     background: Rectangle {
-        color: root.accentColor
+        color: root.primaryColor
     }
     RowLayout {
         anchors { fill: parent; margins: 10 }
