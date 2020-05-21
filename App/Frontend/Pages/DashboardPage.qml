@@ -8,7 +8,6 @@ import "qrc:/components"
 Page {
     objectName: "DashboardPage"
     id: dashboardPageRoot
-    property var operationMode: {}
     property real sideBarWidth: 150
     property var models: {
                 "closedMenu": closedMenuModel,

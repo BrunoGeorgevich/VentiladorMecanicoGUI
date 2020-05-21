@@ -8,13 +8,13 @@ import "qrc:/pages"
 Page {
     objectName: "ModePage"
     id:modeSettingsPageRoot
-    property var operationMode: { "mode": "", "settings": {} }
+
     property var models: [ pcvModel ]
     
     Connections {
         target: rootTopBar
         onRightButtonClicked:  {
-            pageStack.push("qrc:/pages/DashboardPage.qml", { operationMode: operationMode })
+            pageStack.push("qrc:/pages/DashboardPage.qml")
         }
         onLeftButtonClicked:  {
             pageStack.pop()
@@ -79,7 +79,7 @@ Page {
 
                 onCurrentIndexChanged: {
                     let currentElement = tabsModel.get(currentIndex)
-                    operationMode['mode'] = currentElement.elementText
+                    system.operation_mode_controller.set_mode(currentElement.elementText)
                     operationModeRepeater.model = models[currentIndex]
                 }
                 
@@ -119,8 +119,8 @@ Page {
                                 min: elementMin
                                 max: elementMax
                                 preffix: elementPreffix
-                                value: operationMode['settings'][elementLabel] || elementValue
-                                onValueChanged: operationMode['settings'][elementLabel] = value
+                                value: system.operation_mode_controller.operation_mode.parameters[elementLabel] || elementValue
+                                onValueChanged: system.operation_mode_controller.add_parameter(elementLabel, value)
                             }
                         }
                     }
