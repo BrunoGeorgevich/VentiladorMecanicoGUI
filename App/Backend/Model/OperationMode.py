@@ -17,3 +17,6 @@ class OperationMode(QObject):
     parameters_has_changed = Signal('QVariant')
     @Property('QVariant', notify=parameters_has_changed)
     def parameters(self): return self._parameters
+
+    def init_parameters(self):
+        self._parameters = {}

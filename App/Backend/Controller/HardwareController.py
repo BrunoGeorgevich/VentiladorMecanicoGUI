@@ -6,3 +6,6 @@ from PySide2.QtCore import QObject, Slot, Property, Signal
 class HardwareController(QObject):
 	def __init__(self):
 		super().__init__()
+
+	def connect(self):
+		pass

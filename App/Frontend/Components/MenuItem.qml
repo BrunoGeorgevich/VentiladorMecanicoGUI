@@ -10,6 +10,28 @@ Rectangle {
     
     property var settings
     property var clickAction
+
+    function toPercent() {
+        let name = settings.parameterName
+        if (name === undefined) return undefined
+        let value = system.operation_mode_controller.operation_mode.parameters[name]
+        if (value === undefined) return undefined
+
+        let min = settings.min
+        let max = settings.max
+
+        return (value - min) / (max - min)
+    }
+
+    function valueToText() {
+        let name = settings.parameterName
+        if (name === undefined) return undefined
+        let prefix = settings.parameterPrefix || ''
+
+        let value = system.operation_mode_controller.operation_mode.parameters[name]
+        value = value || ''
+        return `${prefix}${value}`
+    }
     
     Rectangle {
         property real margin: settings.type === 'status' ? 0 : 8
@@ -92,7 +114,7 @@ Rectangle {
                         horizontalAlignment: 'AlignHCenter'
                         verticalAlignment: 'AlignVCenter'
                         font { bold: true; pointSize:18 }
-                        text: settings.value || ''
+                        text: valueToText() || ''
                     }
                     
                     Item {
@@ -128,8 +150,8 @@ Rectangle {
                         }
                     }
                     
-                    ProgressBar {
-                        value: 0.5
+                    ProgressBar {   
+                        value: toPercent() || ''
                         width: parent.width
                     }
                 }

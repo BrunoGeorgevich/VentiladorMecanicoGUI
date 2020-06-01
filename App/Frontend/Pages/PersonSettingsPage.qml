@@ -11,7 +11,7 @@ Page {
     Connections {
         target: rootTopBar
         onRightButtonClicked:  {
-            pageStack.push("qrc:/pages/ModeSettingsPage.qml")
+            pageStack.replace("qrc:/pages/ModeSettingsPage.qml")
         }
     }
 
@@ -53,7 +53,9 @@ Page {
                 width: 280; height: 120
                 control: TouchSpinBox{ 
                     id: heightControl
-                    value: system.person_controller.person.height
+                    Component.onCompleted: {
+                        value = system.person_controller.person.height
+                    }
                     onValueChanged: system.person_controller.person.height = heightControl.value
                 }
             }
@@ -87,7 +89,9 @@ Page {
                         ListElement { elementText: "♀"; elementValue: "female"; elementIsEnable: true}
                     }
                     numOfItens: 2
-                    value: system.person_controller.person.gender
+                    Component.onCompleted: {
+                        value = system.person_controller.person.gender
+                    }
                     onValueChanged: system.person_controller.person.gender = value
                 }
             }

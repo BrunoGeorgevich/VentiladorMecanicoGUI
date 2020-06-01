@@ -14,10 +14,10 @@ Page {
     Connections {
         target: rootTopBar
         onRightButtonClicked:  {
-            pageStack.push("qrc:/pages/DashboardPage.qml")
+            pageStack.replace("qrc:/pages/DashboardPage.qml")
         }
         onLeftButtonClicked:  {
-            pageStack.pop()
+            pageStack.replace("qrc:/pages/PersonPage.qml")
         }
     }
 
@@ -119,8 +119,12 @@ Page {
                                 min: elementMin
                                 max: elementMax
                                 preffix: elementPreffix
-                                value: system.operation_mode_controller.operation_mode.parameters[elementLabel] || elementValue
-                                onValueChanged: system.operation_mode_controller.add_parameter(elementLabel, value)
+                                Component.onCompleted: {
+                                    value = system.operation_mode_controller.operation_mode.parameters[elementLabel] || elementValue
+                                }
+                                onValueChanged: {
+                                    system.operation_mode_controller.add_parameter(elementLabel, value)
+                                }
                             }
                         }
                     }

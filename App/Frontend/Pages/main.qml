@@ -28,13 +28,16 @@ ApplicationWindow {
         anchors.fill: parent
         initialItem: PersonSettingsPage {}
         onCurrentItemChanged: {
-
             if (currentItem.objectName === "DashboardPage") {
-                console.log("CHART UPDATE TIMER RESTARTED!")
-                chartUpdateTimer.restart()
+                if (!chartUpdateTimer.running) {
+                    console.log("CHART UPDATE TIMER RESTARTED!")
+                    chartUpdateTimer.restart()
+                }
             } else {
-                console.log("CHART UPDATE TIMER STOPPED!")
-                chartUpdateTimer.stop()
+                if (chartUpdateTimer.running) {
+                    console.log("CHART UPDATE TIMER STOPPED!")
+                    chartUpdateTimer.stop()
+                }
             }
 
             switch (currentItem.objectName) {
@@ -50,7 +53,7 @@ ApplicationWindow {
                     rootTopBar.rightButtonVisible = true
                     rootTopBar.text = "Modo de operação"        
                     break;
-                default:
+                case "DashboardPage":
                     rootTopBar.visible = true
                     rootTopBar.leftButtonVisible = false
                     rootTopBar.rightButtonVisible = false

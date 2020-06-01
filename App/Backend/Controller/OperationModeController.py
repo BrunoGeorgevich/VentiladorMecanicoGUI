@@ -17,8 +17,9 @@ class OperationModeController(QObject):
 	
 	@Slot(str)
 	def set_mode(self, mode):
-		self._operation_mode.mode = mode
-		self._operation_mode.parameters = {}
+		if self._operation_mode.mode != mode:
+			self._operation_mode.mode = mode
+			self._operation_mode.init_parameters()
 
 	@Slot(str, float)
 	def add_parameter(self, name, value):

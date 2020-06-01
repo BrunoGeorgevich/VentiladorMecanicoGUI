@@ -10,7 +10,7 @@ TabButton {
 
     background: Rectangle {
         anchors.fill: parent
-        color: tabButton.checked ? root.foregroudColor : root.backgroundColor
+        color: tabButton.checked ? root.foregroundColor : root.backgroundColor
 
         Rectangle {
             anchors {

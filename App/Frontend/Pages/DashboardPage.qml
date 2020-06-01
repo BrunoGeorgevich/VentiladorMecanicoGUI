@@ -17,9 +17,31 @@ Page {
     ListModel {
         id: closedMenuModel
         ListElement { type: "button"; label: "Menu"; actionName: "openMenu"; }
-        ListElement { type: "item"; label: "Resp. Rate"; value: '12'; min: '4'; max: '60'; unit: 'b/min' }
-        ListElement { type: "item"; label: "Insp./Expir."; value: '1 : 2'; min: '1'; max: '4'; unit: 'ratio' }
-        ListElement { type: "item"; label: "Insp. Pressure"; value: '15'; min: '2'; max: '40'; unit: '[cmH<sub>2</sub>O]' }
+        ListElement { 
+            type: "item"; 
+            label: "Resp. Rate"; 
+            parameterName: "rr";
+            min: '4'; 
+            max: '60'; 
+            unit: 'b/min' 
+        }
+        ListElement { 
+            type: "item"; 
+            label: "Insp./Expir."; 
+            parameterPrefix: "1 : ";
+            parameterName: "ie";
+            min: '1'; 
+            max: '4'; 
+            unit: 'ratio' 
+        }
+        ListElement { 
+            type: "item"; 
+            label: "Insp. Pressure"; 
+            parameterName: "pp";
+            min: '2'; 
+            max: '40'; 
+            unit: '[cmH<sub>2</sub>O]' 
+        }
         // ListElement { type: "status"; action: "Stopped"; mode: 'PCV' }
     }
 
@@ -72,7 +94,6 @@ Page {
     Connections {
         target: chartUpdateTimer
         onTriggered: {
-            console.log("CHART UPDATE TIMER TRIGGERED!")
             chart1.addRandomPoint()
             chart2.addRandomPoint()
             chart3.addRandomPoint()
@@ -98,10 +119,10 @@ Page {
                 "openMenu": () => { rightSideToolBar.currentModel = "openedMenu" },
                 "closeMenu": () => { rightSideToolBar.currentModel = "closedMenu" },
                 "openPersonSettingsPage": () => { 
-                    pageStack.push("qrc:/pages/PersonSettingsPage.qml") 
+                    pageStack.replace("qrc:/pages/PersonSettingsPage.qml") 
                 },
                 "openOperationModePage": () => { 
-                    pageStack.push("qrc:/pages/ModeSettingsPage.qml")
+                    pageStack.replace("qrc:/pages/ModeSettingsPage.qml")
                 },
             }
             
