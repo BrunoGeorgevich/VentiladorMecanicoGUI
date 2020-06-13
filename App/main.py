@@ -22,7 +22,6 @@ if __name__ == "__main__":
     app.setOrganizationName("UFAL")
     
     QResource.registerResource("qml.rcc")
-
     engine = QQmlApplicationEngine()
 
     system = System()

@@ -13,7 +13,17 @@ Page {
                 "closedMenu": closedMenuModel,
                 "openedMenu": openedMenuModel,
             }
-
+    Component.onCompleted: {
+        system.dashboard_controller.data_complete.connect(dashboardPageRoot.dataArrived)
+    }
+    
+    signal dataArrived(var data)
+    onDataArrived: {
+        pawChart.addPoint(data['paw'])
+        vtidalChart.addPoint(data['vtidal'])
+        flowChart.addPoint(data['flow'])
+    }
+    
     ListModel {
         id: closedMenuModel
         ListElement { type: "button"; label: "Menu"; actionName: "openMenu"; }
@@ -90,15 +100,6 @@ Page {
                       max: 100 
                     }
     }
-
-    Connections {
-        target: chartUpdateTimer
-        onTriggered: {
-            chart1.addRandomPoint()
-            chart2.addRandomPoint()
-            chart3.addRandomPoint()
-        }
-    }
     
     Rectangle {
         anchors.fill: parent
@@ -151,15 +152,15 @@ Page {
                     rightMargin: 3
                 }
                 LineChart {
-                    id: chart1
+                    id: pawChart
                     title: "PAW<br>[cmH<sub>2</sub>O]"
                 }
                 LineChart {
-                    id: chart2
+                    id: vtidalChart
                     title: "V<sub>tidal</sub><br>[ml]"
                 }
                 LineChart {
-                    id: chart3
+                    id: flowChart
                     title: "Flow<br>[slpm]"
                 }
             }

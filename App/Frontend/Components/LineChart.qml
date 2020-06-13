@@ -8,8 +8,8 @@ Item {
     property real numOfPoints: 60
     property alias title: chartTitle.text
     
-    function addRandomPoint() {
-        ls.lastVal = Math.random()*100
+    function addPoint(value) {
+        ls.lastVal = value
         if (ls.count < numOfPoints) {
             ls.append(ls.count, ls.lastVal)
         } else {
