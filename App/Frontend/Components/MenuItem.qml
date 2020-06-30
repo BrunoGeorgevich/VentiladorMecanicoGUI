@@ -32,6 +32,19 @@ Rectangle {
         value = value || ''
         return `${prefix}${value}`
     }
+
+    function unitParse() {
+        if (settings.twoUnits) {
+            let value = system.operation_mode_controller.operation_mode.parameters[settings.unitSelector]
+            if (value === settings.unitConditional) {
+                return settings.unit || ''
+            } else {
+                return settings.secondaryUnit || ''
+            }
+        } else {
+                return settings.unit || ''
+        }
+    }
     
     Rectangle {
         property real margin: settings.type === 'status' ? 0 : 8
@@ -137,7 +150,7 @@ Rectangle {
                                 verticalAlignment: 'AlignTop'
                                 horizontalAlignment: 'AlignHCenter'
                                 font.bold: true
-                                text: settings.unit || ''
+                                text: unitParse()
                             }
                             Label {
                                 height: parent.height

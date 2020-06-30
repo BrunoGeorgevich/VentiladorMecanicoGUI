@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import Qt.labs.qmlmodels 1.0
 
 import "qrc:/components"
 import "qrc:/pages"
@@ -10,6 +11,7 @@ Page {
     id:modeSettingsPageRoot
 
     property var models: [ pcvModel ]
+    property var controlsModels: { "sensibilityModel": sensibilityModel }
     
     Connections {
         target: rootTopBar
@@ -17,13 +19,20 @@ Page {
             pageStack.replace("qrc:/pages/DashboardPage.qml")
         }
         onLeftButtonClicked:  {
-            pageStack.replace("qrc:/pages/PersonPage.qml")
+            pageStack.replace("qrc:/pages/PersonSettingsPage.qml")
         }
+    }
+
+    ListModel {
+        id: sensibilityModel
+        ListElement { elementText: "Pressão"; elementValue: "pressure"; elementIsEnable: true }
+        ListElement { elementText: "Fluxo"; elementValue: "flow"; elementIsEnable: true  }
     }
 
     ListModel {
         id: pcvModel
         ListElement {   elementLabel: "ie";
+                        elementType: "TouchSpinBox";
                         elementName: "I:E"; 
                         elementValue: 2;  
                         elementMin: 2;  
@@ -31,6 +40,7 @@ Page {
                         elementPreffix: '1:' 
                     }
         ListElement {   elementLabel: "rr";
+                        elementType: "TouchSpinBox";
                         elementName: "RR";  
                         elementValue: 12;  
                         elementMin: 5;  
@@ -38,6 +48,7 @@ Page {
                         elementPreffix: ''
                     }
         ListElement {   elementLabel: "pp";
+                        elementType: "TouchSpinBox";
                         elementName: "Pressão Pico";  
                         elementValue: 30;  
                         elementMin: 5;  
@@ -45,7 +56,22 @@ Page {
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "peep";
+                        elementType: "TouchSpinBox";
                         elementName: "PEEP";  
+                        elementValue: 12;  
+                        elementMin: 5;  
+                        elementMax: 25;  
+                        elementPreffix: '' 
+                    }
+        ListElement {   elementLabel: "sensibilityType";
+                        elementType: "Buttons";
+                        elementChecked: "pressure";  
+                        elementName: "Tipo de Sensibilidade";
+                        elementChildrenModel: "sensibilityModel" 
+                    }
+        ListElement {   elementLabel: "sensibilityValue";
+                        elementType: "TouchSpinBox";
+                        elementName: "Sensiblidade";  
                         elementValue: 12;  
                         elementMin: 5;  
                         elementMax: 25;  
@@ -105,27 +131,58 @@ Page {
 
                 Repeater {
                     id: operationModeRepeater
-                    delegate: Item {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
+                    delegate: DelegateChooser {
+                        role: "elementType"
+                        DelegateChoice { roleValue: "TouchSpinBox"; 
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
 
-                        Field {
-                            anchors.centerIn: parent
-                            name: elementName
-                            fontSize: 15
-                            width: 280; height: 100
-                            control: TouchSpinBox{ 
-                                scale: 0.8
-                                min: elementMin
-                                max: elementMax
-                                preffix: elementPreffix
-                                Component.onCompleted: {
-                                    value = system.operation_mode_controller.operation_mode.parameters[elementLabel] || elementValue
-                                }
-                                onValueChanged: {
-                                    system.operation_mode_controller.add_parameter(elementLabel, value)
+                                Field {
+                                    anchors.centerIn: parent
+                                    name: elementName
+                                    fontSize: 12
+                                    width: 280; height: 70
+                                    control: TouchSpinBox{ 
+                                        scale: 0.65
+                                        min: elementMin
+                                        max: elementMax
+                                        preffix: elementPreffix
+                                        Component.onCompleted: {
+                                            value = system.operation_mode_controller.operation_mode.parameters[elementLabel] || elementValue
+                                        }
+                                        onValueChanged: {
+                                            system.operation_mode_controller.add_parameter(elementLabel, value)
+                                        }
+                                    }
                                 }
                             }
+                        }
+                        DelegateChoice { roleValue: "Buttons"; 
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                
+
+                                Field {
+                                    anchors.centerIn: parent
+                                    name: elementName
+                                    fontSize: 12
+                                    width: 280; height: 70
+                                    control: Chooser{ 
+                                        options: controlsModels[elementChildrenModel]
+                                        numOfItens: 2
+                                        fontSize: 9
+                                        buttonRadius: 50
+                                        Component.onCompleted: {
+                                            value = system.operation_mode_controller.operation_mode.parameters[elementLabel] || elementChecked
+                                        }
+                                        onValueChanged: {
+                                            system.operation_mode_controller.add_parameter(elementLabel, value)
+                                        }
+                                    }
+                                }
+                            } 
                         }
                     }
                 }

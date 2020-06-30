@@ -10,6 +10,7 @@ Item {
     property real numOfItens: -1
     property real fontSize: 30
     property var value: -1
+    property bool rounded: true
 
     width: numOfItens*(buttonRadius + spacing) - spacing; height: buttonRadius
 
@@ -28,7 +29,7 @@ Item {
                 enabled: elementIsEnable
         
                 background: Rectangle {
-                    radius: parent.height/2
+                    radius: rounded ? parent.height/2 : 0
                     color: parent.checked ? root.accentColor : root.backgroundColor
                 }
 

@@ -14,6 +14,8 @@ Page {
                 "openedMenu": openedMenuModel,
             }
     Component.onCompleted: {
+        console.log(Object.keys(system.operation_mode_controller.operation_mode.parameters))
+        console.log(Object.values(system.operation_mode_controller.operation_mode.parameters))
         system.dashboard_controller.data_complete.connect(dashboardPageRoot.dataArrived)
     }
     
@@ -33,6 +35,7 @@ Page {
             parameterName: "rr";
             min: '4'; 
             max: '60'; 
+            twoUnits: false;
             unit: 'b/min' 
         }
         ListElement { 
@@ -42,6 +45,7 @@ Page {
             parameterName: "ie";
             min: '1'; 
             max: '4'; 
+            twoUnits: false;
             unit: 'ratio' 
         }
         ListElement { 
@@ -50,7 +54,20 @@ Page {
             parameterName: "pp";
             min: '2'; 
             max: '40'; 
+            twoUnits: false;
             unit: '[cmH<sub>2</sub>O]' 
+        }
+        ListElement { 
+            type: "item"; 
+            label: "Sensibilidade"; 
+            parameterName: "sensibilityValue";
+            min: '2'; 
+            max: '100'; 
+            twoUnits: true;
+            unitSelector: 'sensibilityType'; 
+            unitConditional: 'pressure'; 
+            unit: '[cmH<sub>2</sub>O]' ;
+            secondaryUnit: 'L/min' 
         }
         // ListElement { type: "status"; action: "Stopped"; mode: 'PCV' }
     }
@@ -60,6 +77,7 @@ Page {
         ListElement { type: "button"; label: "Voltar"; actionName: "closeMenu"; }
         ListElement { type: "button"; label: "Mudar\nPaciente"; actionName: "openPersonSettingsPage" }
         ListElement { type: "button"; label: "Mudar\nModo de\nOperação"; actionName: "openOperationModePage" }
+        ListElement { type: "button"; label: "Bloquear 🔒"; actionName: "lockScreen" }
     }
    
     ListModel {

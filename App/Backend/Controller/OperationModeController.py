@@ -21,6 +21,6 @@ class OperationModeController(QObject):
 			self._operation_mode.mode = mode
 			self._operation_mode.init_parameters()
 
-	@Slot(str, float)
+	@Slot(str, "QVariant")
 	def add_parameter(self, name, value):
 		self._operation_mode.parameters[name] = value

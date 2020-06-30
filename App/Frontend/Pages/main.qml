@@ -26,6 +26,7 @@ ApplicationWindow {
         id:pageStack
 
         anchors.fill: parent
+        smooth: false
         initialItem: PersonSettingsPage {}
         onCurrentItemChanged: {
             if (currentItem.objectName === "DashboardPage") {
@@ -45,22 +46,34 @@ ApplicationWindow {
                     rootTopBar.visible = true
                     rootTopBar.leftButtonVisible = false
                     rootTopBar.rightButtonVisible = true
+                    rootTopBar.batteryIndicatorVisible = false
+                    rootTopBar.startVentilationButtonVisible = false
                     rootTopBar.text = "Recepção do paciente"        
                     break;
                 case "ModePage":
                     rootTopBar.visible = true
                     rootTopBar.leftButtonVisible = true
                     rootTopBar.rightButtonVisible = true
+                    rootTopBar.batteryIndicatorVisible = false
+                    rootTopBar.startVentilationButtonVisible = false
                     rootTopBar.text = "Modo de operação"        
                     break;
                 case "DashboardPage":
                     rootTopBar.visible = true
                     rootTopBar.leftButtonVisible = false
                     rootTopBar.rightButtonVisible = false
+                    rootTopBar.batteryIndicatorVisible = true
+                    rootTopBar.startVentilationButtonVisible = true
                     rootTopBar.text = system.person_controller.details()
                     break;
             }
             
+        }
+        
+        replaceEnter : Transition {
+            id: replaceEnterAnimation 
+            PropertyAction { property: "x"; value: replaceEnterAnimation.ViewTransition.item.pos }
+            PropertyAction { property: "y"; value: replaceEnterAnimation.ViewTransition.item.pos }
         }
     }
     
