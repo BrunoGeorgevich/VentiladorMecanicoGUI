@@ -18,6 +18,18 @@ ApplicationWindow {
     
     header: TopBar{
         id:rootTopBar
+
+        function coloredNotify(msg, color) {
+            notificationSystem.coloredNotify(msg, color);
+        }
+
+        NotificationSystem {
+            id:notificationSystem
+            isOnTheTop: true
+            centralized: true
+            defaultH: 60
+            defaultW: 300
+        }
     }
 
     footer: BottomBar {}
@@ -47,7 +59,7 @@ ApplicationWindow {
                     rootTopBar.leftButtonVisible = false
                     rootTopBar.rightButtonVisible = true
                     rootTopBar.batteryIndicatorVisible = false
-                    rootTopBar.startVentilationButtonVisible = false
+                    rootTopBar.lockButtonIsVisible = false
                     rootTopBar.text = "Recepção do paciente"        
                     break;
                 case "ModePage":
@@ -55,7 +67,7 @@ ApplicationWindow {
                     rootTopBar.leftButtonVisible = true
                     rootTopBar.rightButtonVisible = true
                     rootTopBar.batteryIndicatorVisible = false
-                    rootTopBar.startVentilationButtonVisible = false
+                    rootTopBar.lockButtonIsVisible = false
                     rootTopBar.text = "Modo de operação"        
                     break;
                 case "DashboardPage":
@@ -63,7 +75,7 @@ ApplicationWindow {
                     rootTopBar.leftButtonVisible = false
                     rootTopBar.rightButtonVisible = false
                     rootTopBar.batteryIndicatorVisible = true
-                    rootTopBar.startVentilationButtonVisible = true
+                    rootTopBar.lockButtonIsVisible = true
                     rootTopBar.text = system.person_controller.details()
                     break;
             }

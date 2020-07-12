@@ -6,7 +6,7 @@ Item {
     id: choooserRoot
     property alias spacing: rowLayoutChooser.spacing
     property var options: ListModel {}
-    property real buttonRadius: 70
+    property real buttonRadius: 75
     property real numOfItens: -1
     property real fontSize: 30
     property var value: -1
@@ -17,13 +17,13 @@ Item {
     RowLayout {
         id: rowLayoutChooser
         anchors.fill: parent
-        spacing: 10
+        spacing: 15
 
         Repeater {
             model: options
             delegate: RoundButton {
-                Layout.preferredHeight: parent.height
-                Layout.preferredWidth: parent.height
+                Layout.preferredHeight: buttonRadius
+                Layout.preferredWidth: buttonRadius
 
                 checked: value == elementValue
                 enabled: elementIsEnable
@@ -38,6 +38,7 @@ Item {
                     horizontalAlignment: "AlignHCenter"
                     verticalAlignment: "AlignVCenter"
                     font { pointSize: fontSize; bold: true }
+                    fontSizeMode: "Fit"
                     color: parent.checked ? root.backgroundColor : root.accentColor
                     text: elementText
                 }

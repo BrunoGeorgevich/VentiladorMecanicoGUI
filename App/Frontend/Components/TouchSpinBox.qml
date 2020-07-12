@@ -28,6 +28,7 @@ RowLayout {
             horizontalAlignment: "AlignHCenter"
             verticalAlignment: "AlignVCenter"
             font { pointSize: fontSize; bold: true }
+            fontSizeMode: "Fit"
             color: parent.pressed ? Qt.lighter(root.accentColor, 2) : root.accentColor
             text: "-"
         }
@@ -48,6 +49,7 @@ RowLayout {
         text: `${preffix}${touchSpinBoxRoot.value}`
         color: Qt.darker(root.secondaryColor)
         font.pointSize: fontSize * 0.75
+        fontSizeMode: "Fit"
     }
     RoundButton {
         Layout.preferredHeight: parent.height
@@ -62,6 +64,7 @@ RowLayout {
             horizontalAlignment: "AlignHCenter"
             verticalAlignment: "AlignVCenter"
             font { pointSize: fontSize; bold: true }
+            fontSizeMode: "Fit"
             color: parent.pressed ? Qt.lighter(root.accentColor, 2) : root.accentColor
             text: "+"
         }

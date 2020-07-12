@@ -93,12 +93,12 @@ Page {
                     id: tabsModel
                     ListElement {
                         elementText: "PCV";
-                        elementFullSizeText: "Pressure-Controller Ventilation";
+                        elementFullSizeText: "Pressão Controlada";
                         elementEnabled: true;
                     }
                     ListElement {
-                        elementText: "PSV";
-                        elementFullSizeText: "Pressure Supported Ventilation";
+                        elementText: "VCV";
+                        elementFullSizeText: "Volume Controlado";
                         elementEnabled: false;
                     }
                 }
@@ -127,7 +127,7 @@ Page {
             GridLayout {
                 anchors.fill: parent
                 columns: 2
-                rows: 2
+                rows: 3
 
                 Repeater {
                     id: operationModeRepeater
@@ -167,7 +167,7 @@ Page {
                                 Field {
                                     anchors.centerIn: parent
                                     name: elementName
-                                    fontSize: 12
+                                    fontSize: 10
                                     width: 280; height: 70
                                     control: Chooser{ 
                                         options: controlsModels[elementChildrenModel]

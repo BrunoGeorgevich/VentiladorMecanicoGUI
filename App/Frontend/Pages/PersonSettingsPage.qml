@@ -20,7 +20,6 @@ Page {
     ColumnLayout {
         anchors {
             fill: parent
-            bottomMargin: 20
         }
 
         Item {

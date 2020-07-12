@@ -8,30 +8,31 @@ Item {
     property string name: "NO NAME"
     property Component control: idDefaultComponent
 
-    Column {
-        anchors.fill: parent
+    implicitWidth: Math.max(controlLoader.implicitWidth, fieldLabel.implicitWidth)
+    implicitHeight: controlLoader.implicitHeight + controlLoader.anchors.topMargin + fieldLabel.implicitHeight
 
-        Label {
-            width: parent.width; height: parent.height/2
-            verticalAlignment: "AlignVCenter"
-            horizontalAlignment: "AlignHCenter"
+    Label {
+        id: fieldLabel
+        verticalAlignment: "AlignVCenter"
+        horizontalAlignment: "AlignHCenter"
+        anchors.horizontalCenter: parent.horizontalCenter
 
-            text: fieldRoot.name
-            color: root.secondaryColor
-            font { pointSize: fontSize; bold: true }
+        text: fieldRoot.name
+        color: root.secondaryColor
+        font { pointSize: fontSize; bold: true }
+    }
+    Loader {
+        id: controlLoader
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: fieldLabel.bottom
+            topMargin: 10
         }
-        Item {
-            width: parent.width; height: parent.height/2
-            Loader {
-                id: controlLoader
-                anchors.centerIn: parent
-                sourceComponent: control
-            }
-        }
+        sourceComponent: control
     }
 
     Component {
         id: idDefaultComponent
-        Rectangle { anchors.fill: parent; color: "red" }
+        Rectangle { color: "red" }
     }
 }

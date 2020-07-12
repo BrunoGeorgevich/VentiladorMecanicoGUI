@@ -7,14 +7,20 @@ ToolBar {
     id: toolBarRoot
     signal leftButtonClicked()
     signal rightButtonClicked()
+    signal lockButtonClicked()
 
     property alias text: topBarLabel.text
+    property alias isLocked: lockButton.isLocked
     property bool leftButtonVisible: true
     property bool rightButtonVisible: true
     property bool batteryIndicatorVisible: false
-    property bool startVentilationButtonVisible: false
+    property bool lockButtonIsVisible: false
 
-    height: 82
+    function unlock() {
+        lockButton.isLocked = "false"
+    }
+
+    height: 75
     
     background: Rectangle {
         color: root.primaryColor
@@ -32,38 +38,27 @@ ToolBar {
 
                 Item {
                     Layout.fillHeight: true
-                    Layout.preferredWidth: 150
+                    Layout.preferredWidth: lockButtonIsVisible ? 150 : 0
 
                     Button {
-                        id: startVentilationButton
-                        property string operating: "false"
-                        property var buttonText: { "true": "INICIAR", "false": "PARAR" }
-                        property var buttonColor: { "true": Material.color(Material.Green), "false": Material.color(Material.Red) }
+                        id: lockButton
+                        property string isLocked: "false"
+                        property var buttonIcon: { "true": "qrc:/images/locked", "false": "qrc:/images/unlocked" }
 
-                        anchors {
-                            fill: parent
-                            margins: 5
-                        }
+                        visible: lockButtonIsVisible
+                        height: parent.height
+                        width: 50
 
-                        visible: startVentilationButtonVisible
-                        text: buttonText[operating]
-            
-                        background: Rectangle {
-                            color: startVentilationButton.buttonColor[startVentilationButton.operating]
-                        }
-
-                        contentItem: Label {
-                            anchors.fill: parent
-                            horizontalAlignment: "AlignHCenter"
-                            verticalAlignment: "AlignVCenter"
-                            font { pointSize: 20; bold: true }
-                            color: "#FFFFFF"
-                            text: parent.text
+                        flat: true
+                        icon {
+                            source: buttonIcon[isLocked]
+                            color: root.foregroundColor
+                            height: parent.height*0.8
                         }
 
                         onClicked: { 
-                            operating = operating === "true" ? "false" : "true"
-                            // START AND STOP VENTILATION
+                            isLocked = "true"
+                            lockButtonClicked()
                         }
                     }
                 }
@@ -71,7 +66,7 @@ ToolBar {
                 Button {
                     Layout.fillHeight: true
                     Layout.preferredWidth: 98
-                    visible: startVentilationButtonVisible
+                    visible: leftButtonVisible && !lockButtonIsVisible
                     flat: true
                     icon {
                         source: leftButtonVisible ? "qrc:/images/arrow_left" : ""

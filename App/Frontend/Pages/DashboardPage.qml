@@ -8,15 +8,30 @@ import "qrc:/components"
 Page {
     objectName: "DashboardPage"
     id: dashboardPageRoot
+    property bool lockScreenStatus: false
     property real sideBarWidth: 150
     property var models: {
                 "closedMenu": closedMenuModel,
                 "openedMenu": openedMenuModel,
             }
+
     Component.onCompleted: {
         console.log(Object.keys(system.operation_mode_controller.operation_mode.parameters))
         console.log(Object.values(system.operation_mode_controller.operation_mode.parameters))
         system.dashboard_controller.data_complete.connect(dashboardPageRoot.dataArrived)
+    }
+    
+    Connections {
+        target: rootTopBar
+        onLockButtonClicked:  {
+            if(!dashboardPageRoot.lockScreenStatus) {
+                dashboardPageRoot.lockScreenStatus = true
+                rightSideToolBar.currentModel = "closedMenu"
+                rootTopBar.coloredNotify("Tela bloqueada!", "#0D0")
+            } else {
+                rootTopBar.coloredNotify("Tela está bloqueada!", "#D00")
+            }
+        }
     }
     
     signal dataArrived(var data)
@@ -26,13 +41,31 @@ Page {
         flowChart.addPoint(data['flow'])
     }
     
+    Rectangle {
+        z: 1
+        anchors.fill: parent
+        visible: dashboardPageRoot.lockScreenStatus
+        color: "#00000000"
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                rootTopBar.coloredNotify("Tela está bloqueada!", "#D00")
+            }
+            onPressAndHold: {
+                dashboardPageRoot.lockScreenStatus = false
+                rootTopBar.coloredNotify("Tela desbloqueada!", "#0D0")
+                rootTopBar.unlock()
+            }
+        }
+    }
+
     ListModel {
         id: closedMenuModel
         ListElement { type: "button"; label: "Menu"; actionName: "openMenu"; }
         ListElement { 
             type: "item"; 
-            label: "Resp. Rate"; 
-            parameterName: "rr";
+            label: "RR"; 
+            name: "rr";
             min: '4'; 
             max: '60'; 
             twoUnits: false;
@@ -40,9 +73,9 @@ Page {
         }
         ListElement { 
             type: "item"; 
-            label: "Insp./Expir."; 
-            parameterPrefix: "1 : ";
-            parameterName: "ie";
+            label: "I:E"; 
+            preffix: "1 : ";
+            name: "ie";
             min: '1'; 
             max: '4'; 
             twoUnits: false;
@@ -50,17 +83,26 @@ Page {
         }
         ListElement { 
             type: "item"; 
-            label: "Insp. Pressure"; 
-            parameterName: "pp";
+            label: "P<sub>insp</sub>"; 
+            name: "pp";
             min: '2'; 
             max: '40'; 
             twoUnits: false;
             unit: '[cmH<sub>2</sub>O]' 
         }
+        ListElement {
+            type: "item"; 
+            label: "PEEP"; 
+            name: "peep";
+            min: '-30'; 
+            max: '30'; 
+            twoUnits: false;
+            unit: '[cmH<sub>2</sub>O]'
+        }
         ListElement { 
             type: "item"; 
-            label: "Sensibilidade"; 
-            parameterName: "sensibilityValue";
+            label: "Sensi."; 
+            name: "sensibilityValue";
             min: '2'; 
             max: '100'; 
             twoUnits: true;
@@ -77,31 +119,16 @@ Page {
         ListElement { type: "button"; label: "Voltar"; actionName: "closeMenu"; }
         ListElement { type: "button"; label: "Mudar\nPaciente"; actionName: "openPersonSettingsPage" }
         ListElement { type: "button"; label: "Mudar\nModo de\nOperação"; actionName: "openOperationModePage" }
-        ListElement { type: "button"; label: "Bloquear 🔒"; actionName: "lockScreen" }
     }
    
     ListModel {
         id: indicatorsModel
-        ListElement { type: "indicator"; 
-                      name: "MEAS RR"; 
-                      unit: "bpm"; 
-                      value: 56; 
-                      min: 0; 
-                      max: 17 
-                    }
         ListElement { type: "indicator"; 
                       name: "MAX P<sub>insp</sub>"; 
                       unit: "cmH<sub>2</sub>O"; 
                       value: 101; 
                       min: 5; 
                       max: 70 
-                    }
-        ListElement { type: "indicator"; 
-                      name: "PEEP"; 
-                      unit: "cmH<sub>2</sub>O"; 
-                      value: 19; 
-                      min: -30; 
-                      max: 30 
                     }
         ListElement { type: "indicator"; 
                       name: "V<sub>e</sub>"; 
@@ -117,6 +144,9 @@ Page {
                       min: 21; 
                       max: 100 
                     }
+        ListElement { type: "toggle"; label: "Pausa \n Expiratória"; actionName: "toggleExpirationPause"; }
+        ListElement { type: "toggle"; label: "Pausa \n Inspiratória"; actionName: "toggleInspirationPause"; }
+        ListElement { type: "toggle"; label: "Ventilação"; actionName: "toggleAssistedVentilation"; }
     }
     
     Rectangle {
@@ -184,8 +214,24 @@ Page {
             }
         }
         ToolBar {
+            id: leftSideToolBar
             Layout.fillHeight: true
             Layout.preferredWidth: dashboardPageRoot.sideBarWidth
+
+            property var actions: { 
+                "toggleExpirationPause": (currentState) => {
+                    console.log(currentState)
+                    // SEND SERIAL COMMAND TO PAUSE
+                },
+                "toggleInspirationPause": (currentState) => {
+                    console.log(currentState)
+                    // SEND SERIAL COMMAND TO PAUSE
+                },
+                "toggleAssistedVentilation": (currentState) => {
+                    console.log(currentState)
+                    // SEND SERIAL COMMAND TO PAUSE
+                }
+            }
             
             ColumnLayout {
                 anchors.fill: parent            
@@ -195,6 +241,7 @@ Page {
                     model: indicatorsModel
                     delegate: MenuItem {
                         settings: leftSideToolBarRepeater.model.get(index)
+                        clickAction: leftSideToolBar.actions[actionName]
                     }
                 }
             }

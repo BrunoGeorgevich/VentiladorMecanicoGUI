@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import QtQuick.Controls.Material 2.12
 
 Rectangle {
     id: rootMenuItem
@@ -24,13 +25,13 @@ Rectangle {
     }
 
     function valueToText() {
-        let name = settings.parameterName
+        let name = settings.name
         if (name === undefined) return undefined
-        let prefix = settings.parameterPrefix || ''
+        let preffix = settings.preffix || ''
 
         let value = system.operation_mode_controller.operation_mode.parameters[name]
         value = value || ''
-        return `${prefix}${value}`
+        return `${preffix}${value}`
     }
 
     function unitParse() {
@@ -101,71 +102,112 @@ Rectangle {
                     onClicked: clickAction()
                 }
             }
+            
+            // Type: toggle
+            Item {
+                id: toggleTemplate
+                anchors.fill: parent
+                visible: settings.type === 'toggle'
+
+                Button {
+                    id: toggleButton
+                    property string operating: "false"
+                    property var buttonColor: { "true": Material.color(Material.Green), "false": Material.color(Material.Red) }
+
+                    anchors {
+                        fill: parent
+                        margins:-7
+                    }
+                    
+                    text: settings.label || ""
+        
+                    background: Rectangle {
+                        color: toggleButton.buttonColor[toggleButton.operating]
+                    }
+
+                    contentItem: Label {
+                        anchors.fill: parent
+                        horizontalAlignment: "AlignHCenter"
+                        verticalAlignment: "AlignVCenter"
+                        font { pointSize: 20; bold: true }
+                        fontSizeMode: "Fit"
+                        color: "#FFFFFF"
+                        text: parent.text
+                    }
+
+                    onClicked: { 
+                        operating = operating === "true" ? "false" : "true"
+                        clickAction(operating === "true")
+                    }
+                }
+            }
                 
             // Type: item
             Item {
                 id: itemTemplate
                 anchors.fill: parent
                 visible: settings.type === 'item'
-                
-                Column {
+                ColumnLayout {
                     anchors.fill: parent
-                    Label {
-                        id: itemLabel
-                        width: parent.width
-                        height: parent.height*0.1
-                        color: root.foregroundColor
-                        horizontalAlignment: 'AlignHCenter'
-                        verticalAlignment: 'AlignVCenter'
-                        font.bold: true
-                        text: settings.label || ''
-                    }
-                    Label {
-                        width: parent.width
-                        height: parent.height*0.60
-                        color: root.accentColor
-                        horizontalAlignment: 'AlignHCenter'
-                        verticalAlignment: 'AlignVCenter'
-                        font { bold: true; pointSize:18 }
-                        text: valueToText() || ''
-                    }
-                    
+                    spacing: 5
                     Item {
-                        width: parent.width
-                        height: parent.height*0.25
-                        Row {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 15
+                        
+                        RowLayout {
                             anchors.fill: parent
                             Label {
-                                height: parent.height
-                                width: parent.width/3  
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+
+                                text: settings.label || ''
+                                font { pointSize: 9; bold: true }
                                 color: root.foregroundColor
-                                verticalAlignment: 'AlignTop'
-                                text: settings.min || ''
+                                textFormat: Text.RichText
+                                verticalAlignment: "AlignVCenter"
                             }
                             Label {
-                                height: parent.height
-                                width: parent.width/3    
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+
+                                text: unitParse() || ''
+                                font { pointSize: 9 }
                                 textFormat: Text.RichText
                                 color: root.foregroundColor
-                                verticalAlignment: 'AlignTop'
-                                horizontalAlignment: 'AlignHCenter'
-                                font.bold: true
-                                text: unitParse()
-                            }
-                            Label {
-                                height: parent.height
-                                width: parent.width/3  
-                                color: root.foregroundColor
-                                verticalAlignment: 'AlignTop'
-                                horizontalAlignment: 'AlignRight'
-                                text: settings.max || ''
+                                horizontalAlignment: "AlignRight"
+                                verticalAlignment: "AlignVCenter"
                             }
                         }
                     }
-                    
-                    ProgressBar {   
-                        value: toPercent() || ''
-                        width: parent.width
+
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        
+                        RowLayout {
+                            anchors.fill: parent
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+
+                                text: valueToText() || ''
+                                font { pointSize: 22; bold: true }
+                                fontSizeMode: "Fit"
+                                color: root.accentColor
+                                verticalAlignment: "AlignVCenter"
+                                horizontalAlignment: "AlignHCenter"
+                            }
+                            Label {
+                                Layout.fillHeight: true
+                                Layout.preferredWidth: 35
+
+                                text: `${settings.max}\n${settings.min}` || '-\n-'
+                                font { pointSize: 8 }
+                                color: root.foregroundColor
+                                horizontalAlignment: "AlignHCenter"
+                                verticalAlignment: "AlignVCenter"
+                            }
+                        }
                     }
                 }
             }
@@ -177,10 +219,11 @@ Rectangle {
                 visible: settings.type === 'indicator'
                 ColumnLayout {
                     anchors.fill: parent
+                    spacing: 5
 
                     Item {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 20
+                        Layout.preferredHeight: 15
                         
                         RowLayout {
                             anchors.fill: parent
@@ -220,6 +263,7 @@ Rectangle {
 
                                 text: `${settings.value}` || ''
                                 font { pointSize: 22; bold: true }
+                                fontSizeMode: "Fit"
                                 color: root.accentColor
                                 verticalAlignment: "AlignVCenter"
                                 horizontalAlignment: "AlignHCenter"
