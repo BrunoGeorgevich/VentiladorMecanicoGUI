@@ -18,6 +18,7 @@
         <file alias="Field.qml">Components/Field.qml</file>
         <file alias="TopBar.qml">Components/TopBar.qml</file>
         <file alias="Chooser.qml">Components/Chooser.qml</file>
+        <file alias="SideBar.qml">Components/SideBar.qml</file>
         <file alias="MenuItem.qml">Components/MenuItem.qml</file>
         <file alias="LineChart.qml">Components/LineChart.qml</file>
         <file alias="BottomBar.qml">Components/BottomBar.qml</file>

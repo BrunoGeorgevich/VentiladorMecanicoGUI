@@ -20,6 +20,8 @@ class OperationMode(QObject):
 
     def init_parameters(self):
         self._parameters[self._mode] = {}
+        self.parameters_has_changed.emit(self._parameters[self._mode])
 
     def add_parameters(self, name, value):
         self._parameters[self._mode][name] = value
+        self.parameters_has_changed.emit(self._parameters[self._mode])

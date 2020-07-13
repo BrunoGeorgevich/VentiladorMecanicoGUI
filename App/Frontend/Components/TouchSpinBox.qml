@@ -18,6 +18,7 @@ RowLayout {
     RoundButton {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.height
+        autoRepeat: true
         
         background: Rectangle {
             radius: parent.height/2
@@ -32,12 +33,9 @@ RowLayout {
             color: parent.pressed ? Qt.lighter(root.accentColor, 2) : root.accentColor
             text: "-"
         }
-        onClicked: value = (value - 1 < min ? min : value - 1)
-        onPressAndHold: {
-            buttonPressedTimer.start()
-            buttonPressedTimer.increment = -5
+        onPressed: {
+            value = (value - 1 < min ? min : value - 1)
         }
-        onReleased: buttonPressedTimer.stop()
     }
     Label {
         Layout.fillHeight: true
@@ -54,6 +52,7 @@ RowLayout {
     RoundButton {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.height
+        autoRepeat: true
         
         background: Rectangle {
             radius: parent.height/2
@@ -68,26 +67,8 @@ RowLayout {
             color: parent.pressed ? Qt.lighter(root.accentColor, 2) : root.accentColor
             text: "+"
         }
-        onClicked: value = (value + 1 > max ? max : value + 1)
-        onPressAndHold: {
-            buttonPressedTimer.start()
-            buttonPressedTimer.increment = 5
+        onPressed: {
+            value = (value + 1 > max ? max : value + 1)
         }
-        onReleased: buttonPressedTimer.stop()
-    }   
-
-    Timer {
-        id: buttonPressedTimer
-        property int increment: 0
-        
-        repeat: true
-        running: false
-
-        interval: 200
-        onTriggered: {
-            value += increment
-            if (value <= min) value = min
-            if (value >= max) value = max
-        }
-    }
+    }  
 }

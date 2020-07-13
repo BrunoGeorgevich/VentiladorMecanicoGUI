@@ -9,7 +9,6 @@ Page {
     objectName: "DashboardPage"
     id: dashboardPageRoot
     property string currentMode: system.operation_mode_controller.operation_mode.mode
-    property bool propertyUpdateSidePanelVisible: false
     property bool lockScreenStatus: false
     property real sideBarWidth: 150
     property var models: {
@@ -257,14 +256,13 @@ Page {
                 "openMenu": () => { rightSideToolBar.currentModel = "openedMenu" },
                 "closeMenu": () => { rightSideToolBar.currentModel = "closedMenu" + dashboardPageRoot.currentMode },
                 "openPersonSettingsPage": () => { 
-                    pageStack.pop();
-                    pageStack.pop();
+                    pageStack.replace("qrc:/pages/PersonSettingsPage.qml")
                 },
                 "openOperationModePage": () => { 
-                    pageStack.pop();
+                    pageStack.replace("qrc:/pages/ModeSettingsPage.qml")
                 },
-                "openUpdateSidePanel": () => { 
-                    propertyUpdateSidePanelVisible = true;
+                "openUpdateSidePanel": (value, key) => { 
+                    updatePropSideBar.open(value, key)
                 },
             }
             
@@ -280,65 +278,18 @@ Page {
                     }
                 }
             }
-            
-            Rectangle {
-                anchors.fill: parent 
-                visible: propertyUpdateSidePanelVisible
-                color: root.primaryColor
-            
-                ColumnLayout {
-                    anchors.fill: parent            
-                    spacing: 1
-                    SideBarButton {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        text: "+"
 
-                        onClicked: {
-                            propertyUpdateSidePanelVisible = false
-                        }
-                    }
-                    Item {
-                        Layout.fillHeight: true
-                        Layout.minimumHeight: 96
-                        Layout.fillWidth: true
+            SideBar {
+                id:updatePropSideBar
 
-                        Label {
-                            verticalAlignment: "AlignVCenter"
-                            horizontalAlignment: "AlignHCenter"
-                            anchors.fill: parent
-                            text: "19"
-                            color: root.accentColor
-                            font.pixelSize: 40
-                        }
-                    }
-                    SideBarButton {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        text: "-"
-
-                        onClicked: {
-                            propertyUpdateSidePanelVisible = false
-                        }
-                    }
-                    SideBarButton {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        text: "CANCELAR"
-
-                        onClicked: {
-                            propertyUpdateSidePanelVisible = false
-                        }
-                    }
-                    SideBarButton {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        text: "SALVAR"
-
-                        onClicked: {
-                            propertyUpdateSidePanelVisible = false
-                        }
-                    }
+                onSave: {
+                    console.log("###################################################################")
+                    console.log(Object.keys(system.operation_mode_controller.operation_mode.parameters))
+                    console.log(Object.values(system.operation_mode_controller.operation_mode.parameters))
+                    console.log(`KEY :: ${key} || VALUE :: ${value}`)
+                    system.operation_mode_controller.add_parameter(key, value)
+                    console.log(Object.keys(system.operation_mode_controller.operation_mode.parameters))
+                    console.log(Object.values(system.operation_mode_controller.operation_mode.parameters))
                 }
             }
         }

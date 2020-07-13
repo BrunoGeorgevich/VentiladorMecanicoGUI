@@ -34,10 +34,10 @@ ApplicationWindow {
         onRightButtonClicked: {
             switch (pageStack.currentItem.objectName) {
                 case "PersonPage":
-                    pageStack.push("qrc:/pages/ModeSettingsPage.qml")
+                    pageStack.replace("qrc:/pages/ModeSettingsPage.qml")
                     break
                 case "ModePage":
-                    pageStack.push("qrc:/pages/DashboardPage.qml")
+                    pageStack.replace("qrc:/pages/DashboardPage.qml")
                     break
             }
         }
@@ -45,7 +45,7 @@ ApplicationWindow {
         onLeftButtonClicked: {
             switch (pageStack.currentItem.objectName) {
                 case "ModePage":
-                    pageStack.pop()
+                    pageStack.replace("qrc:/pages/PersonSettingsPage.qml")
                     break
             }
         }
@@ -99,6 +99,12 @@ ApplicationWindow {
                     rootTopBar.text = system.person_controller.details()
                     break;
             }   
+        }	
+
+        replaceEnter : Transition {	
+            id: replaceEnterAnimation 	
+            PropertyAction { property: "x"; value: replaceEnterAnimation.ViewTransition.item.pos }	
+            PropertyAction { property: "y"; value: replaceEnterAnimation.ViewTransition.item.pos }	
         }
     }
     

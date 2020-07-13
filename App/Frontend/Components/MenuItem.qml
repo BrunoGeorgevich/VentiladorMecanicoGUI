@@ -213,7 +213,8 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        clickAction()
+                        let value = system.operation_mode_controller.operation_mode.parameters[name];
+                        clickAction(value, name)
                     }
                 }
             }
