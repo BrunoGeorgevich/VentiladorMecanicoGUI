@@ -22,6 +22,7 @@
         <file alias="LineChart.qml">Components/LineChart.qml</file>
         <file alias="BottomBar.qml">Components/BottomBar.qml</file>
         <file alias="TouchSpinBox.qml">Components/TouchSpinBox.qml</file>
+        <file alias="SideBarButton.qml">Components/SideBarButton.qml</file>
         <file alias="PersonDetailsTopBar.qml">Components/PersonDetailsTopBar.qml</file>
         <file alias="NotificationSystem.qml">Components/NotificationSystem.qml</file>
     </qresource>

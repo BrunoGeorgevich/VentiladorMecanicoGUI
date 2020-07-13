@@ -10,18 +10,10 @@ Page {
     objectName: "ModePage"
     id:modeSettingsPageRoot
 
-    property var models: [ pcvModel ]
+    property var models: [ pcvModel, vcvModel ]
     property var controlsModels: { "sensibilityModel": sensibilityModel }
-    
-    Connections {
-        target: rootTopBar
-        onRightButtonClicked:  {
-            pageStack.replace("qrc:/pages/DashboardPage.qml")
-        }
-        onLeftButtonClicked:  {
-            pageStack.replace("qrc:/pages/PersonSettingsPage.qml")
-        }
-    }
+
+    // Component.onCompleted
 
     ListModel {
         id: sensibilityModel
@@ -47,7 +39,7 @@ Page {
                         elementMax: 20;  
                         elementPreffix: ''
                     }
-        ListElement {   elementLabel: "pp";
+        ListElement {   elementLabel: "pip";
                         elementType: "TouchSpinBox";
                         elementName: "Pressão Pico";  
                         elementValue: 30;  
@@ -63,13 +55,63 @@ Page {
                         elementMax: 25;  
                         elementPreffix: '' 
                     }
-        ListElement {   elementLabel: "sensibilityType";
+        ListElement {   elementLabel: "sensiT";
                         elementType: "Buttons";
                         elementChecked: "pressure";  
                         elementName: "Tipo de Sensibilidade";
                         elementChildrenModel: "sensibilityModel" 
                     }
-        ListElement {   elementLabel: "sensibilityValue";
+        ListElement {   elementLabel: "sensiV";
+                        elementType: "TouchSpinBox";
+                        elementName: "Sensiblidade";  
+                        elementValue: 12;  
+                        elementMin: 5;  
+                        elementMax: 25;  
+                        elementPreffix: '' 
+                    }
+    }
+
+    ListModel {
+        id: vcvModel
+        ListElement {   elementLabel: "volume";
+                        elementType: "TouchSpinBox";
+                        elementName: "Volume"; 
+                        elementValue: 15;  
+                        elementMin: 2;  
+                        elementMax: 60;  
+                        elementPreffix: '' 
+                    }
+        ListElement {   elementLabel: "rr";
+                        elementType: "TouchSpinBox";
+                        elementName: "RR";  
+                        elementValue: 12;  
+                        elementMin: 5;  
+                        elementMax: 20;  
+                        elementPreffix: ''
+                    }
+        ListElement {   elementLabel: "flow";
+                        elementType: "TouchSpinBox";
+                        elementName: "Fluxo";  
+                        elementValue: 30;  
+                        elementMin: 5;  
+                        elementMax: 60;  
+                        elementPreffix: '' 
+                    }
+        ListElement {   elementLabel: "peep";
+                        elementType: "TouchSpinBox";
+                        elementName: "PEEP";  
+                        elementValue: 12;  
+                        elementMin: 5;  
+                        elementMax: 25;  
+                        elementPreffix: '' 
+                    }
+        ListElement {   elementLabel: "sensiT";
+                        elementType: "Buttons";
+                        elementChecked: "pressure";  
+                        elementName: "Tipo de Sensibilidade";
+                        elementChildrenModel: "sensibilityModel" 
+                    }
+        ListElement {   elementLabel: "sensiV";
                         elementType: "TouchSpinBox";
                         elementName: "Sensiblidade";  
                         elementValue: 12;  
@@ -99,7 +141,7 @@ Page {
                     ListElement {
                         elementText: "VCV";
                         elementFullSizeText: "Volume Controlado";
-                        elementEnabled: false;
+                        elementEnabled: true;
                     }
                 }
 

@@ -7,14 +7,8 @@ import "qrc:/pages"
 
 Page {  
     objectName: "PersonPage"
+    id: personPageRootPage
     
-    Connections {
-        target: rootTopBar
-        onRightButtonClicked:  {
-            pageStack.replace("qrc:/pages/ModeSettingsPage.qml")
-        }
-    }
-
     Rectangle { anchors.fill: parent; color: "white" }
     
     ColumnLayout {

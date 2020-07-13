@@ -8,11 +8,18 @@ import "qrc:/components"
 Page {
     objectName: "DashboardPage"
     id: dashboardPageRoot
+    property string currentMode: system.operation_mode_controller.operation_mode.mode
+    property bool propertyUpdateSidePanelVisible: false
     property bool lockScreenStatus: false
     property real sideBarWidth: 150
     property var models: {
-                "closedMenu": closedMenuModel,
+                "closedMenuPCV": closedMenuPCVModel,
+                "closedMenuVCV": closedMenuVCVModel,
                 "openedMenu": openedMenuModel,
+            }
+    property var indicatorsModels: {
+                "PCV": indicatorsPCVModel,
+                "VCV": indicatorsVCVModel,
             }
 
     Component.onCompleted: {
@@ -26,7 +33,7 @@ Page {
         onLockButtonClicked:  {
             if(!dashboardPageRoot.lockScreenStatus) {
                 dashboardPageRoot.lockScreenStatus = true
-                rightSideToolBar.currentModel = "closedMenu"
+                rightSideToolBar.currentModel = "closedMenu" + dashboardPageRoot.currentMode
                 rootTopBar.coloredNotify("Tela bloqueada!", "#0D0")
             } else {
                 rootTopBar.coloredNotify("Tela está bloqueada!", "#D00")
@@ -39,6 +46,178 @@ Page {
         pawChart.addPoint(data['paw'])
         vtidalChart.addPoint(data['vtidal'])
         flowChart.addPoint(data['flow'])
+    }
+
+    ListModel {
+        id: closedMenuPCVModel
+        ListElement { type: "button"; label: "Menu"; actionName: "openMenu"; }
+        ListElement { 
+            type: "item"; 
+            label: "RR"; 
+            name: "rr";
+            min: '4'; 
+            max: '60'; 
+            twoUnits: false;
+            unit: 'b/min';
+            actionName: "openUpdateSidePanel";
+        }
+        ListElement { 
+            type: "item"; 
+            label: "I:E"; 
+            preffix: "1 : ";
+            name: "ie";
+            min: '1'; 
+            max: '4'; 
+            twoUnits: false;
+            unit: 'ratio';
+            actionName: "openUpdateSidePanel";
+        }
+        ListElement { 
+            type: "item"; 
+            label: "P. INSP."; 
+            name: "pip";
+            min: '2'; 
+            max: '40'; 
+            twoUnits: false;
+            unit: '[cmH<sub>2</sub>O]';
+            actionName: "openUpdateSidePanel";
+        }
+        ListElement {
+            type: "item"; 
+            label: "PEEP"; 
+            name: "peep";
+            min: '-30'; 
+            max: '30'; 
+            twoUnits: false;
+            unit: '[cmH<sub>2</sub>O]';
+            actionName: "openUpdateSidePanel";
+        }
+        ListElement { 
+            type: "item"; 
+            label: "Sensi."; 
+            name: "sensiV";
+            min: '2'; 
+            max: '100'; 
+            twoUnits: true;
+            unitSelector: 'sensiT'; 
+            unitConditional: 'pressure'; 
+            unit: '[cmH<sub>2</sub>O]' ;
+            secondaryUnit: 'L/min';
+            actionName: "openUpdateSidePanel";
+        }
+    }
+    ListModel {
+        id: closedMenuVCVModel
+        ListElement { type: "button"; label: "Menu"; actionName: "openMenu"; }
+        ListElement { 
+            type: "item"; 
+            label: "RR"; 
+            name: "rr";
+            min: '4'; 
+            max: '60'; 
+            twoUnits: false;
+            unit: 'b/min';
+            actionName: "openUpdateSidePanel";
+        }
+        ListElement { 
+            type: "item"; 
+            label: "Volume"; 
+            name: "volume";
+            min: '2'; 
+            max: '60'; 
+            twoUnits: false;
+            unit: 'l';
+            actionName: "openUpdateSidePanel";
+        }
+        ListElement { 
+            type: "item"; 
+            label: "Fluxo"; 
+            name: "flow";
+            min: '2'; 
+            max: '40'; 
+            twoUnits: false;
+            unit: 'l/m²';
+            actionName: "openUpdateSidePanel";
+        }
+        ListElement {
+            type: "item"; 
+            label: "PEEP"; 
+            name: "peep";
+            min: '-30'; 
+            max: '30'; 
+            twoUnits: false;
+            unit: '[cmH<sub>2</sub>O]';
+            actionName: "openUpdateSidePanel";
+        }
+        ListElement { 
+            type: "item"; 
+            label: "Sensi."; 
+            name: "sensiV";
+            min: '2'; 
+            max: '100'; 
+            twoUnits: true;
+            unitSelector: 'sensiT'; 
+            unitConditional: 'pressure'; 
+            unit: '[cmH<sub>2</sub>O]' ;
+            secondaryUnit: 'L/min';
+            actionName: "openUpdateSidePanel";
+        }
+    }
+
+    ListModel {
+        id: openedMenuModel
+        ListElement { type: "button"; label: "Voltar"; actionName: "closeMenu"; }
+        ListElement { type: "button"; label: "Mudar\nPaciente"; actionName: "openPersonSettingsPage" }
+        ListElement { type: "button"; label: "Mudar\nModo de\nOperação"; actionName: "openOperationModePage" }
+    }
+   
+    ListModel {
+        id: indicatorsPCVModel
+        ListElement { type: "indicator"; 
+                      name: "Ve"; 
+                      unit: "slpm"; 
+                      value: 30.3; 
+                      min: 2; 
+                      max: 40 
+                    }
+        ListElement { type: "indicator"; 
+                      name: "FIO<sub>2</sub>"; 
+                      unit: "%"; 
+                      value: 91; 
+                      min: 21; 
+                      max: 100 
+                    }
+        ListElement { type: "toggle"; label: "Pausa \n Expiratória"; actionName: "toggleExpirationPause"; }
+        ListElement { type: "toggle"; label: "Pausa \n Inspiratória"; actionName: "toggleInspirationPause"; }
+        ListElement { type: "toggle"; label: "Ventilação\nPCV"; actionName: "toggleAssistedVentilation"; }
+    }
+   
+    ListModel {
+        id: indicatorsVCVModel
+        ListElement { type: "indicator"; 
+                      name: "T. INSP"; 
+                      unit: "cmH<sub>2</sub>O"; 
+                      value: 101; 
+                      min: 5; 
+                      max: 70 
+                    }
+        ListElement { type: "indicator"; 
+                      name: "Ve"; 
+                      unit: "slpm"; 
+                      value: 30.3; 
+                      min: 2; 
+                      max: 40 
+                    }
+        ListElement { type: "indicator"; 
+                      name: "FIO<sub>2</sub>"; 
+                      unit: "%"; 
+                      value: 91; 
+                      min: 21; 
+                      max: 100 
+                    }
+        ListElement { type: "toggle"; label: "Pausa \n Expiratória"; actionName: "toggleExpirationPause"; }
+        ListElement { type: "toggle"; label: "Pausa \n Inspiratória"; actionName: "toggleInspirationPause"; }
+        ListElement { type: "toggle"; label: "Ventilação\nVCV"; actionName: "toggleAssistedVentilation"; }
     }
     
     Rectangle {
@@ -58,96 +237,6 @@ Page {
             }
         }
     }
-
-    ListModel {
-        id: closedMenuModel
-        ListElement { type: "button"; label: "Menu"; actionName: "openMenu"; }
-        ListElement { 
-            type: "item"; 
-            label: "RR"; 
-            name: "rr";
-            min: '4'; 
-            max: '60'; 
-            twoUnits: false;
-            unit: 'b/min' 
-        }
-        ListElement { 
-            type: "item"; 
-            label: "I:E"; 
-            preffix: "1 : ";
-            name: "ie";
-            min: '1'; 
-            max: '4'; 
-            twoUnits: false;
-            unit: 'ratio' 
-        }
-        ListElement { 
-            type: "item"; 
-            label: "P<sub>insp</sub>"; 
-            name: "pp";
-            min: '2'; 
-            max: '40'; 
-            twoUnits: false;
-            unit: '[cmH<sub>2</sub>O]' 
-        }
-        ListElement {
-            type: "item"; 
-            label: "PEEP"; 
-            name: "peep";
-            min: '-30'; 
-            max: '30'; 
-            twoUnits: false;
-            unit: '[cmH<sub>2</sub>O]'
-        }
-        ListElement { 
-            type: "item"; 
-            label: "Sensi."; 
-            name: "sensibilityValue";
-            min: '2'; 
-            max: '100'; 
-            twoUnits: true;
-            unitSelector: 'sensibilityType'; 
-            unitConditional: 'pressure'; 
-            unit: '[cmH<sub>2</sub>O]' ;
-            secondaryUnit: 'L/min' 
-        }
-        // ListElement { type: "status"; action: "Stopped"; mode: 'PCV' }
-    }
-
-    ListModel {
-        id: openedMenuModel
-        ListElement { type: "button"; label: "Voltar"; actionName: "closeMenu"; }
-        ListElement { type: "button"; label: "Mudar\nPaciente"; actionName: "openPersonSettingsPage" }
-        ListElement { type: "button"; label: "Mudar\nModo de\nOperação"; actionName: "openOperationModePage" }
-    }
-   
-    ListModel {
-        id: indicatorsModel
-        ListElement { type: "indicator"; 
-                      name: "MAX P<sub>insp</sub>"; 
-                      unit: "cmH<sub>2</sub>O"; 
-                      value: 101; 
-                      min: 5; 
-                      max: 70 
-                    }
-        ListElement { type: "indicator"; 
-                      name: "V<sub>e</sub>"; 
-                      unit: "slpm"; 
-                      value: 30.3; 
-                      min: 2; 
-                      max: 40 
-                    }
-        ListElement { type: "indicator"; 
-                      name: "FIO<sub>2</sub>"; 
-                      unit: "%"; 
-                      value: 91; 
-                      min: 21; 
-                      max: 100 
-                    }
-        ListElement { type: "toggle"; label: "Pausa \n Expiratória"; actionName: "toggleExpirationPause"; }
-        ListElement { type: "toggle"; label: "Pausa \n Inspiratória"; actionName: "toggleInspirationPause"; }
-        ListElement { type: "toggle"; label: "Ventilação"; actionName: "toggleAssistedVentilation"; }
-    }
     
     Rectangle {
         anchors.fill: parent
@@ -163,15 +252,19 @@ Page {
             Layout.fillHeight: true
             Layout.preferredWidth: dashboardPageRoot.sideBarWidth
             
-            property string currentModel: "closedMenu"
+            property string currentModel: "closedMenu" + dashboardPageRoot.currentMode
             property var actions: { 
                 "openMenu": () => { rightSideToolBar.currentModel = "openedMenu" },
-                "closeMenu": () => { rightSideToolBar.currentModel = "closedMenu" },
+                "closeMenu": () => { rightSideToolBar.currentModel = "closedMenu" + dashboardPageRoot.currentMode },
                 "openPersonSettingsPage": () => { 
-                    pageStack.replace("qrc:/pages/PersonSettingsPage.qml") 
+                    pageStack.pop();
+                    pageStack.pop();
                 },
                 "openOperationModePage": () => { 
-                    pageStack.replace("qrc:/pages/ModeSettingsPage.qml")
+                    pageStack.pop();
+                },
+                "openUpdateSidePanel": () => { 
+                    propertyUpdateSidePanelVisible = true;
                 },
             }
             
@@ -184,6 +277,67 @@ Page {
                     delegate: MenuItem {
                         settings: rightSideToolBarRepeater.model.get(index)
                         clickAction: rightSideToolBar.actions[actionName]
+                    }
+                }
+            }
+            
+            Rectangle {
+                anchors.fill: parent 
+                visible: propertyUpdateSidePanelVisible
+                color: root.primaryColor
+            
+                ColumnLayout {
+                    anchors.fill: parent            
+                    spacing: 1
+                    SideBarButton {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        text: "+"
+
+                        onClicked: {
+                            propertyUpdateSidePanelVisible = false
+                        }
+                    }
+                    Item {
+                        Layout.fillHeight: true
+                        Layout.minimumHeight: 96
+                        Layout.fillWidth: true
+
+                        Label {
+                            verticalAlignment: "AlignVCenter"
+                            horizontalAlignment: "AlignHCenter"
+                            anchors.fill: parent
+                            text: "19"
+                            color: root.accentColor
+                            font.pixelSize: 40
+                        }
+                    }
+                    SideBarButton {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        text: "-"
+
+                        onClicked: {
+                            propertyUpdateSidePanelVisible = false
+                        }
+                    }
+                    SideBarButton {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        text: "CANCELAR"
+
+                        onClicked: {
+                            propertyUpdateSidePanelVisible = false
+                        }
+                    }
+                    SideBarButton {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        text: "SALVAR"
+
+                        onClicked: {
+                            propertyUpdateSidePanelVisible = false
+                        }
                     }
                 }
             }
@@ -238,7 +392,7 @@ Page {
                 spacing: 1
                 Repeater {
                     id: leftSideToolBarRepeater
-                    model: indicatorsModel
+                    model: indicatorsModels[currentMode]
                     delegate: MenuItem {
                         settings: leftSideToolBarRepeater.model.get(index)
                         clickAction: leftSideToolBar.actions[actionName]

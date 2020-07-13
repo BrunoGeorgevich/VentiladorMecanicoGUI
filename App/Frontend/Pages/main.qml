@@ -30,6 +30,25 @@ ApplicationWindow {
             defaultH: 60
             defaultW: 300
         }
+        
+        onRightButtonClicked: {
+            switch (pageStack.currentItem.objectName) {
+                case "PersonPage":
+                    pageStack.push("qrc:/pages/ModeSettingsPage.qml")
+                    break
+                case "ModePage":
+                    pageStack.push("qrc:/pages/DashboardPage.qml")
+                    break
+            }
+        }
+        
+        onLeftButtonClicked: {
+            switch (pageStack.currentItem.objectName) {
+                case "ModePage":
+                    pageStack.pop()
+                    break
+            }
+        }
     }
 
     footer: BottomBar {}
@@ -41,6 +60,7 @@ ApplicationWindow {
         smooth: false
         initialItem: PersonSettingsPage {}
         onCurrentItemChanged: {
+            console.log(currentItem.objectName);
             if (currentItem.objectName === "DashboardPage") {
                 if (!chartUpdateTimer.running) {
                     console.log("CHART UPDATE TIMER RESTARTED!")
@@ -78,14 +98,7 @@ ApplicationWindow {
                     rootTopBar.lockButtonIsVisible = true
                     rootTopBar.text = system.person_controller.details()
                     break;
-            }
-            
-        }
-        
-        replaceEnter : Transition {
-            id: replaceEnterAnimation 
-            PropertyAction { property: "x"; value: replaceEnterAnimation.ViewTransition.item.pos }
-            PropertyAction { property: "y"; value: replaceEnterAnimation.ViewTransition.item.pos }
+            }   
         }
     }
     

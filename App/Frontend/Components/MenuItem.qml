@@ -210,6 +210,12 @@ Rectangle {
                         }
                     }
                 }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        clickAction()
+                    }
+                }
             }
 
             // Type: indicator
