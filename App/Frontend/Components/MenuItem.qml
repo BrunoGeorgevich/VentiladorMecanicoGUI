@@ -11,6 +11,7 @@ Rectangle {
     
     property var settings
     property var clickAction
+    property var indicatorsValues
 
     function toPercent() {
         let name = settings.parameterName
@@ -268,7 +269,7 @@ Rectangle {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
 
-                                text: `${settings.value}` || ''
+                                text: `${rootMenuItem.indicatorsValues[settings.key]}` || '-'
                                 font { pointSize: 22; bold: true }
                                 fontSizeMode: "Fit"
                                 color: root.accentColor

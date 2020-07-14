@@ -16,6 +16,15 @@ class DashboardController(QObject):
 	@Slot(str)
 	def parse_data(self, data):
 		data = data.strip()
+		
+		print(f"RECEIVED FROM ARDUINO => {data}")
+
+		if len(data) <= 0:
+			return
+		
+		if data == "OK":
+			return
+
 		if data[0] != "$" or data[-1] != "%":
 			self.data_incomplete.emit(data)
 			return

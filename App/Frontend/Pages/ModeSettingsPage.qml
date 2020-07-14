@@ -13,7 +13,12 @@ Page {
     property var models: [ pcvModel, vcvModel ]
     property var controlsModels: { "sensibilityModel": sensibilityModel }
 
-    // Component.onCompleted
+    Connections {
+        target: rootTopBar
+        onRightButtonClicked: {
+            system.hardware_controller.write_data("SET ALL", undefined)
+        }
+    }
 
     ListModel {
         id: sensibilityModel

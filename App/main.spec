@@ -22,27 +22,29 @@ a = Analysis(['main.py'],
 
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
+pyz = PYZ(a.pure, a.zipped_data,
+             cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
-          a.binaries,
-          a.zipfiles,
-          a.datas,
-          [],
-          name='name',
+	  # a.binaries,
+	  # a.zipfiles,
+	  # a.datas,
+          name='app',
+	  exclude_binaries=True,
           debug=False,
-          bootloader_ignore_signals=False,
+          # bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          upx_exclude=[],
-          runtime_tmpdir=None,
-          console=True )
+          # upx_exclude=[],
+          # runtime_tmpdir=None,
+          console=False)
 
-# coll = COLLECT(
-#     exe,
-#     a.binaries,
-#     a.zipfiles,
-#     a.datas,
-#     name='Ventilador',
-#     strip=False,
-#     upx=True
-# )
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    name='Ventilador',
+    strip=False,
+    upx=True
+)

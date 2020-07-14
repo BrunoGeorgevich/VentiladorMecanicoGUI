@@ -15,15 +15,16 @@ Page {
                 "closedMenuPCV": closedMenuPCVModel,
                 "closedMenuVCV": closedMenuVCVModel,
                 "openedMenu": openedMenuModel,
-            }
+    }
     property var indicatorsModels: {
                 "PCV": indicatorsPCVModel,
                 "VCV": indicatorsVCVModel,
-            }
+    }
+    property var indicatorsValues: { 'fio2': '-', 've': '-', 'tInsp': '-' }
 
     Component.onCompleted: {
-        console.log(Object.keys(system.operation_mode_controller.operation_mode.parameters))
-        console.log(Object.values(system.operation_mode_controller.operation_mode.parameters))
+        // console.log(Object.keys(system.operation_mode_controller.operation_mode.parameters))
+        // console.log(Object.values(system.operation_mode_controller.operation_mode.parameters))
         system.dashboard_controller.data_complete.connect(dashboardPageRoot.dataArrived)
     }
     
@@ -32,19 +33,28 @@ Page {
         onLockButtonClicked:  {
             if(!dashboardPageRoot.lockScreenStatus) {
                 dashboardPageRoot.lockScreenStatus = true
-                rightSideToolBar.currentModel = "closedMenu" + dashboardPageRoot.currentMode
-                rootTopBar.coloredNotify("Tela bloqueada!", "#0D0")
+                leftSideToolBar.currentModel = "closedMenu" + dashboardPageRoot.currentMode
+                rootTopBar.good("Tela bloqueada!")
             } else {
-                rootTopBar.coloredNotify("Tela está bloqueada!", "#D00")
+                rootTopBar.bad("Tela está bloqueada!")
             }
         }
     }
     
     signal dataArrived(var data)
     onDataArrived: {
-        pawChart.addPoint(data['paw'])
-        vtidalChart.addPoint(data['vtidal'])
-        flowChart.addPoint(data['flow'])
+        console.log(Object.keys(data))
+        console.log(Object.values(data))
+        if (Object.keys(data).indexOf('paw') !== -1){
+            pawChart.addPoint(data['paw'])
+        }
+        if (Object.keys(data).indexOf('vtidal') !== -1){
+            vtidalChart.addPoint(data['vtidal'])
+        }
+        if (Object.keys(data).indexOf('flow') !== -1){
+            flowChart.addPoint(data['flow'])
+        }
+        dashboardPageRoot.indicatorsValues = data
     }
 
     ListModel {
@@ -175,14 +185,14 @@ Page {
         ListElement { type: "indicator"; 
                       name: "Ve"; 
                       unit: "slpm"; 
-                      value: 30.3; 
+                      key: "ve";
                       min: 2; 
                       max: 40 
                     }
         ListElement { type: "indicator"; 
                       name: "FIO<sub>2</sub>"; 
                       unit: "%"; 
-                      value: 91; 
+                      key: "fio2";
                       min: 21; 
                       max: 100 
                     }
@@ -195,22 +205,22 @@ Page {
         id: indicatorsVCVModel
         ListElement { type: "indicator"; 
                       name: "T. INSP"; 
-                      unit: "cmH<sub>2</sub>O"; 
-                      value: 101; 
+                      unit: "s"; 
+                      key: "tInsp";
                       min: 5; 
                       max: 70 
                     }
         ListElement { type: "indicator"; 
                       name: "Ve"; 
                       unit: "slpm"; 
-                      value: 30.3; 
+                      key: "ve";
                       min: 2; 
                       max: 40 
                     }
         ListElement { type: "indicator"; 
                       name: "FIO<sub>2</sub>"; 
                       unit: "%"; 
-                      value: 91; 
+                      key: "fio2";
                       min: 21; 
                       max: 100 
                     }
@@ -227,11 +237,11 @@ Page {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                rootTopBar.coloredNotify("Tela está bloqueada!", "#D00")
+                rootTopBar.bad("Tela está bloqueada!")
             }
             onPressAndHold: {
                 dashboardPageRoot.lockScreenStatus = false
-                rootTopBar.coloredNotify("Tela desbloqueada!", "#0D0")
+                rootTopBar.good("Tela desbloqueada!")
                 rootTopBar.unlock()
             }
         }
@@ -246,15 +256,15 @@ Page {
         anchors.fill: parent
         spacing: 1
         ToolBar {
-            id: rightSideToolBar
+            id: leftSideToolBar
 
             Layout.fillHeight: true
             Layout.preferredWidth: dashboardPageRoot.sideBarWidth
             
             property string currentModel: "closedMenu" + dashboardPageRoot.currentMode
             property var actions: { 
-                "openMenu": () => { rightSideToolBar.currentModel = "openedMenu" },
-                "closeMenu": () => { rightSideToolBar.currentModel = "closedMenu" + dashboardPageRoot.currentMode },
+                "openMenu": () => { leftSideToolBar.currentModel = "openedMenu" },
+                "closeMenu": () => { leftSideToolBar.currentModel = "closedMenu" + dashboardPageRoot.currentMode },
                 "openPersonSettingsPage": () => { 
                     pageStack.replace("qrc:/pages/PersonSettingsPage.qml")
                 },
@@ -270,11 +280,11 @@ Page {
                 anchors.fill: parent            
                 spacing: 1
                 Repeater {
-                    id: rightSideToolBarRepeater
-                    model: dashboardPageRoot.models[rightSideToolBar.currentModel]
+                    id: leftSideToolBarRepeater
+                    model: dashboardPageRoot.models[leftSideToolBar.currentModel]
                     delegate: MenuItem {
-                        settings: rightSideToolBarRepeater.model.get(index)
-                        clickAction: rightSideToolBar.actions[actionName]
+                        settings: leftSideToolBarRepeater.model.get(index)
+                        clickAction: leftSideToolBar.actions[actionName]
                     }
                 }
             }
@@ -283,13 +293,9 @@ Page {
                 id:updatePropSideBar
 
                 onSave: {
-                    console.log("###################################################################")
-                    console.log(Object.keys(system.operation_mode_controller.operation_mode.parameters))
-                    console.log(Object.values(system.operation_mode_controller.operation_mode.parameters))
-                    console.log(`KEY :: ${key} || VALUE :: ${value}`)
                     system.operation_mode_controller.add_parameter(key, value)
-                    console.log(Object.keys(system.operation_mode_controller.operation_mode.parameters))
-                    console.log(Object.values(system.operation_mode_controller.operation_mode.parameters))
+                    system.hardware_controller.write_data("SET", key)
+                    rootTopBar.good("Parâmetro salvo com sucesso!")
                 }
             }
         }
@@ -302,7 +308,7 @@ Page {
             ColumnLayout {
                 anchors {
                     fill: parent
-                    rightMargin: 3
+                    leftMargin: 3
                 }
                 LineChart {
                     id: pawChart
@@ -319,22 +325,28 @@ Page {
             }
         }
         ToolBar {
-            id: leftSideToolBar
+            id: rightSideToolBar
             Layout.fillHeight: true
             Layout.preferredWidth: dashboardPageRoot.sideBarWidth
 
             property var actions: { 
                 "toggleExpirationPause": (currentState) => {
+                    system.operation_mode_controller.add_parameter("pExp", currentState ? 1 : 0)
+                    system.hardware_controller.write_data("SET", "pExp")
                     console.log(currentState)
-                    // SEND SERIAL COMMAND TO PAUSE
                 },
                 "toggleInspirationPause": (currentState) => {
+                    system.operation_mode_controller.add_parameter("pInsp", currentState ? 1 : 0)
+                    system.hardware_controller.write_data("SET", "pInsp")
                     console.log(currentState)
-                    // SEND SERIAL COMMAND TO PAUSE
                 },
                 "toggleAssistedVentilation": (currentState) => {
+                    if (currentState) {
+                        system.hardware_controller.write_data("START", "")
+                    } else {
+                        system.hardware_controller.write_data("STOP", "")
+                    }
                     console.log(currentState)
-                    // SEND SERIAL COMMAND TO PAUSE
                 }
             }
             
@@ -342,11 +354,12 @@ Page {
                 anchors.fill: parent            
                 spacing: 1
                 Repeater {
-                    id: leftSideToolBarRepeater
+                    id: rightSideToolBarRepeater
                     model: indicatorsModels[currentMode]
                     delegate: MenuItem {
-                        settings: leftSideToolBarRepeater.model.get(index)
-                        clickAction: leftSideToolBar.actions[actionName]
+                        settings: rightSideToolBarRepeater.model.get(index)
+                        clickAction: rightSideToolBar.actions[actionName]
+                        indicatorsValues: dashboardPageRoot.indicatorsValues 
                     }
                 }
             }

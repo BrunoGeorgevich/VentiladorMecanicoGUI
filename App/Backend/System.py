@@ -12,8 +12,8 @@ class System(QObject):
 	def __init__(self):
 		super().__init__()
 		self._person_controller = PersonController()
-		self._hardware_controller = HardwareController()
 		self._operation_mode_controller = OperationModeController()
+		self._hardware_controller = HardwareController(self._operation_mode_controller)
 		self._dashboard_controller = DashboardController(self._hardware_controller)
 
 	# Getters and Setters

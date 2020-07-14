@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import QtQuick.Controls.Material 2.12
             
 Rectangle {
     id:sideBarRoot
@@ -71,23 +72,29 @@ Rectangle {
                 color: root.accentColor
                 font.pixelSize: 40
             }
+
+            MouseArea {
+                anchors.fill: parent
+            }
         }
         SideBarButton {
             Layout.fillHeight: true
             Layout.fillWidth: true
-            text: "CANCELAR"
+            color: Material.color(Material.Green)
+            text: "SALVAR"
 
             onClicked: {
+                sideBarRoot.save(sideBarRoot.value, sideBarRoot.key)
                 sideBarRoot.close()
             }
         }
         SideBarButton {
             Layout.fillHeight: true
             Layout.fillWidth: true
-            text: "SALVAR"
+            color: Material.color(Material.Red)
+            text: "CANCELAR"
 
             onClicked: {
-                sideBarRoot.save(sideBarRoot.value, sideBarRoot.key)
                 sideBarRoot.close()
             }
         }

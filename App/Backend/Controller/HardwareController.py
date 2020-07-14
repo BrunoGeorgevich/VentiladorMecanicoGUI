@@ -4,6 +4,7 @@
 from PySide2.QtCore import QObject, Slot, Property, Signal, QThreadPool
 from serial import Serial, SerialException
 from platform import system
+from time import time
 
 from Backend.Concurrent.HardwareThread import HardwareThread
 
@@ -18,22 +19,41 @@ class HardwareController(QObject):
 	
 	new_data_arrived = Signal(str)
 
-	def __init__(self):
+	def __init__(self, operation_mode_controller):
 		super().__init__()
-
+		
 		self._thread_pool = QThreadPool()
+
+		self._operation_mode_controller = operation_mode_controller
 		usb_port = 0
         
 		while True:
 			try:
-				self.__serial = Serial(f'{SERIAL_PATH}{usb_port}', 115200)
+				self.__serial = Serial(f'{SERIAL_PATH}{usb_port}', 115200, timeout=0.25)
 			except SerialException:
 				usb_port += 1
 				if usb_port > 100:
 					self.__serial = None
 					break
 			else:
-				break
+				print(f"CONNECTED WITH {SERIAL_PATH}{usb_port}")
+		
+				data = ""
+				counter = 0
+				timer = time()
+				while counter < 10:
+					self.__serial.write(b"CONNECT\n")
+					ret = self.__serial.readline().strip().decode()
+					if ret == "OK":
+						data = ret
+						break
+					counter += 1
+
+				if data == "OK":
+					print(f"{SERIAL_PATH}{usb_port} CONNECTION WAS SUCCESSFULLY!")
+					break
+				else:
+					print(f"{SERIAL_PATH}{usb_port} DO NOT REPLY CORRECTLY, TRYING ONE MORE!")
 
 		if self.__serial is None:
 			print(f"[UNABLE TO CONNECT WITH ARDUINO!!!]")
@@ -44,6 +64,42 @@ class HardwareController(QObject):
 	
 	def __del__(self):
 		self.__hardware_is_connected = False
+
+	@Slot(str, str)
+	def write_data(self, command, key):
+		if self.hardware_is_connected is not True:
+			print("NO HARDWARE CONNECTED!")
+			return
+
+		if (command == "SET ALL"):
+			message = "SET$"
+			params = self._operation_mode_controller.operation_mode.parameters
+			for k in params:
+				v = params[k]
+				if (k == "sensiT"):
+					v = 1 if v == "pressure" else 0
+				message = f"{message}{k}:{v},"
+
+			message = f"{message}op:{self._operation_mode_controller.get_mode_parsed()}%\n".upper()
+
+			print(f"SEND TO ARDUINO => {message}")
+			self.__serial.write(message.encode())
+		
+		if (command == "SET"):
+			message = f"SET${key}:{self._operation_mode_controller.get_parameter(key)}%\n".upper()
+			print(f"SEND TO ARDUINO => {message}")
+			self.__serial.write(message.encode())
+		
+		if (command == "START"):
+			message = "START"
+			print(f"SEND TO ARDUINO => {message}")
+			self.__serial.write(message.encode())
+		
+		if (command == "STOP"):
+			message = "STOP"
+			print(f"SEND TO ARDUINO => {message}")
+			self.__serial.write(message.encode())
+
 
 	def read_data(self):
 		data = self.__serial.readline()

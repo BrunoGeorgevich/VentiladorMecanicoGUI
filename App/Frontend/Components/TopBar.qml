@@ -66,7 +66,7 @@ ToolBar {
                 Button {
                     Layout.fillHeight: true
                     Layout.preferredWidth: 98
-                    visible: leftButtonVisible && !lockButtonIsVisible
+                    visible: !lockButtonIsVisible
                     flat: true
                     icon {
                         source: leftButtonVisible ? "qrc:/images/arrow_left" : ""

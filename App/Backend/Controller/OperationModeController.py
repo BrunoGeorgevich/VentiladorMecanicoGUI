@@ -17,14 +17,23 @@ class OperationModeController(QObject):
 	
 	@Slot(str)
 	def set_mode(self, mode):
-		print(self._operation_mode.mode, mode)
 		if self._operation_mode.mode != mode:
 			self._operation_mode.set_mode(mode)
 			self._operation_mode.init_parameters()
+	
+	def get_mode(self):
+		return self._operation_mode.mode
+	
+	def get_mode_parsed(self):
+		if (self._operation_mode.mode == "PCV"): return 0
+		if (self._operation_mode.mode == "VCV"): return 1
 
 	@Slot(str, "QVariant")
 	def add_parameter(self, name, value):
-		self._operation_mode.add_parameters(name, value)
+		self._operation_mode.add_parameter(name, value)
+
+	def get_parameter(self, name):
+		return self._operation_mode.get_parameter(name)
 	
 	@Slot()
 	def clear_parameters(self):

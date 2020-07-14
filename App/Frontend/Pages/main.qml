@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import QtQuick.Controls.Material 2.12
 
 import "qrc:/components"
 import "qrc:/pages"
@@ -15,6 +16,14 @@ ApplicationWindow {
     property string secondaryColor: "#a30f0f"
     property string backgroundColor : "#40464c"
     property string foregroundColor : "#FFFFFF"
+
+    Component.onCompleted: {
+        if (system.hardware_controller.hardware_is_connected) {
+            rootTopBar.good("Arduino conectado com sucesso!")
+        } else {
+            rootTopBar.bad("Não foi possível conectar-se com o Arduino!")
+        }
+    }
     
     header: TopBar{
         id:rootTopBar
@@ -23,12 +32,28 @@ ApplicationWindow {
             notificationSystem.coloredNotify(msg, color);
         }
 
+        function good(msg) {
+            rootTopBar.coloredNotify(msg, Material.color(Material.Green));
+        }
+
+        function bad(msg) {
+            rootTopBar.coloredNotify(msg, Material.color(Material.Red));
+        }
+
+        function info(msg) {
+            rootTopBar.coloredNotify(msg, Material.color(Material.Blue));
+        }
+
+        function warning(msg) {
+            rootTopBar.coloredNotify(msg, Material.color(Material.Yellow));
+        }
+
         NotificationSystem {
             id:notificationSystem
             isOnTheTop: true
             centralized: true
             defaultH: 60
-            defaultW: 300
+            defaultW: 500
         }
         
         onRightButtonClicked: {
@@ -60,7 +85,6 @@ ApplicationWindow {
         smooth: false
         initialItem: PersonSettingsPage {}
         onCurrentItemChanged: {
-            console.log(currentItem.objectName);
             if (currentItem.objectName === "DashboardPage") {
                 if (!chartUpdateTimer.running) {
                     console.log("CHART UPDATE TIMER RESTARTED!")
