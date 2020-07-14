@@ -271,8 +271,8 @@ Page {
                 "openOperationModePage": () => { 
                     pageStack.replace("qrc:/pages/ModeSettingsPage.qml")
                 },
-                "openUpdateSidePanel": (value, key) => { 
-                    updatePropSideBar.open(value, key)
+                "openUpdateSidePanel": (value, key, label) => { 
+                    updatePropSideBar.open(value, key, label)
                 },
             }
             

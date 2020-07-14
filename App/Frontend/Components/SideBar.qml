@@ -7,12 +7,14 @@ Rectangle {
     id:sideBarRoot
     property real value: -1
     property string key: "no_key"
+    property string label: "NO NAME"
 
     signal save(var value, var key)
 
-    function open(value, key) {
+    function open(value, key, label) {
         sideBarRoot.value = value
         sideBarRoot.key = key
+        sideBarRoot.label = label
         sideBarRoot.visible = true
     }
 
@@ -65,9 +67,21 @@ Rectangle {
             Layout.fillWidth: true
 
             Label {
-                verticalAlignment: "AlignVCenter"
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+                    topMargin: 5
+                }
                 horizontalAlignment: "AlignHCenter"
-                anchors.fill: parent
+                text: `${sideBarRoot.label}`
+                color: root.accentColor
+                font.pixelSize: 25
+                fontSizeMode: "Fit"
+            }
+
+            Label {
+                anchors.centerIn: parent
                 text: `${sideBarRoot.value}`
                 color: root.accentColor
                 font.pixelSize: 40
@@ -81,6 +95,7 @@ Rectangle {
             Layout.fillHeight: true
             Layout.fillWidth: true
             color: Material.color(Material.Green)
+            textColor: root.foregroundColor
             text: "SALVAR"
 
             onClicked: {
@@ -92,6 +107,7 @@ Rectangle {
             Layout.fillHeight: true
             Layout.fillWidth: true
             color: Material.color(Material.Red)
+            textColor: root.foregroundColor
             text: "CANCELAR"
 
             onClicked: {

@@ -214,8 +214,10 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
+                        let label = settings.label;
+                        let name = settings.name;
                         let value = system.operation_mode_controller.operation_mode.parameters[name];
-                        clickAction(value, name)
+                        clickAction(value, name, label)
                     }
                 }
             }
@@ -269,7 +271,7 @@ Rectangle {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
 
-                                text: `${rootMenuItem.indicatorsValues[settings.key]}` || '-'
+                                text: `${rootMenuItem.indicatorsValues[settings.key] || "-"}`
                                 font { pointSize: 22; bold: true }
                                 fontSizeMode: "Fit"
                                 color: root.accentColor
