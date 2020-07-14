@@ -29,7 +29,7 @@ class HardwareController(QObject):
         
 		while True:
 			try:
-				self.__serial = Serial(f'{SERIAL_PATH}{usb_port}', 115200, timeout=0.25)
+				self.__serial = Serial(f'{SERIAL_PATH}{usb_port}', 9600, timeout=0.25)
 			except SerialException:
 				usb_port += 1
 				if usb_port > 100:
@@ -90,13 +90,23 @@ class HardwareController(QObject):
 			print(f"SEND TO ARDUINO => {message}")
 			self.__serial.write(message.encode())
 		
+		if (command == "SEND_DATA"):
+			message = "SEND_DATA\n"
+			print(f"SEND TO ARDUINO => {message}")
+			self.__serial.write(message.encode())
+		
+		if (command == "STOP_SENDING"):
+			message = "STOP_SENDING\n"
+			print(f"SEND TO ARDUINO => {message}")
+			self.__serial.write(message.encode())
+		
 		if (command == "START"):
-			message = "START"
+			message = "START\n"
 			print(f"SEND TO ARDUINO => {message}")
 			self.__serial.write(message.encode())
 		
 		if (command == "STOP"):
-			message = "STOP"
+			message = "STOP\n"
 			print(f"SEND TO ARDUINO => {message}")
 			self.__serial.write(message.encode())
 

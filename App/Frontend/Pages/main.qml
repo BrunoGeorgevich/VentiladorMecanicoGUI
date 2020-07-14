@@ -64,6 +64,7 @@ ApplicationWindow {
                     break
                 case "ModePage":
                     pageStack.replace("qrc:/pages/DashboardPage.qml")
+                    system.hardware_controller.write_data("SEND_DATA", "")
                     break
             }
         }

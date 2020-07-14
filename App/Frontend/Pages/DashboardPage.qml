@@ -266,9 +266,11 @@ Page {
                 "openMenu": () => { leftSideToolBar.currentModel = "openedMenu" },
                 "closeMenu": () => { leftSideToolBar.currentModel = "closedMenu" + dashboardPageRoot.currentMode },
                 "openPersonSettingsPage": () => { 
+                    system.hardware_controller.write_data("STOP_SENDING", "")
                     pageStack.replace("qrc:/pages/PersonSettingsPage.qml")
                 },
                 "openOperationModePage": () => { 
+                    system.hardware_controller.write_data("STOP_SENDING", "")
                     pageStack.replace("qrc:/pages/ModeSettingsPage.qml")
                 },
                 "openUpdateSidePanel": (value, key, label) => { 
