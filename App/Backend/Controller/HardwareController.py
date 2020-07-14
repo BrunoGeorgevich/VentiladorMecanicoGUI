@@ -11,7 +11,7 @@ from Backend.Concurrent.HardwareThread import HardwareThread
 SERIAL_PATH = ""
 
 if system() == 'Linux':
-    SERIAL_PATH = "/dev/ttyUSB"
+    SERIAL_PATH = "/dev/ttyACM"
 elif system() == 'Windows':
     SERIAL_PATH = "COM"
 
