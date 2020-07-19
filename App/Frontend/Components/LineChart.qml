@@ -135,14 +135,14 @@ Item {
         }
         Label {
             Layout.fillHeight: true
-            Layout.preferredWidth: 50
+            Layout.preferredWidth: 60
 
             text: parseNumber(ls.lastVal)
             font { pointSize: 35; bold: true }
             fontSizeMode: "Fit"
             color: ls.color || root.primaryColor
             verticalAlignment: "AlignVCenter"
-            horizontalAlignment: "AlignHCenter"
+            horizontalAlignment: "AlignLeft"
         }
     }
 }
