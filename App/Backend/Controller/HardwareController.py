@@ -23,6 +23,7 @@ class HardwareController(QObject):
 		super().__init__()
 		
 		self._thread_pool = QThreadPool()
+		self._is_receiving_data = False
 
 		self._operation_mode_controller = operation_mode_controller
 		usb_port = 0
@@ -93,11 +94,13 @@ class HardwareController(QObject):
 		if (command == "SEND_DATA"):
 			message = "SEND_DATA\n"
 			print(f"SEND TO ARDUINO => {message}")
+			self._is_receiving_data = True
 			self.__serial.write(message.encode())
 		
 		if (command == "STOP_SENDING"):
 			message = "STOP_SENDING\n"
 			print(f"SEND TO ARDUINO => {message}")
+			self._is_receiving_data = False
 			self.__serial.write(message.encode())
 		
 		if (command == "START"):
@@ -119,7 +122,8 @@ class HardwareController(QObject):
 	
 	@Slot(str)
 	def send_data(self, result):
-		self.new_data_arrived.emit(result)
+		if self._is_receiving_data:
+			self.new_data_arrived.emit(result)
 
 	def restart_thread(self):
 		hardware_thread = HardwareThread(fn=self.read_data, parent=self)

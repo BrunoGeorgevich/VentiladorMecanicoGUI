@@ -5,8 +5,24 @@ import QtCharts 2.12
 
 Item {
     id: chartRoot
-    property real numOfPoints: 60
+
+    property alias min: ls.yMin
+    property alias max: ls.yMax
     property alias title: chartTitle.text
+    
+    property real numOfPoints: 60
+    property bool dinamicallyAdaptY: false
+
+    function parseNumber(number) {
+        if (!parseFloat(number) && isNaN(number)) {
+            return "-"
+        }
+        if (parseInt(number) === parseFloat(number)) {
+            return parseInt(number)
+        } else {
+            return parseFloat(number).toFixed(1)
+        }
+    }
     
     function addPoint(value) {
         ls.lastVal = value
@@ -33,7 +49,7 @@ Item {
             Label {
                 id:chartTitle
                 anchors.fill: parent
-                text: `${ls.lastVal.toFixed(0)}` || ''
+                text: ''
                 font { pointSize: 15; bold: true }
                 fontSizeMode: "Fit"
                 color: root.accentColor
@@ -68,6 +84,7 @@ Item {
             }
             ValueAxis {
                 id: yAxis
+                min: ls.yMin
                 max: ls.yMax
                 labelsFont.pointSize: 6
                 labelsColor: root.accentColor
@@ -76,6 +93,7 @@ Item {
             LineSeries {
                 id: ls
 
+                property real yMin: 0
                 property real yMax: 5
                 property real currentIndex: 0
                 property real lastVal: 0
@@ -96,8 +114,16 @@ Item {
                 capStyle: "RoundCap"
                 color: root.foregroundColor
 
-                onPointAdded: refreshYMax()
-                onPointReplaced: refreshYMax()
+                onPointAdded: {
+                    if (dinamicallyAdaptY) {
+                        chartRoot. refreshYMax()
+                    }
+                }
+                onPointReplaced: {
+                    if (dinamicallyAdaptY) {
+                        chartRoot. refreshYMax()
+                    }
+                }
             }
 
             ScatterSeries {
@@ -111,7 +137,7 @@ Item {
             Layout.fillHeight: true
             Layout.preferredWidth: 50
 
-            text: `${ls.lastVal.toFixed(0)}` || ''
+            text: parseNumber(ls.lastVal)
             font { pointSize: 35; bold: true }
             fontSizeMode: "Fit"
             color: ls.color || root.primaryColor

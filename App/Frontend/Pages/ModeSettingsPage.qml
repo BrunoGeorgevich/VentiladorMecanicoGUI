@@ -31,33 +31,26 @@ Page {
         ListElement {   elementLabel: "ie";
                         elementType: "TouchSpinBox";
                         elementName: "I:E"; 
-                        elementValue: 2;  
-                        elementMin: 2;  
-                        elementMax: 8;  
+                        elementValue: 2;
+                        elementStep: 0.1;  
                         elementPreffix: '1:' 
                     }
         ListElement {   elementLabel: "rr";
                         elementType: "TouchSpinBox";
                         elementName: "RR";  
                         elementValue: 12;  
-                        elementMin: 5;  
-                        elementMax: 20;  
                         elementPreffix: ''
                     }
         ListElement {   elementLabel: "pip";
                         elementType: "TouchSpinBox";
                         elementName: "Pressão Pico";  
                         elementValue: 30;  
-                        elementMin: 5;  
-                        elementMax: 60;  
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "peep";
                         elementType: "TouchSpinBox";
                         elementName: "PEEP";  
                         elementValue: 12;  
-                        elementMin: 5;  
-                        elementMax: 25;  
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "sensiT";
@@ -70,8 +63,6 @@ Page {
                         elementType: "TouchSpinBox";
                         elementName: "Sensiblidade";  
                         elementValue: 12;  
-                        elementMin: 5;  
-                        elementMax: 25;  
                         elementPreffix: '' 
                     }
     }
@@ -82,32 +73,24 @@ Page {
                         elementType: "TouchSpinBox";
                         elementName: "Volume"; 
                         elementValue: 15;  
-                        elementMin: 2;  
-                        elementMax: 60;  
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "rr";
                         elementType: "TouchSpinBox";
                         elementName: "RR";  
                         elementValue: 12;  
-                        elementMin: 5;  
-                        elementMax: 20;  
                         elementPreffix: ''
                     }
         ListElement {   elementLabel: "flow";
                         elementType: "TouchSpinBox";
                         elementName: "Fluxo";  
                         elementValue: 30;  
-                        elementMin: 5;  
-                        elementMax: 60;  
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "peep";
                         elementType: "TouchSpinBox";
                         elementName: "PEEP";  
                         elementValue: 12;  
-                        elementMin: 5;  
-                        elementMax: 25;  
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "sensiT";
@@ -120,8 +103,6 @@ Page {
                         elementType: "TouchSpinBox";
                         elementName: "Sensiblidade";  
                         elementValue: 12;  
-                        elementMin: 5;  
-                        elementMax: 25;  
                         elementPreffix: '' 
                     }
     }
@@ -134,7 +115,19 @@ Page {
             Layout.fillWidth: true
 
             TabBar {
+                id:operationModeTabBar
+
+                function getParsedCurrentIndex() {
+                    let len = tabsModel.count
+                    let idx = system.operation_mode_controller.get_mode_parsed()
+                    if (idx > len + 1 || idx < 0) {
+                        return 0
+                    }
+                    return idx
+                }
+
                 anchors.fill: parent
+                currentIndex: getParsedCurrentIndex()
 
                 ListModel {
                     id: tabsModel
@@ -192,8 +185,7 @@ Page {
                                     width: 280; height: 70
                                     control: TouchSpinBox{ 
                                         scale: 0.65
-                                        min: elementMin
-                                        max: elementMax
+                                        step: elementStep !== undefined ? elementStep : 1
                                         preffix: elementPreffix
                                         Component.onCompleted: {
                                             value = system.operation_mode_controller.operation_mode.parameters[elementLabel] || elementValue

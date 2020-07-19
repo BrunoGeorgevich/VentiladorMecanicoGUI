@@ -66,6 +66,7 @@ Page {
             name: "rr";
             min: '4'; 
             max: '60'; 
+            step: '1'; 
             twoUnits: false;
             unit: 'b/min';
             actionName: "openUpdateSidePanel";
@@ -77,6 +78,7 @@ Page {
             name: "ie";
             min: '1'; 
             max: '4'; 
+            step: '0.1'; 
             twoUnits: false;
             unit: 'ratio';
             actionName: "openUpdateSidePanel";
@@ -87,6 +89,7 @@ Page {
             name: "pip";
             min: '2'; 
             max: '40'; 
+            step: '1'; 
             twoUnits: false;
             unit: '[cmH<sub>2</sub>O]';
             actionName: "openUpdateSidePanel";
@@ -97,6 +100,7 @@ Page {
             name: "peep";
             min: '-30'; 
             max: '30'; 
+            step: '1'; 
             twoUnits: false;
             unit: '[cmH<sub>2</sub>O]';
             actionName: "openUpdateSidePanel";
@@ -107,6 +111,7 @@ Page {
             name: "sensiV";
             min: '2'; 
             max: '100'; 
+            step: '1'; 
             twoUnits: true;
             unitSelector: 'sensiT'; 
             unitConditional: 'pressure'; 
@@ -123,7 +128,8 @@ Page {
             label: "RR"; 
             name: "rr";
             min: '4'; 
-            max: '60'; 
+            max: '60';
+            step: '1'; 
             twoUnits: false;
             unit: 'b/min';
             actionName: "openUpdateSidePanel";
@@ -134,6 +140,7 @@ Page {
             name: "volume";
             min: '2'; 
             max: '60'; 
+            step: '1'; 
             twoUnits: false;
             unit: 'l';
             actionName: "openUpdateSidePanel";
@@ -144,6 +151,7 @@ Page {
             name: "flow";
             min: '2'; 
             max: '40'; 
+            step: '10';
             twoUnits: false;
             unit: 'l/m²';
             actionName: "openUpdateSidePanel";
@@ -154,6 +162,7 @@ Page {
             name: "peep";
             min: '-30'; 
             max: '30'; 
+            step: '1'; 
             twoUnits: false;
             unit: '[cmH<sub>2</sub>O]';
             actionName: "openUpdateSidePanel";
@@ -164,6 +173,7 @@ Page {
             name: "sensiV";
             min: '2'; 
             max: '100'; 
+            step: '1'; 
             twoUnits: true;
             unitSelector: 'sensiT'; 
             unitConditional: 'pressure'; 
@@ -178,14 +188,29 @@ Page {
         ListElement { type: "button"; label: "Voltar"; actionName: "closeMenu"; }
         ListElement { type: "button"; label: "Mudar\nPaciente"; actionName: "openPersonSettingsPage" }
         ListElement { type: "button"; label: "Mudar\nModo de\nOperação"; actionName: "openOperationModePage" }
+        ListElement { type: "button"; label: "Configuração\nde Alarmes"; actionName: "openAlarmsSettingsPage" }
     }
    
     ListModel {
         id: indicatorsPCVModel
         ListElement { type: "indicator"; 
-                      name: "Ve"; 
-                      unit: "slpm"; 
+                      name: "P<sub>PICO</sub>"; 
+                        unit: 'cmH<sub>2</sub>O' ;
+                      key: "pe";
+                      min: 2; 
+                      max: 40 
+                    }
+        ListElement { type: "indicator"; 
+                      name: "Vt"; 
+                      unit: "ml"; 
                       key: "ve";
+                      min: 2; 
+                      max: 40 
+                    }
+        ListElement { type: "indicator"; 
+                      name: "Vol<sub>MIN</sub>"; 
+                      unit: "l/min"; 
+                      key: "vol_min";
                       min: 2; 
                       max: 40 
                     }
@@ -211,9 +236,23 @@ Page {
                       max: 70 
                     }
         ListElement { type: "indicator"; 
-                      name: "Ve"; 
-                      unit: "slpm"; 
+                      name: "P<sub>PICO</sub>"; 
+                        unit: 'cmH<sub>2</sub>O' ;
+                      key: "pe";
+                      min: 2; 
+                      max: 40 
+                    }
+        ListElement { type: "indicator"; 
+                      name: "Vt"; 
+                      unit: "ml"; 
                       key: "ve";
+                      min: 2; 
+                      max: 40 
+                    }
+        ListElement { type: "indicator"; 
+                      name: "Vol<sub>MIN</sub>"; 
+                      unit: "l/min"; 
+                      key: "vol_min";
                       min: 2; 
                       max: 40 
                     }
@@ -266,15 +305,22 @@ Page {
                 "openMenu": () => { leftSideToolBar.currentModel = "openedMenu" },
                 "closeMenu": () => { leftSideToolBar.currentModel = "closedMenu" + dashboardPageRoot.currentMode },
                 "openPersonSettingsPage": () => { 
+                    system.hardware_controller.write_data("STOP", "")
                     system.hardware_controller.write_data("STOP_SENDING", "")
                     pageStack.replace("qrc:/pages/PersonSettingsPage.qml")
                 },
                 "openOperationModePage": () => { 
+                    system.hardware_controller.write_data("STOP", "")
                     system.hardware_controller.write_data("STOP_SENDING", "")
                     pageStack.replace("qrc:/pages/ModeSettingsPage.qml")
                 },
-                "openUpdateSidePanel": (value, key, label) => { 
-                    updatePropSideBar.open(value, key, label)
+                "openAlarmsSettingsPage": () => { 
+                    system.hardware_controller.write_data("STOP", "")
+                    system.hardware_controller.write_data("STOP_SENDING", "")
+                    pageStack.replace("qrc:/pages/AlarmSettingsPage.qml")
+                },
+                "openUpdateSidePanel": (value, key, label, step) => { 
+                    updatePropSideBar.open(value, key, label, step)
                 },
             }
             
@@ -314,14 +360,20 @@ Page {
                 }
                 LineChart {
                     id: pawChart
+                    min: -0.5
+                    max: 60
                     title: "PAW<br>[cmH<sub>2</sub>O]"
                 }
                 LineChart {
                     id: vtidalChart
+                    min: -1
+                    max: 1000
                     title: "V<sub>tidal</sub><br>[ml]"
                 }
                 LineChart {
                     id: flowChart
+                    min: -100
+                    max: 100
                     title: "Flow<br>[slpm]"
                 }
             }

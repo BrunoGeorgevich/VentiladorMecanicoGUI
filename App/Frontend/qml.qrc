@@ -3,6 +3,7 @@
         <file alias="main.qml">Pages/main.qml</file>
         <file alias="DashboardPage.qml">Pages/DashboardPage.qml</file>
         <file alias="ModeSettingsPage.qml">Pages/ModeSettingsPage.qml</file>
+        <file alias="AlarmSettingsPage.qml">Pages/AlarmSettingsPage.qml</file>
         <file alias="PersonSettingsPage.qml">Pages/PersonSettingsPage.qml</file>
     </qresource>
     <qresource prefix="/images">

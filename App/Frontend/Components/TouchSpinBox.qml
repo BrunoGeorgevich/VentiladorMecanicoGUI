@@ -9,8 +9,19 @@ RowLayout {
     property string preffix: ''
     property real scale: 1 
     property real value: 160
-    property real min: 0
-    property real max: 300
+    property real step: 1 
+    property real interval: 50
+
+    function parseNumber(number) {
+        if (!parseFloat(number) && isNaN(number)) {
+            return "-"
+        }
+        if (parseInt(number) === parseFloat(number)) {
+            return parseInt(number)
+        } else {
+            return parseFloat(number).toFixed(1)
+        }
+    }
 
 
     width: 270 * scale; height: 70 * scale
@@ -19,6 +30,7 @@ RowLayout {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.height
         autoRepeat: true
+        autoRepeatInterval: interval
         
         background: Rectangle {
             radius: parent.height/2
@@ -34,7 +46,7 @@ RowLayout {
             text: "-"
         }
         onPressed: {
-            value = (value - 1 < min ? min : value - 1)
+            value = value - step
         }
     }
     Label {
@@ -44,7 +56,7 @@ RowLayout {
         horizontalAlignment: "AlignHCenter"
         verticalAlignment: "AlignVCenter"
         
-        text: `${preffix}${touchSpinBoxRoot.value}`
+        text: `${preffix}${parseNumber(touchSpinBoxRoot.value)}`
         color: Qt.darker(root.secondaryColor)
         font.pointSize: fontSize * 0.75
         fontSizeMode: "Fit"
@@ -53,6 +65,7 @@ RowLayout {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.height
         autoRepeat: true
+        autoRepeatInterval: interval
         
         background: Rectangle {
             radius: parent.height/2
@@ -68,7 +81,7 @@ RowLayout {
             text: "+"
         }
         onPressed: {
-            value = (value + 1 > max ? max : value + 1)
+            value = value + step
         }
     }  
 }

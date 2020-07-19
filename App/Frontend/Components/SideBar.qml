@@ -5,16 +5,29 @@ import QtQuick.Controls.Material 2.12
             
 Rectangle {
     id:sideBarRoot
+    property real step: 1
     property real value: -1
     property string key: "no_key"
     property string label: "NO NAME"
 
     signal save(var value, var key)
 
-    function open(value, key, label) {
+    function parseNumber(number) {
+        if (!parseFloat(number) && isNaN(number)) {
+            return "-"
+        }
+        if (parseInt(number) === parseFloat(number)) {
+            return parseInt(number)
+        } else {
+            return parseFloat(number).toFixed(1)
+        }
+    }
+
+    function open(value, key, label, step) {
         sideBarRoot.value = value
         sideBarRoot.key = key
         sideBarRoot.label = label
+        sideBarRoot.step = parseFloat(step) ? parseFloat(step) : 1
         sideBarRoot.visible = true
     }
 
@@ -34,15 +47,11 @@ Rectangle {
             Layout.fillWidth: true
             autoRepeat: true
             autoRepeatDelay: 300
-            autoRepeatInterval: 100
+            autoRepeatInterval: 50
             text: "+"
 
             onClicked: {
-                if (sideBarRoot.value >= 1000) {
-                    sideBarRoot.value = 1000
-                } else {
-                    sideBarRoot.value += 1
-                }
+                sideBarRoot.value += sideBarRoot.step
             }
         }
         SideBarButton {
@@ -50,15 +59,11 @@ Rectangle {
             Layout.fillWidth: true
             autoRepeat: true
             autoRepeatDelay: 300
-            autoRepeatInterval: 100
+            autoRepeatInterval: 50
             text: "-"
 
             onClicked: {
-                if (sideBarRoot.value <= 0) {
-                    sideBarRoot.value = 0
-                } else {
-                    sideBarRoot.value -= 1
-                }
+                sideBarRoot.value -= sideBarRoot.step
             }
         }
         Item {
@@ -82,7 +87,7 @@ Rectangle {
 
             Label {
                 anchors.centerIn: parent
-                text: `${sideBarRoot.value}`
+                text: parseNumber(sideBarRoot.value)
                 color: root.accentColor
                 font.pixelSize: 40
             }

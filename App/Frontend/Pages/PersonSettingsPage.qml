@@ -42,7 +42,7 @@ Page {
             Field {
                 id: heightField
                 anchors.centerIn: parent
-                name: "Altura"
+                name: "Altura (cm)"
                 width: 280; height: 120
                 control: TouchSpinBox{ 
                     id: heightControl

@@ -74,6 +74,10 @@ ApplicationWindow {
                 case "ModePage":
                     pageStack.replace("qrc:/pages/PersonSettingsPage.qml")
                     break
+                case "AlarmPage":
+                    pageStack.replace("qrc:/pages/DashboardPage.qml")
+                    system.hardware_controller.write_data("SEND_DATA", "")
+                    break
             }
         }
     }
@@ -115,6 +119,14 @@ ApplicationWindow {
                     rootTopBar.batteryIndicatorVisible = false
                     rootTopBar.lockButtonIsVisible = false
                     rootTopBar.text = "Modo de operação"        
+                    break;
+                case "AlarmPage":
+                    rootTopBar.visible = true
+                    rootTopBar.leftButtonVisible = true
+                    rootTopBar.rightButtonVisible = false
+                    rootTopBar.batteryIndicatorVisible = false
+                    rootTopBar.lockButtonIsVisible = false
+                    rootTopBar.text = "Configuração de Alarmes"        
                     break;
                 case "DashboardPage":
                     rootTopBar.visible = true

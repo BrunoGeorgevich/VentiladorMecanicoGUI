@@ -19,7 +19,8 @@ class OperationMode(QObject):
     def parameters(self): return self._parameters[self._mode]
 
     def init_parameters(self):
-        self._parameters[self._mode] = { "pExp": 0, "pInsp": 0 }
+        if self._mode not in self._parameters:
+            self._parameters[self._mode] = { "pExp": 0, "pInsp": 0 }
         self.parameters_has_changed.emit(self._parameters[self._mode])
 
     def add_parameter(self, name, value):

@@ -13,6 +13,17 @@ Rectangle {
     property var clickAction
     property var indicatorsValues
 
+    function parseNumber(number) {
+        if (!parseFloat(number) && isNaN(number)) {
+            return "-"
+        }
+        if (parseInt(number) === parseFloat(number)) {
+            return parseInt(number)
+        } else {
+            return parseFloat(number).toFixed(1)
+        }
+    }
+
     function toPercent() {
         let name = settings.parameterName
         if (name === undefined) return undefined
@@ -27,12 +38,12 @@ Rectangle {
 
     function valueToText() {
         let name = settings.name
-        if (name === undefined) return undefined
-        let preffix = settings.preffix || ''
+        if (name === undefined) return ''
+        let preffix = settings.preffix !== undefined ? settings.preffix : ''
 
         let value = system.operation_mode_controller.operation_mode.parameters[name]
-        value = value || ''
-        return `${preffix}${value}`
+        value = value !== undefined ? value : ''
+        return `${preffix}${parseNumber(value)}`
     }
 
     function unitParse() {
@@ -191,7 +202,7 @@ Rectangle {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
 
-                                text: valueToText() || ''
+                                text: valueToText()
                                 font { pointSize: 22; bold: true }
                                 fontSizeMode: "Fit"
                                 color: root.accentColor
@@ -216,8 +227,9 @@ Rectangle {
                     onClicked: {
                         let label = settings.label;
                         let name = settings.name;
+                        let step = settings.step;
                         let value = system.operation_mode_controller.operation_mode.parameters[name];
-                        clickAction(value, name, label)
+                        clickAction(value, name, label, step)
                     }
                 }
             }
@@ -266,12 +278,33 @@ Rectangle {
                         Layout.fillHeight: true
                         
                         RowLayout {
+
                             anchors.fill: parent
                             Label {
+                                id: indicatorValueLabel
+
+                                function indicatorParseValue() {
+                                    if (rootMenuItem.indicatorsValues !== undefined) {
+                                        if (settings.key !== undefined) {
+                                            if (settings.key === "vol_min") {
+                                                let ve = rootMenuItem.indicatorsValues["ve"]
+                                                let rr = system.operation_mode_controller.operation_mode.parameters["rr"]
+                                                return parseNumber(rr*ve/1000)
+                                            }
+                                            else if (rootMenuItem.indicatorsValues[settings.key] !== undefined) {
+                                                if (parseFloat(rootMenuItem.indicatorsValues[settings.key])) {
+                                                    return parseNumber(rootMenuItem.indicatorsValues[settings.key]).toFixed(1) 
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return "-"
+                                }
+
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
 
-                                text: `${rootMenuItem.indicatorsValues[settings.key] || "-"}`
+                                text: indicatorValueLabel.indicatorParseValue()
                                 font { pointSize: 22; bold: true }
                                 fontSizeMode: "Fit"
                                 color: root.accentColor

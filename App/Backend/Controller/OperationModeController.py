@@ -24,6 +24,7 @@ class OperationModeController(QObject):
 	def get_mode(self):
 		return self._operation_mode.mode
 	
+	@Slot(result=int)
 	def get_mode_parsed(self):
 		if (self._operation_mode.mode == "PCV"): return 0
 		if (self._operation_mode.mode == "VCV"): return 1
