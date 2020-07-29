@@ -30,7 +30,7 @@ Page {
     
     Connections {
         target: rootTopBar
-        onLockButtonClicked:  {
+        onLockButtonClicked: {
             if(!dashboardPageRoot.lockScreenStatus) {
                 dashboardPageRoot.lockScreenStatus = true
                 leftSideToolBar.currentModel = "closedMenu" + dashboardPageRoot.currentMode
@@ -38,6 +38,9 @@ Page {
             } else {
                 rootTopBar.bad("Tela está bloqueada!")
             }
+        }
+        onAlertButtonClicked: {
+            alertSideBar.open()
         }
     }
     
@@ -195,7 +198,7 @@ Page {
         id: indicatorsPCVModel
         ListElement { type: "indicator"; 
                       name: "P<sub>PICO</sub>"; 
-                        unit: 'cmH<sub>2</sub>O' ;
+                      unit: 'cmH<sub>2</sub>O' ;
                       key: "pe";
                       min: 2; 
                       max: 40 
@@ -417,6 +420,16 @@ Page {
                     }
                 }
             }
+        }
+    }
+    
+    AlertSideBar {
+        id:alertSideBar
+        width: parent.width * 0.81
+        height: parent.height
+        anchors {
+            right: parent.right
+            verticalCenter: parent.verticalCenter
         }
     }
 }

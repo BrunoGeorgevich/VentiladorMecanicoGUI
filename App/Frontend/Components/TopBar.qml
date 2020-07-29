@@ -7,6 +7,7 @@ ToolBar {
     id: toolBarRoot
     signal leftButtonClicked()
     signal rightButtonClicked()
+    signal alertButtonClicked()
     signal lockButtonClicked()
 
     property alias text: topBarLabel.text
@@ -117,7 +118,10 @@ ToolBar {
                     visible: batteryIndicatorVisible
 
                     RowLayout {
-                        anchors.fill: parent
+                        anchors {
+                            fill: parent
+                            rightMargin: 10
+                        }
 
                         Label {
                             id: batteryLabel
@@ -142,6 +146,26 @@ ToolBar {
                             fillMode: Image.PreserveAspectFit
 
                             source: "qrc:/images/battery"
+                        }
+
+                        Button {
+                            id: alertButton
+                            Layout.fillHeight: true
+                            Layout.preferredWidth: 40
+
+                            visible: lockButtonIsVisible
+                            height: parent.height
+
+                            flat: true
+                            icon {
+                                source: "qrc:/images/alert"
+                                color: root.foregroundColor
+                                height: parent.height
+                            }
+
+                            onClicked: { 
+                                alertButtonClicked()
+                            }
                         }
                     }
                 }

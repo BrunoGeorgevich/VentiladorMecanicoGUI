@@ -39,18 +39,21 @@ Page {
                         elementType: "TouchSpinBox";
                         elementName: "RR";  
                         elementValue: 12;  
+                        elementStep: 1;  
                         elementPreffix: ''
                     }
         ListElement {   elementLabel: "pip";
                         elementType: "TouchSpinBox";
                         elementName: "Pressão Pico";  
-                        elementValue: 30;  
+                        elementValue: 30;    
+                        elementStep: 1;  
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "peep";
                         elementType: "TouchSpinBox";
                         elementName: "PEEP";  
-                        elementValue: 12;  
+                        elementValue: 12;    
+                        elementStep: 1;  
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "sensiT";
@@ -62,7 +65,8 @@ Page {
         ListElement {   elementLabel: "sensiV";
                         elementType: "TouchSpinBox";
                         elementName: "Sensiblidade";  
-                        elementValue: 12;  
+                        elementValue: 12;   
+                        elementStep: 1;  
                         elementPreffix: '' 
                     }
     }
@@ -72,25 +76,29 @@ Page {
         ListElement {   elementLabel: "volume";
                         elementType: "TouchSpinBox";
                         elementName: "Volume"; 
-                        elementValue: 15;  
+                        elementValue: 15;   
+                        elementStep: 1;  
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "rr";
                         elementType: "TouchSpinBox";
                         elementName: "RR";  
-                        elementValue: 12;  
+                        elementValue: 12;   
+                        elementStep: 1;  
                         elementPreffix: ''
                     }
         ListElement {   elementLabel: "flow";
                         elementType: "TouchSpinBox";
                         elementName: "Fluxo";  
-                        elementValue: 30;  
+                        elementValue: 30;   
+                        elementStep: 1;  
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "peep";
                         elementType: "TouchSpinBox";
                         elementName: "PEEP";  
-                        elementValue: 12;  
+                        elementValue: 12;   
+                        elementStep: 1;  
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "sensiT";
@@ -102,7 +110,8 @@ Page {
         ListElement {   elementLabel: "sensiV";
                         elementType: "TouchSpinBox";
                         elementName: "Sensiblidade";  
-                        elementValue: 12;  
+                        elementValue: 12;   
+                        elementStep: 1;  
                         elementPreffix: '' 
                     }
     }

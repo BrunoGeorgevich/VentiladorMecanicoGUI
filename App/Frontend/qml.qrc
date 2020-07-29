@@ -10,6 +10,7 @@
         <file alias="arrow_left">assets/arrow_left.png</file>
         <file alias="arrow_right">assets/arrow_right.png</file>
         <file alias="battery">assets/battery.png</file>
+        <file alias="alert">assets/alert.png</file>
         <file alias="plug">assets/power-plug.png</file>
         <file alias="locked">assets/locked.png</file>
         <file alias="unlocked">assets/unlocked.png</file>
@@ -23,6 +24,7 @@
         <file alias="MenuItem.qml">Components/MenuItem.qml</file>
         <file alias="LineChart.qml">Components/LineChart.qml</file>
         <file alias="BottomBar.qml">Components/BottomBar.qml</file>
+        <file alias="AlertSideBar.qml">Components/AlertSideBar.qml</file>
         <file alias="TouchSpinBox.qml">Components/TouchSpinBox.qml</file>
         <file alias="SideBarButton.qml">Components/SideBarButton.qml</file>
         <file alias="PersonDetailsTopBar.qml">Components/PersonDetailsTopBar.qml</file>

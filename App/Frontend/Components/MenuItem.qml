@@ -293,7 +293,7 @@ Rectangle {
                                             }
                                             else if (rootMenuItem.indicatorsValues[settings.key] !== undefined) {
                                                 if (parseFloat(rootMenuItem.indicatorsValues[settings.key])) {
-                                                    return parseNumber(rootMenuItem.indicatorsValues[settings.key]).toFixed(1) 
+                                                    return parseNumber(rootMenuItem.indicatorsValues[settings.key])
                                                 }
                                             }
                                         }

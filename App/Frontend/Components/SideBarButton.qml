@@ -4,6 +4,7 @@ import QtQuick.Controls 2.12
 Button {
     property alias textColor: buttonContentLabel.color
     property alias color: backgroundRect.color
+    property alias radius: backgroundRect.radius
     flat: true
         
     background: Rectangle {

@@ -46,7 +46,7 @@ RowLayout {
             text: "-"
         }
         onPressed: {
-            value = value - step
+            value = (value - step)  <= 0 ? 0 : (value - step)
         }
     }
     Label {
