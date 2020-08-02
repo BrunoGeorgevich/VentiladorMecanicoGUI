@@ -2,6 +2,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
+import "qrc:/functions/utils.js" as Utils
+
 RowLayout {
     id:touchSpinBoxRoot
 
@@ -11,17 +13,6 @@ RowLayout {
     property real value: 160
     property real step: 1 
     property real interval: 50
-
-    function parseNumber(number) {
-        if (!parseFloat(number) && isNaN(number)) {
-            return "-"
-        }
-        if (parseInt(number) === parseFloat(number)) {
-            return parseInt(number)
-        } else {
-            return parseFloat(number).toFixed(1)
-        }
-    }
 
 
     width: 270 * scale; height: 70 * scale
@@ -56,7 +47,7 @@ RowLayout {
         horizontalAlignment: "AlignHCenter"
         verticalAlignment: "AlignVCenter"
         
-        text: `${preffix}${parseNumber(touchSpinBoxRoot.value)}`
+        text: `${preffix}${Utils.parseNumber(touchSpinBoxRoot.value)}`
         color: Qt.darker(root.secondaryColor)
         font.pointSize: fontSize * 0.75
         fontSizeMode: "Fit"

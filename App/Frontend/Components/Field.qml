@@ -18,6 +18,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
 
         text: fieldRoot.name
+        textFormat: Text.RichText
         color: root.secondaryColor
         font { pointSize: fontSize; bold: true }
     }

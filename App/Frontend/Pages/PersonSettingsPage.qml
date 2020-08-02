@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
+import "qrc:/functions/utils.js" as Utils
 import "qrc:/components"
 import "qrc:/pages"
 
@@ -16,24 +17,24 @@ Page {
             fill: parent
         }
 
-        Item {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+        // Item {
+        //     Layout.fillWidth: true
+        //     Layout.fillHeight: true
 
-            Field {
-                anchors.centerIn: parent
-                name: "Nome"
-                width: 450; height: 120
-                control: TextField { 
-                    width: 450; height: 50
-                    font.pointSize: 18
-                    maximumLength: 30
-                    placeholderText: qsTr("Ex.: João") 
-                    text: system.person_controller.person.name
-                    onTextChanged: system.person_controller.person.name = text
-                }
-            }
-        }
+        //     Field {
+        //         anchors.centerIn: parent
+        //         name: "Nome"
+        //         width: 450; height: 120
+        //         control: TextField { 
+        //             width: 450; height: 50
+        //             font.pointSize: 18
+        //             maximumLength: 30
+        //             placeholderText: qsTr("Ex.: João") 
+        //             text: system.person_controller.person.name
+        //             onTextChanged: system.person_controller.person.name = text
+        //         }
+        //     }
+        // }
 
         Item {
             Layout.fillWidth: true
@@ -54,6 +55,7 @@ Page {
             }
 
             Label {
+
                 anchors {
                     right: parent.right
                     bottom: heightField.bottom
@@ -62,9 +64,10 @@ Page {
                 }
 
                 verticalAlignment: "AlignVCenter"
+                horizontalAlignment: "AlignHCenter"
                 font.pointSize: 20
 
-                text: "4 Litros/kg"
+                text: `Peso Predito:\n${Utils.predictWeight()} kg`
             }
         }
 
@@ -78,8 +81,8 @@ Page {
                 width: 280; height: 140
                 control: Chooser{ 
                     options: ListModel {
-                        ListElement { elementText: "♂"; elementValue: "male"; elementIsEnable: true}
-                        ListElement { elementText: "♀"; elementValue: "female"; elementIsEnable: true}
+                        ListElement { elementType: "label"; elementText: "♂"; elementValue: "male"; elementIsEnable: true}
+                        ListElement { elementType: "label"; elementText: "♀"; elementValue: "female"; elementIsEnable: true}
                     }
                     numOfItens: 2
                     Component.onCompleted: {

@@ -79,7 +79,7 @@ Rectangle {
                 headerPositioning: "OverlayHeader"
                 spacing: 5
                 
-                model: system.alarm_controller.items
+                model: system.alarm_message_controller.items
                 delegate: Rectangle {
                     height: alertListItemLabel.implicitHeight + 10
                     width: alertSideBarRoot.width * 0.98
@@ -90,7 +90,10 @@ Rectangle {
                     Label {
                         id: alertListItemLabel
                         anchors {
-                            fill: parent
+                            left: parent.left
+                            right: alertListItemRoundButton.left
+                            top: parent.top
+                            bottom: parent.bottom
                             margins: 5
                         }
                         verticalAlignment: "AlignVCenter"
@@ -99,7 +102,49 @@ Rectangle {
                         font.pointSize: 18
                         wrapMode: "Wrap"
                     }
+
+                    RoundButton {
+                        id: alertListItemRoundButton
+                        height: 30
+                        width: height
+
+                        anchors {
+                            right: parent.right
+                            rightMargin: 5
+                            verticalCenter: parent.verticalCenter
+                        }
+        
+                        background: Rectangle {
+                            radius: parent.height/2
+                            color: parent.pressed ? Qt.lighter(root.backgroundColor, 2) : root.backgroundColor
+                        }
+
+                        contentItem: Label { 
+                            horizontalAlignment: "AlignHCenter"
+                            verticalAlignment: "AlignVCenter"
+                            font { pointSize: 20; bold: true }
+                            fontSizeMode: "Fit"
+                            color: parent.pressed ? Qt.lighter(root.accentColor, 2) : root.accentColor
+                            text: "X"
+                        }
+
+                        onClicked: {
+                            system.alarm_message_controller.remove_alarm_message(index)
+                        }
+                    }
                 }
+            }
+
+            Label {
+                anchors.fill: parent
+                visible: system.alarm_message_controller.isEmpty
+                horizontalAlignment: "AlignHCenter"
+                font {
+                    pointSize: 20
+                    bold: true
+                }
+                color: root.accentColor
+                text: "Lista de alarmes está vazia!"
             }
         }
     }

@@ -3,31 +3,24 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls.Material 2.12
             
+import "qrc:/functions/utils.js" as Utils
+
 Rectangle {
     id:sideBarRoot
     property real step: 1
     property real value: -1
+    property real interval: 1
     property string key: "no_key"
     property string label: "NO NAME"
 
     signal save(var value, var key)
 
-    function parseNumber(number) {
-        if (!parseFloat(number) && isNaN(number)) {
-            return "-"
-        }
-        if (parseInt(number) === parseFloat(number)) {
-            return parseInt(number)
-        } else {
-            return parseFloat(number).toFixed(1)
-        }
-    }
-
-    function open(value, key, label, step) {
+    function open(value, key, label, step, interval) {
         sideBarRoot.value = value
         sideBarRoot.key = key
         sideBarRoot.label = label
         sideBarRoot.step = parseFloat(step) ? parseFloat(step) : 1
+        sideBarRoot.interval = interval
         sideBarRoot.visible = true
     }
 
@@ -47,7 +40,7 @@ Rectangle {
             Layout.fillWidth: true
             autoRepeat: true
             autoRepeatDelay: 300
-            autoRepeatInterval: 50
+            autoRepeatInterval: sideBarRoot.interval
             text: "+"
 
             onClicked: {
@@ -59,7 +52,7 @@ Rectangle {
             Layout.fillWidth: true
             autoRepeat: true
             autoRepeatDelay: 300
-            autoRepeatInterval: 50
+            autoRepeatInterval: sideBarRoot.interval
             text: "-"
 
             onClicked: {
@@ -87,7 +80,7 @@ Rectangle {
 
             Label {
                 anchors.centerIn: parent
-                text: parseNumber(sideBarRoot.value)
+                text: Utils.parseNumber(sideBarRoot.value)
                 color: root.accentColor
                 font.pixelSize: 40
             }

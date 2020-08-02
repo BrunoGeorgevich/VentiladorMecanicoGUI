@@ -3,6 +3,8 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls.Material 2.12
 
+import "qrc:/functions/utils.js" as Utils
+
 Rectangle {
     id: rootMenuItem
     Layout.fillWidth: true
@@ -12,18 +14,7 @@ Rectangle {
     property var settings
     property var clickAction
     property var indicatorsValues
-
-    function parseNumber(number) {
-        if (!parseFloat(number) && isNaN(number)) {
-            return "-"
-        }
-        if (parseInt(number) === parseFloat(number)) {
-            return parseInt(number)
-        } else {
-            return parseFloat(number).toFixed(1)
-        }
-    }
-
+    
     function toPercent() {
         let name = settings.parameterName
         if (name === undefined) return undefined
@@ -43,7 +34,7 @@ Rectangle {
 
         let value = system.operation_mode_controller.operation_mode.parameters[name]
         value = value !== undefined ? value : ''
-        return `${preffix}${parseNumber(value)}`
+        return `${preffix}${Utils.parseNumber(value)}`
     }
 
     function unitParse() {
@@ -228,17 +219,25 @@ Rectangle {
                         let label = settings.label;
                         let name = settings.name;
                         let step = settings.step;
+                        let interval = settings.interval;
                         let value = system.operation_mode_controller.operation_mode.parameters[name];
-                        clickAction(value, name, label, step)
+                        clickAction(value, name, label, step, interval)
                     }
                 }
             }
 
             // Type: indicator
-            Item {
+            Rectangle {
                 id: indicatorTemplate
-                anchors.fill: parent
+                anchors {
+                    fill: parent
+                    margins: -7
+                }
                 visible: settings.type === 'indicator'
+                color: system.alarm_controller.check_value(settings.key, indicatorValueLabel.indicatorParseValue()) ? 
+                            "transparent" : Material.color(Material.Red)
+
+
                 ColumnLayout {
                     anchors.fill: parent
                     spacing: 5
@@ -289,11 +288,11 @@ Rectangle {
                                             if (settings.key === "vol_min") {
                                                 let ve = rootMenuItem.indicatorsValues["ve"]
                                                 let rr = system.operation_mode_controller.operation_mode.parameters["rr"]
-                                                return parseNumber(rr*ve/1000)
+                                                return Utils.parseNumber(rr*ve/1000)
                                             }
                                             else if (rootMenuItem.indicatorsValues[settings.key] !== undefined) {
                                                 if (parseFloat(rootMenuItem.indicatorsValues[settings.key])) {
-                                                    return parseNumber(rootMenuItem.indicatorsValues[settings.key])
+                                                    return Utils.parseNumber(rootMenuItem.indicatorsValues[settings.key])
                                                 }
                                             }
                                         }
@@ -315,7 +314,14 @@ Rectangle {
                                 Layout.fillHeight: true
                                 Layout.preferredWidth: 35
 
-                                text: `${settings.max}\n${settings.min}` || '-\n-'
+                                function getLimits(key) {
+                                    let min = system.alarm_controller.get_min(key)
+                                    let max = system.alarm_controller.get_max(key)
+
+                                    return `${max}\n${min}`
+                                }
+
+                                text: getLimits(settings.key)
                                 font { pointSize: 8 }
                                 color: root.foregroundColor
                                 horizontalAlignment: "AlignHCenter"

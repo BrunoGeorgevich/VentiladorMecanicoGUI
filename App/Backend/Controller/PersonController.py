@@ -24,9 +24,18 @@ class PersonController(QObject):
 	def person(self):
 		return self._person
 	
-	@Slot(result=str)
-	def details(self):
-		name = "Paciente" if self._person.name == "" else self._person.name
-		gender = self.parse_gender()
+	@Slot(str, result=str)
+	def details(self, predicted_weight):
+		# name = "Paciente" if self._person.name == "" else self._person.name
 		height = self._person.height
-		return f"{name}, {gender}, {height} cm"
+		gender = self.parse_gender()
+
+		parsed_gender = "Homem"
+		if gender == "female":
+			parsed_gender = "Mulher"
+		
+		first_header = "Paciente"
+		second_header = "Altura\tSexo\tPeso"
+		third_header = f"{height} cm\t{parsed_gender}\t{predicted_weight} kg"
+
+		return f"{first_header}\n{second_header}\n{third_header}"

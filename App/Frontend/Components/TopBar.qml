@@ -3,6 +3,8 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls.Material 2.12
 
+import "qrc:/functions/utils.js" as Utils
+
 ToolBar {
     id: toolBarRoot
     signal leftButtonClicked()
@@ -39,7 +41,7 @@ ToolBar {
 
                 Item {
                     Layout.fillHeight: true
-                    Layout.preferredWidth: lockButtonIsVisible ? 150 : 0
+                    Layout.preferredWidth: lockButtonIsVisible ? 60 : 0
 
                     Button {
                         id: lockButton
@@ -91,6 +93,30 @@ ToolBar {
                     verticalAlignment: "AlignVCenter"
                     color: root.accentColor
                     font { pointSize: 24; bold: true }
+                    fontSizeMode: "Fit"
+                }
+
+                Label {
+                    id: topBarVolumeDetails
+                    visible: lockButtonIsVisible
+
+                    function details() {
+                        let pw = Utils.predictWeight()
+                        let firstHeader = "Volume Corrente Ideal"
+                        let secondHeader = "4ml/kg\t6ml/kg\t8ml/kg"
+                        let thirdHeader = `${Utils.parseNumber(pw*4)} ml\t${Utils.parseNumber(pw*6)} ml\t${Utils.parseNumber(pw*8)} ml`
+                        return `${firstHeader}\n${secondHeader}\n${thirdHeader}`
+                    }
+
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+
+                    horizontalAlignment: "AlignHCenter"
+                    verticalAlignment: "AlignVCenter"
+                    color: root.accentColor
+                    font { pointSize: 12; bold: true }
+                    fontSizeMode: "Fit"
+                    text: details()
                 }
 
                 Button {
@@ -113,7 +139,7 @@ ToolBar {
 
                 Item {
                     Layout.fillHeight: true
-                    Layout.preferredWidth: 150                   
+                    Layout.preferredWidth: 100                   
 
                     visible: batteryIndicatorVisible
 

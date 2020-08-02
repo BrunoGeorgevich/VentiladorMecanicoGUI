@@ -9,45 +9,9 @@ Page {
     objectName: "AlarmPage"
     id: alarmSettingsPageRoot
 
-    ListModel {
-        id: alarmsListModel
-        ListElement {
-            type: "numerical"
-            min: 0
-            max: 100
-            name: "Pressão"
-            message: "Pressão máxima excedida!"
-            key: "maxPressureExceed"
-        }
-        ListElement {
-            type: "numerical"
-            min: 0
-            max: 100
-            name: "Pressão máxima excedida asd asd asd asd asd asd asdasd asdas dasd"
-            message: "Pressão máxima excedida!"
-            key: "maxPressureExceed"
-        }
-        ListElement {
-            type: "numerical"
-            min: 0
-            max: 100
-            name: "Lorem ipsum bla bla bla uhsaiudh hasuidhiuahds"
-            message: "Pressão máxima excedida!"
-            key: "maxPressureExceed"
-        }
-        ListElement {
-            type: "numerical"
-            min: 0
-            max: 100
-            name: "asdas a isdjas jdioj asdjasoi djoijasodj oiasdoajsoid"
-            message: "Pressão máxima excedida!"
-            key: "maxPressureExceed"
-        }
-    }
-
     ListView {
         anchors.fill: parent
-        model: alarmsListModel
+        model: system.alarm_controller.items
         boundsBehavior: "StopAtBounds"
         headerPositioning: "OverlayHeader"
         header: Rectangle {
@@ -102,7 +66,7 @@ Page {
             }
         }
         delegate: DelegateChooser {
-            role: "type"
+            role: "alarmType"
             DelegateChoice { roleValue: "numerical";
                 Item {
                     width: alarmSettingsPageRoot.width
@@ -119,6 +83,7 @@ Page {
                             Layout.preferredWidth: alarmSettingsPageRoot.width*0.5
                             Layout.alignment: "AlignVCenter"
                             text: name
+                            checked: isEnabled
                             contentItem: Label {
                                 id: alarmCheckboxLabel
                                 anchors {
@@ -132,23 +97,31 @@ Page {
                                 fontSizeMode: "Fit"
                                 wrapMode: "Wrap"
                             }
+
+                            onToggled: {
+                                system.alarm_controller.set_is_enabled(index, alarmCheckbox.checked)
+                            }
                         }
                         Item {    
                             Layout.fillWidth: true
                             Layout.fillHeight: true                            
                             TouchSpinBox { 
+                                id: minControl
                                 anchors.centerIn: parent
                                 scale: 0.65
                                 value: min
+                                onValueChanged: system.alarm_controller.set_min(index, minControl.value)
                             }
                         }
                         Item {    
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             TouchSpinBox { 
+                                id: maxControl
                                 anchors.centerIn: parent
                                 scale: 0.65
                                 value: max
+                                onValueChanged: system.alarm_controller.set_max(index, maxControl.value)
                             }
                         }
                     }

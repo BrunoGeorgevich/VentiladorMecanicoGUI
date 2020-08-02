@@ -70,6 +70,7 @@ Page {
             min: '4'; 
             max: '60'; 
             step: '1'; 
+            interval: 50;
             twoUnits: false;
             unit: 'b/min';
             actionName: "openUpdateSidePanel";
@@ -82,6 +83,7 @@ Page {
             min: '1'; 
             max: '4'; 
             step: '0.1'; 
+            interval: 50;
             twoUnits: false;
             unit: 'ratio';
             actionName: "openUpdateSidePanel";
@@ -93,6 +95,7 @@ Page {
             min: '2'; 
             max: '40'; 
             step: '1'; 
+            interval: 50;
             twoUnits: false;
             unit: '[cmH<sub>2</sub>O]';
             actionName: "openUpdateSidePanel";
@@ -104,6 +107,7 @@ Page {
             min: '-30'; 
             max: '30'; 
             step: '1'; 
+            interval: 50;
             twoUnits: false;
             unit: '[cmH<sub>2</sub>O]';
             actionName: "openUpdateSidePanel";
@@ -115,9 +119,8 @@ Page {
             min: '2'; 
             max: '100'; 
             step: '1'; 
-            twoUnits: true;
-            unitSelector: 'sensiT'; 
-            unitConditional: 'pressure'; 
+            interval: 50;
+            twoUnits: false;
             unit: '[cmH<sub>2</sub>O]' ;
             secondaryUnit: 'L/min';
             actionName: "openUpdateSidePanel";
@@ -133,6 +136,7 @@ Page {
             min: '4'; 
             max: '60';
             step: '1'; 
+            interval: 50;
             twoUnits: false;
             unit: 'b/min';
             actionName: "openUpdateSidePanel";
@@ -144,8 +148,9 @@ Page {
             min: '2'; 
             max: '60'; 
             step: '1'; 
+            interval: 10;
             twoUnits: false;
-            unit: 'l';
+            unit: 'ml';
             actionName: "openUpdateSidePanel";
         }
         ListElement { 
@@ -154,7 +159,8 @@ Page {
             name: "flow";
             min: '2'; 
             max: '40'; 
-            step: '10';
+            step: '1';
+            interval: 50;
             twoUnits: false;
             unit: 'l/m²';
             actionName: "openUpdateSidePanel";
@@ -166,6 +172,7 @@ Page {
             min: '-30'; 
             max: '30'; 
             step: '1'; 
+            interval: 50;
             twoUnits: false;
             unit: '[cmH<sub>2</sub>O]';
             actionName: "openUpdateSidePanel";
@@ -177,9 +184,8 @@ Page {
             min: '2'; 
             max: '100'; 
             step: '1'; 
-            twoUnits: true;
-            unitSelector: 'sensiT'; 
-            unitConditional: 'pressure'; 
+            interval: 50; 
+            twoUnits: false;
             unit: '[cmH<sub>2</sub>O]' ;
             secondaryUnit: 'L/min';
             actionName: "openUpdateSidePanel";
@@ -240,7 +246,7 @@ Page {
                     }
         ListElement { type: "indicator"; 
                       name: "P<sub>PICO</sub>"; 
-                        unit: 'cmH<sub>2</sub>O' ;
+                      unit: 'cmH<sub>2</sub>O' ;
                       key: "pe";
                       min: 2; 
                       max: 40 
@@ -322,8 +328,8 @@ Page {
                     system.hardware_controller.write_data("STOP_SENDING", "")
                     pageStack.replace("qrc:/pages/AlarmSettingsPage.qml")
                 },
-                "openUpdateSidePanel": (value, key, label, step) => { 
-                    updatePropSideBar.open(value, key, label, step)
+                "openUpdateSidePanel": (value, key, label, step, interval) => { 
+                    updatePropSideBar.open(value, key, label, step, interval)
                 },
             }
             

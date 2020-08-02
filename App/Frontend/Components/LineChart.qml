@@ -3,6 +3,8 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtCharts 2.12
 
+import "qrc:/functions/utils.js" as Utils
+
 Item {
     id: chartRoot
 
@@ -13,17 +15,6 @@ Item {
     property real numOfPoints: 60
     property bool dinamicallyAdaptY: false
 
-    function parseNumber(number) {
-        if (!parseFloat(number) && isNaN(number)) {
-            return "-"
-        }
-        if (parseInt(number) === parseFloat(number)) {
-            return parseInt(number)
-        } else {
-            return parseFloat(number).toFixed(1)
-        }
-    }
-    
     function addPoint(value) {
         ls.lastVal = value
         if (ls.count < numOfPoints) {
@@ -137,7 +128,7 @@ Item {
             Layout.fillHeight: true
             Layout.preferredWidth: 60
 
-            text: parseNumber(ls.lastVal)
+            text: Utils.parseNumber(ls.lastVal)
             font { pointSize: 35; bold: true }
             fontSizeMode: "Fit"
             color: ls.color || root.primaryColor

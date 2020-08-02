@@ -11,7 +11,7 @@ Page {
     id:modeSettingsPageRoot
 
     property var models: [ pcvModel, vcvModel ]
-    property var controlsModels: { "sensibilityModel": sensibilityModel }
+    property var controlsModels: { "flowWaveModel": flowWaveModel }
 
     Connections {
         target: rootTopBar
@@ -21,9 +21,9 @@ Page {
     }
 
     ListModel {
-        id: sensibilityModel
-        ListElement { elementText: "Pressão"; elementValue: "pressure"; elementIsEnable: true }
-        ListElement { elementText: "Fluxo"; elementValue: "flow"; elementIsEnable: true  }
+        id: flowWaveModel
+        ListElement { elementType: "icon"; elementIcon: "qrc:/images/square-wave"; elementValue: 1; elementIsEnable: true }
+        ListElement { elementType: "icon"; elementIcon: "qrc:/images/ramp-wave"; elementValue: 0; elementIsEnable: true  }
     }
 
     ListModel {
@@ -32,40 +32,39 @@ Page {
                         elementType: "TouchSpinBox";
                         elementName: "I:E"; 
                         elementValue: 2;
+                        elementInterval: 50;
                         elementStep: 0.1;  
                         elementPreffix: '1:' 
                     }
         ListElement {   elementLabel: "rr";
                         elementType: "TouchSpinBox";
-                        elementName: "RR";  
+                        elementName: "RR (b/min)";  
                         elementValue: 12;  
+                        elementInterval: 50;
                         elementStep: 1;  
                         elementPreffix: ''
                     }
         ListElement {   elementLabel: "pip";
                         elementType: "TouchSpinBox";
-                        elementName: "Pressão Pico";  
-                        elementValue: 30;    
+                        elementName: "Pressão Pico (cmH<sub>2</sub>O)";  
+                        elementValue: 30;  
+                        elementInterval: 50;  
                         elementStep: 1;  
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "peep";
                         elementType: "TouchSpinBox";
-                        elementName: "PEEP";  
-                        elementValue: 12;    
+                        elementName: "PEEP (cmH<sub>2</sub>O)";  
+                        elementValue: 12;  
+                        elementInterval: 50;  
                         elementStep: 1;  
                         elementPreffix: '' 
                     }
-        ListElement {   elementLabel: "sensiT";
-                        elementType: "Buttons";
-                        elementChecked: "pressure";  
-                        elementName: "Tipo de Sensibilidade";
-                        elementChildrenModel: "sensibilityModel" 
-                    }
         ListElement {   elementLabel: "sensiV";
                         elementType: "TouchSpinBox";
-                        elementName: "Sensiblidade";  
-                        elementValue: 12;   
+                        elementName: "Sensiblidade (cmH<sub>2</sub>O)";  
+                        elementValue: 12;  
+                        elementInterval: 50; 
                         elementStep: 1;  
                         elementPreffix: '' 
                     }
@@ -75,42 +74,47 @@ Page {
         id: vcvModel
         ListElement {   elementLabel: "volume";
                         elementType: "TouchSpinBox";
-                        elementName: "Volume"; 
+                        elementName: "Volume (ml)"; 
                         elementValue: 15;   
+                        elementInterval: 5;
                         elementStep: 1;  
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "rr";
                         elementType: "TouchSpinBox";
-                        elementName: "RR";  
-                        elementValue: 12;   
+                        elementName: "RR (b/min)";  
+                        elementValue: 12;     
+                        elementInterval: 50;
                         elementStep: 1;  
                         elementPreffix: ''
                     }
         ListElement {   elementLabel: "flow";
                         elementType: "TouchSpinBox";
-                        elementName: "Fluxo";  
+                        elementName: "Fluxo (slpm)";  
                         elementValue: 30;   
+                        elementInterval: 50;
                         elementStep: 1;  
                         elementPreffix: '' 
                     }
         ListElement {   elementLabel: "peep";
                         elementType: "TouchSpinBox";
-                        elementName: "PEEP";  
+                        elementName: "PEEP (cmH<sub>2</sub>O)";  
                         elementValue: 12;   
+                        elementInterval: 50;
                         elementStep: 1;  
                         elementPreffix: '' 
                     }
-        ListElement {   elementLabel: "sensiT";
+        ListElement {   elementLabel: "isSquareWave";
                         elementType: "Buttons";
-                        elementChecked: "pressure";  
-                        elementName: "Tipo de Sensibilidade";
-                        elementChildrenModel: "sensibilityModel" 
+                        elementChecked: 1;  
+                        elementName: "Tipo de Onda de Fluxo";
+                        elementChildrenModel: "flowWaveModel" 
                     }
         ListElement {   elementLabel: "sensiV";
                         elementType: "TouchSpinBox";
-                        elementName: "Sensiblidade";  
+                        elementName: "Sensiblidade (cmH<sub>2</sub>O)";  
                         elementValue: 12;   
+                        elementInterval: 50;
                         elementStep: 1;  
                         elementPreffix: '' 
                     }
@@ -156,6 +160,12 @@ Page {
                     let currentElement = tabsModel.get(currentIndex)
                     system.operation_mode_controller.set_mode(currentElement.elementText)
                     operationModeRepeater.model = models[currentIndex]
+
+                    if (currentElement.elementText === "PCV") {
+                        system.alarm_controller.init_pcv_alarm()
+                    } else if (currentElement.elementText === "VCV") {
+                        system.alarm_controller.init_vcv_alarm()
+                    } 
                 }
                 
                 Repeater {
@@ -194,7 +204,8 @@ Page {
                                     width: 280; height: 70
                                     control: TouchSpinBox{ 
                                         scale: 0.65
-                                        step: elementStep !== undefined ? elementStep : 1
+                                        step: elementStep
+                                        interval: elementInterval
                                         preffix: elementPreffix
                                         Component.onCompleted: {
                                             value = system.operation_mode_controller.operation_mode.parameters[elementLabel] || elementValue

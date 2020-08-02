@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import Qt.labs.qmlmodels 1.0
 
 Item {
     id: choooserRoot
@@ -21,29 +22,55 @@ Item {
 
         Repeater {
             model: options
-            delegate: RoundButton {
-                Layout.preferredHeight: buttonRadius
-                Layout.preferredWidth: buttonRadius
+            delegate: DelegateChooser {
+                role: "elementType"
+                DelegateChoice { roleValue: "label";
+                    RoundButton {
+                        Layout.preferredHeight: buttonRadius
+                        Layout.preferredWidth: buttonRadius
 
-                checked: value == elementValue
-                enabled: elementIsEnable
-        
-                background: Rectangle {
-                    radius: rounded ? parent.height/2 : 0
-                    color: parent.checked ? root.accentColor : root.backgroundColor
+                        checked: value == elementValue
+                        enabled: elementIsEnable
+                
+                        background: Rectangle {
+                            radius: rounded ? parent.height/2 : 0
+                            color: parent.checked ? root.accentColor : root.backgroundColor
+                        }
+
+                        contentItem: Label {
+                                anchors.fill: parent
+                                horizontalAlignment: "AlignHCenter"
+                                verticalAlignment: "AlignVCenter"
+                                font { pointSize: fontSize; bold: true }
+                                fontSizeMode: "Fit"
+                                color: parent.checked ? root.backgroundColor : root.accentColor
+                                text: elementText === undefined ? "" : elementText
+                            }
+
+                        onClicked: value = elementValue
+                    }
                 }
+                DelegateChoice { roleValue: "icon";
+                    RoundButton {
+                        Layout.preferredHeight: buttonRadius
+                        Layout.preferredWidth: buttonRadius
 
-                contentItem: Label {
-                    anchors.fill: parent
-                    horizontalAlignment: "AlignHCenter"
-                    verticalAlignment: "AlignVCenter"
-                    font { pointSize: fontSize; bold: true }
-                    fontSizeMode: "Fit"
-                    color: parent.checked ? root.backgroundColor : root.accentColor
-                    text: elementText
+                        checked: value == elementValue
+                        enabled: elementIsEnable
+                
+                        background: Rectangle {
+                            radius: rounded ? parent.height/2 : 0
+                            color: parent.checked ? root.accentColor : root.backgroundColor
+                        }
+                        
+                        icon {
+                            source: elementIcon
+                            color: checked ? root.backgroundColor : root.accentColor
+                        }
+
+                        onClicked: value = elementValue
+                    }
                 }
-
-                onClicked: value = elementValue
             }
         }
     }

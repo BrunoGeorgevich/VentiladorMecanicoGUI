@@ -3,6 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls.Material 2.12
 
+import "qrc:/functions/utils.js" as Utils
 import "qrc:/components"
 import "qrc:/pages"
 
@@ -24,8 +25,30 @@ ApplicationWindow {
         } else {
             rootTopBar.bad("Não foi possível conectar-se com o Arduino!")
         }
+        system.alarm_message_controller.new_alarm_message_added.connect(root.newMessageAdded)
     }
     
+
+    signal newMessageAdded(var message, var color)
+    onNewMessageAdded: {
+        switch (color) {
+            case "good":
+                rootTopBar.good(message)
+                break
+            case "bad":
+                rootTopBar.bad(message)
+                break
+            case "info":
+                rootTopBar.info(message)
+                break
+            case "warning":
+                rootTopBar.warning(message)
+                break
+            default:
+                notificationSystem.notify(message)
+        }
+    }
+
     header: TopBar{
         id:rootTopBar
 
@@ -134,7 +157,7 @@ ApplicationWindow {
                     rootTopBar.rightButtonVisible = false
                     rootTopBar.batteryIndicatorVisible = true
                     rootTopBar.lockButtonIsVisible = true
-                    rootTopBar.text = system.person_controller.details()
+                    rootTopBar.text = system.person_controller.details(Utils.predictWeight())
                     break;
             }   
         }	

@@ -14,6 +14,11 @@
         <file alias="plug">assets/power-plug.png</file>
         <file alias="locked">assets/locked.png</file>
         <file alias="unlocked">assets/unlocked.png</file>
+        <file alias="square-wave">assets/square-wave.png</file>
+        <file alias="ramp-wave">assets/ramp-wave.png</file>
+    </qresource>
+    <qresource prefix="/functions">
+        <file alias="utils.js">assets/utils.js</file>
     </qresource>
     <qresource prefix="/components">
         <file alias="Tab.qml">Components/Tab.qml</file>
