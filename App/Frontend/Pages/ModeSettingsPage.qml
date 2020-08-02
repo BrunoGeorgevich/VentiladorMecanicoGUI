@@ -15,7 +15,7 @@ Page {
 
     Connections {
         target: rootTopBar
-        onRightButtonClicked: {
+        function onRightButtonClicked() {
             system.hardware_controller.write_data("SET ALL", undefined)
         }
     }
@@ -158,8 +158,15 @@ Page {
 
                 onCurrentIndexChanged: {
                     let currentElement = tabsModel.get(currentIndex)
+		    
+                    if (currentElement === undefined) {
+			currentElement = { elementText: "PCV" }
+                    }
+
                     system.operation_mode_controller.set_mode(currentElement.elementText)
                     operationModeRepeater.model = models[currentIndex]
+
+		    operationModeTabBar.currentIndex = getParsedCurrentIndex()
 
                     if (currentElement.elementText === "PCV") {
                         system.alarm_controller.init_pcv_alarm()
