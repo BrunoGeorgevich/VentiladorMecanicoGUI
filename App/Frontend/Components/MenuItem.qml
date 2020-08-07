@@ -114,8 +114,6 @@ Rectangle {
 
                 Button {
                     id: toggleButton
-                    property string operating: "false"
-                    property var buttonColor: { "true": Material.color(Material.Green), "false": Material.color(Material.Red) }
 
                     anchors {
                         fill: parent
@@ -125,7 +123,8 @@ Rectangle {
                     text: settings.label || ""
         
                     background: Rectangle {
-                        color: toggleButton.buttonColor[toggleButton.operating]
+                        color: system.dashboard_controller.dashboard_command[settings.key] ? Material.color(Material.Green) : 
+                                                                                             Material.color(Material.Red) 
                     }
 
                     contentItem: Label {
@@ -139,8 +138,8 @@ Rectangle {
                     }
 
                     onClicked: { 
-                        operating = operating === "true" ? "false" : "true"
-                        clickAction(operating === "true")
+                        system.dashboard_controller.toggle_dashboard_command_status(settings.key)
+                        clickAction(system.dashboard_controller.dashboard_command[settings.key])
                     }
                 }
             }
@@ -229,6 +228,8 @@ Rectangle {
             // Type: indicator
             Rectangle {
                 id: indicatorTemplate
+                property int fakeAlarmCounter: 0
+                property int fakeAlarmThreshold: 5
                 anchors {
                     fill: parent
                     margins: -7
@@ -237,6 +238,23 @@ Rectangle {
                 color: system.alarm_controller.check_value(settings.key, indicatorValueLabel.indicatorParseValue()) ? 
                             "transparent" : Material.color(Material.Red)
 
+                onColorChanged: {
+                    if (settings.type === 'indicator') {
+                        print(`FAKE ALARM COUNTER :: ${fakeAlarmCounter}`)
+                        print(indicatorTemplate.color, system.alarm_controller.check_value(settings.key, indicatorValueLabel.indicatorParseValue()))
+                        if (!system.alarm_controller.check_value(settings.key, indicatorValueLabel.indicatorParseValue())) {
+                            if (!alarmSound.isPlaying) {
+                                print("PLAYING ALARM SOUND!")
+                                alarmSound.playAlarm()
+                            }
+                        } else {
+                            if (alarmSound.isPlaying) {
+                                print("STOPPING ALARM SOUND!")
+                                alarmSound.stopAlarm()
+                            }
+                        }
+                    }
+                }
 
                 ColumnLayout {
                     anchors.fill: parent
@@ -292,7 +310,11 @@ Rectangle {
                                             }
                                             else if (rootMenuItem.indicatorsValues[settings.key] !== undefined) {
                                                 if (parseFloat(rootMenuItem.indicatorsValues[settings.key])) {
-                                                    return Utils.parseNumber(rootMenuItem.indicatorsValues[settings.key])
+                                                    let divideBy = 1
+                                                    if(settings.divideBy) {
+                                                        divideBy = settings.divideBy
+                                                    }
+                                                    return Utils.parseNumber(rootMenuItem.indicatorsValues[settings.key]/divideBy)
                                                 }
                                             }
                                         }

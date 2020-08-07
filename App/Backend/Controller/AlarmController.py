@@ -58,7 +58,7 @@ class AlarmController(Controller):
 		self.add_alarm(True, "Tempo de inspiração", 0, 100, "tInsp", "numerical")
 		self.add_alarm(True, "Pressão de Pico", 0, 100, "pe", "numerical")
 		self.add_alarm(True, "Volume Tidal", 0, 100, "ve", "numerical")
-		self.add_alarm(True, "Volume Mínimo", 0, 100, "vol_min", "numerical")
+		self.add_alarm(True, "Volume Minuto", 0, 100, "vol_min", "numerical")
 		self.add_alarm(True, "FIO2", 0, 100, "fio2", "numerical")
         
 	@Slot()
@@ -66,7 +66,7 @@ class AlarmController(Controller):
 		self.clear()
 		self.add_alarm(True, "Pressão de Pico", 0, 100, "pe", "numerical")
 		self.add_alarm(True, "Volume Tidal", 0, 100, "ve", "numerical")
-		self.add_alarm(True, "Volume Mínimo", 0, 100, "vol_min", "numerical")
+		self.add_alarm(True, "Volume Minuto", 0, 100, "vol_min", "numerical")
 		self.add_alarm(True, "FIO2", 0, 100, "fio2", "numerical")
         
 	@Slot(bool, str, float, float)

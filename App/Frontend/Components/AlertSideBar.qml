@@ -38,6 +38,21 @@ Rectangle {
 
             RowLayout {
                 anchors.fill: parent
+            
+                Button {
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: height
+
+                    flat: true
+                    icon {
+                        source: alarmSound.muted ? "qrc:/images/volume-on" : "qrc:/images/volume-off"
+                        color: root.accentColor
+                    }
+
+                    onClicked: {
+                        alarmSound.toggleMute()
+                    }
+                }
 
                 Label {
                     Layout.fillHeight: true

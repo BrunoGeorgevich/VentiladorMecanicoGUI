@@ -1,6 +1,7 @@
 import QtQuick 2.12
-import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
+import QtMultimedia 5.10
 import QtQuick.Controls.Material 2.12
 
 import "qrc:/functions/utils.js" as Utils
@@ -173,5 +174,26 @@ ApplicationWindow {
         id: chartUpdateTimer
         interval: 166
         repeat: true
+    }    
+
+    Audio {
+        id: alarmSound
+        property bool isPlaying: false
+        loops: Audio.Infinite
+        source: "qrc:/audios/notification.mp3"
+
+        function playAlarm() {
+            alarmSound.isPlaying = true
+            alarmSound.play()
+        }
+
+        function stopAlarm() {
+            alarmSound.isPlaying = false
+            alarmSound.stop()
+        }
+
+        function toggleMute() {
+            alarmSound.muted = !alarmSound.muted
+        }
     }
 }
