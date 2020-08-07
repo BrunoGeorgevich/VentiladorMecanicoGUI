@@ -32,7 +32,7 @@ Rectangle {
         anchors.fill: parent
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: 40
+            Layout.preferredHeight: 50
             color: root.backgroundColor
             z: 2
 
@@ -46,6 +46,8 @@ Rectangle {
                     flat: true
                     icon {
                         source: alarmSound.muted ? "qrc:/images/volume-on" : "qrc:/images/volume-off"
+                        height: parent.height
+                        width: parent.height
                         color: root.accentColor
                     }
 
@@ -72,6 +74,7 @@ Rectangle {
 
                     color: Material.color(Material.Red)
                     textColor: root.foregroundColor
+                    fontSize: 18
                     text: "X"
 
                     onClicked: {

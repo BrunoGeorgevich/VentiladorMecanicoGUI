@@ -5,6 +5,7 @@ Button {
     property alias textColor: buttonContentLabel.color
     property alias color: backgroundRect.color
     property alias radius: backgroundRect.radius
+    property alias fontSize: buttonContentLabel.font.pointSize
     flat: true
         
     background: Rectangle {
