@@ -104,7 +104,7 @@ Page {
                         elementStep: 1;  
                         elementPreffix: '' 
                     }
-        ListElement {   elementLabel: "isSquareWave";
+        ListElement {   elementLabel: "wave";
                         elementType: "Buttons";
                         elementChecked: 1;  
                         elementName: "Tipo de Onda de Fluxo";

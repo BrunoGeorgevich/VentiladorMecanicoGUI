@@ -206,6 +206,7 @@ Page {
                       name: "P<sub>PICO</sub>"; 
                       unit: 'cmH<sub>2</sub>O' ;
                       key: "pe";
+                      divideBy: 1;
                       min: 2; 
                       max: 40 
                     }
@@ -213,6 +214,7 @@ Page {
                       name: "Vt"; 
                       unit: "ml"; 
                       key: "ve";
+                      divideBy: 1;
                       min: 2; 
                       max: 40 
                     }
@@ -220,6 +222,7 @@ Page {
                       name: "Vol<sub>MIN</sub>"; 
                       unit: "l/min"; 
                       key: "vol_min";
+                      divideBy: 1;
                       min: 2; 
                       max: 40 
                     }
@@ -227,12 +230,25 @@ Page {
                       name: "FIO<sub>2</sub>"; 
                       unit: "%"; 
                       key: "fio2";
+                      divideBy: 1;
                       min: 21; 
                       max: 100 
                     }
-        ListElement { type: "toggle"; label: "Pausa \n Expiratória"; actionName: "toggleExpirationPause"; }
-        ListElement { type: "toggle"; label: "Pausa \n Inspiratória"; actionName: "toggleInspirationPause"; }
-        ListElement { type: "toggle"; label: "Ventilação\nPCV"; actionName: "toggleAssistedVentilation"; }
+        ListElement { type: "toggle"; 
+                      key: "expiration";
+                      label: "Pausa \n Expiratória"; 
+                      actionName: "toggleExpirationPause"; 
+                    }
+        ListElement { type: "toggle"; 
+                      key: "inspiration";
+                      label: "Pausa \n Inspiratória"; 
+                      actionName: "toggleInspirationPause"; 
+                    }
+        ListElement { type: "toggle"; 
+                      key: "assisted";
+                      label: "Ventilação\nVCV";
+                      actionName: "toggleAssistedVentilation"; 
+                    }
     }
    
     ListModel {
@@ -241,6 +257,7 @@ Page {
                       name: "T. INSP"; 
                       unit: "s"; 
                       key: "tInsp";
+                      divideBy: 1000;
                       min: 5; 
                       max: 70 
                     }
@@ -248,6 +265,7 @@ Page {
                       name: "P<sub>PICO</sub>"; 
                       unit: 'cmH<sub>2</sub>O' ;
                       key: "pe";
+                      divideBy: 1;
                       min: 2; 
                       max: 40 
                     }
@@ -255,6 +273,7 @@ Page {
                       name: "Vt"; 
                       unit: "ml"; 
                       key: "ve";
+                      divideBy: 1;
                       min: 2; 
                       max: 40 
                     }
@@ -262,6 +281,7 @@ Page {
                       name: "Vol<sub>MIN</sub>"; 
                       unit: "l/min"; 
                       key: "vol_min";
+                      divideBy: 1;
                       min: 2; 
                       max: 40 
                     }
@@ -269,12 +289,25 @@ Page {
                       name: "FIO<sub>2</sub>"; 
                       unit: "%"; 
                       key: "fio2";
+                      divideBy: 1;
                       min: 21; 
                       max: 100 
                     }
-        ListElement { type: "toggle"; label: "Pausa \n Expiratória"; actionName: "toggleExpirationPause"; }
-        ListElement { type: "toggle"; label: "Pausa \n Inspiratória"; actionName: "toggleInspirationPause"; }
-        ListElement { type: "toggle"; label: "Ventilação\nVCV"; actionName: "toggleAssistedVentilation"; }
+        ListElement { type: "toggle"; 
+                      key: "expiration";
+                      label: "Pausa \n Expiratória"; 
+                      actionName: "toggleExpirationPause"; 
+                    }
+        ListElement { type: "toggle"; 
+                      key: "inspiration";
+                      label: "Pausa \n Inspiratória"; 
+                      actionName: "toggleInspirationPause"; 
+                    }
+        ListElement { type: "toggle"; 
+                      key: "assisted";
+                      label: "Ventilação\nVCV";
+                      actionName: "toggleAssistedVentilation"; 
+                    }
     }
     
     Rectangle {
@@ -319,12 +352,12 @@ Page {
                     pageStack.replace("qrc:/pages/PersonSettingsPage.qml")
                 },
                 "openOperationModePage": () => { 
-                    system.hardware_controller.write_data("STOP", "")
+                    // system.hardware_controller.write_data("STOP", "")
                     system.hardware_controller.write_data("STOP_SENDING", "")
                     pageStack.replace("qrc:/pages/ModeSettingsPage.qml")
                 },
                 "openAlarmsSettingsPage": () => { 
-                    system.hardware_controller.write_data("STOP", "")
+                    // system.hardware_controller.write_data("STOP", "")
                     system.hardware_controller.write_data("STOP_SENDING", "")
                     pageStack.replace("qrc:/pages/AlarmSettingsPage.qml")
                 },
@@ -393,7 +426,7 @@ Page {
             Layout.preferredWidth: dashboardPageRoot.sideBarWidth
 
             property var actions: { 
-                "toggleExpirationPause": (currentState) => {
+                "toggleExpirationPause": (currentState) => {                    
                     system.operation_mode_controller.add_parameter("pExp", currentState ? 1 : 0)
                     system.hardware_controller.write_data("SET", "pExp")
                     console.log(currentState)
