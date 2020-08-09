@@ -18,6 +18,7 @@ ToolBar {
     property bool rightButtonVisible: true
     property bool batteryIndicatorVisible: false
     property bool lockButtonIsVisible: false
+    property bool closeButtonIsVisible: false
 
     function unlock() {
         lockButton.isLocked = "false"
@@ -68,7 +69,7 @@ ToolBar {
 
                 Button {
                     Layout.fillHeight: true
-                    Layout.preferredWidth: 98
+                    Layout.preferredWidth: leftButtonVisible ? 98 : 0
                     visible: !lockButtonIsVisible
                     flat: true
                     icon {
@@ -80,6 +81,24 @@ ToolBar {
                     onClicked: { 
                         if (leftButtonVisible) {
                             leftButtonClicked() 
+                        }
+                    }
+                }
+
+                Button {
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: 60
+                    visible: closeButtonIsVisible
+                    flat: true
+                    icon {
+                        source: "qrc:/images/close"
+                        color: root.foregroundColor
+                        height: parent.height
+                        width: parent.width
+                    }
+                    onClicked: { 
+                        if (closeButtonIsVisible) {
+                            Qt.quit()
                         }
                     }
                 }

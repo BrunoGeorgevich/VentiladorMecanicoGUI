@@ -20,7 +20,8 @@
         <file alias="square-wave">assets/square-wave.png</file>
         <file alias="ramp-wave">assets/ramp-wave.png</file>
         <file alias="volume-on">assets/volume-on.png</file>
-        <file alias="volume-off">assets/volume-off.png</file>
+        <file alias="volume-off">assets/volume-off.png</file> 
+        <file alias="close">assets/close.png</file> 
     </qresource>
     <qresource prefix="/functions">
         <file alias="utils.js">assets/utils.js</file>

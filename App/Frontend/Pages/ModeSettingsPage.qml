@@ -241,10 +241,15 @@ Page {
                                         fontSize: 9
                                         buttonRadius: 50
                                         Component.onCompleted: {
-                                            value = system.operation_mode_controller.operation_mode.parameters[elementLabel] || elementChecked
+                                            value = system.operation_mode_controller.
+                                                                operation_mode.parameters[elementLabel] === undefined ? 
+                                                        elementChecked :
+                                                        system.operation_mode_controller.operation_mode.parameters[elementLabel]
                                         }
                                         onValueChanged: {
                                             system.operation_mode_controller.add_parameter(elementLabel, value)
+                                            console.log(Object.keys(system.operation_mode_controller.operation_mode.parameters))
+                                            console.log(Object.values(system.operation_mode_controller.operation_mode.parameters))
                                         }
                                     }
                                 }

@@ -134,6 +134,7 @@ ApplicationWindow {
                     rootTopBar.rightButtonVisible = true
                     rootTopBar.batteryIndicatorVisible = false
                     rootTopBar.lockButtonIsVisible = false
+                    rootTopBar.closeButtonIsVisible = true
                     rootTopBar.text = "Recepção do paciente"        
                     break;
                 case "ModePage":
@@ -142,6 +143,7 @@ ApplicationWindow {
                     rootTopBar.rightButtonVisible = true
                     rootTopBar.batteryIndicatorVisible = false
                     rootTopBar.lockButtonIsVisible = false
+                    rootTopBar.closeButtonIsVisible = false
                     rootTopBar.text = "Modo de operação"        
                     break;
                 case "AlarmPage":
@@ -150,6 +152,7 @@ ApplicationWindow {
                     rootTopBar.rightButtonVisible = false
                     rootTopBar.batteryIndicatorVisible = false
                     rootTopBar.lockButtonIsVisible = false
+                    rootTopBar.closeButtonIsVisible = false
                     rootTopBar.text = "Configuração de Alarmes"        
                     break;
                 case "DashboardPage":
@@ -158,6 +161,7 @@ ApplicationWindow {
                     rootTopBar.rightButtonVisible = false
                     rootTopBar.batteryIndicatorVisible = true
                     rootTopBar.lockButtonIsVisible = true
+                    rootTopBar.closeButtonIsVisible = false
                     rootTopBar.text = system.person_controller.details(Utils.predictWeight())
                     break;
             }   

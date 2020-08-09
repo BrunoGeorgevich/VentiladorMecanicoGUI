@@ -11,9 +11,9 @@ from Backend.Concurrent.HardwareThread import HardwareThread
 SERIAL_PATH = ""
 
 if system() == 'Linux':
-    SERIAL_PATH = "/dev/ttyACM"
+    SERIAL_PATH = ["/dev/ttyAMA", "/dev/ttyACM", "/dev/ttyUSB"]
 elif system() == 'Windows':
-    SERIAL_PATH = "COM"
+    SERIAL_PATH = ["COM"]
 
 class HardwareController(QObject):
 	
@@ -28,40 +28,42 @@ class HardwareController(QObject):
 		self._operation_mode_controller = operation_mode_controller
 		usb_port = 0
         
-		while True:
-			try:
-				self.__serial = Serial(f'{SERIAL_PATH}{usb_port}', 9600, timeout=0.25)
-			except SerialException:
-				usb_port += 1
-				if usb_port > 100:
-					self.__serial = None
-					break
-			else:
-				print(f"CONNECTED WITH {SERIAL_PATH}{usb_port}")
-		
-				data = ""
-				counter = 0
-				timer = time()
-				while counter < 10:
-					self.__serial.write(b"CONNECT\n")
-					ret = self.__serial.readline().strip().decode()
-					if ret == "OK":
-						data = ret
+		for possible_path in SERIAL_PATH:
+			while True:
+				try:
+					self.__serial = Serial(f'{possible_path}{usb_port}', 9600, timeout=0.25)
+				except SerialException:
+					usb_port += 1
+					if usb_port > 100:
+						self.__serial = None
 						break
-					counter += 1
-
-				if data == "OK":
-					print(f"{SERIAL_PATH}{usb_port} CONNECTION WAS SUCCESSFULLY!")
-					break
 				else:
-					print(f"{SERIAL_PATH}{usb_port} DO NOT REPLY CORRECTLY, TRYING ONE MORE!")
+					print(f"CONNECTED WITH {possible_path}{usb_port}")
+			
+					data = ""
+					counter = 0
+					timer = time()
+					while counter < 10:
+						self.__serial.write(b"CONNECT\n")
+						ret = self.__serial.readline().strip().decode()
+						if ret == "OK":
+							data = ret
+							break
+						counter += 1
 
-		if self.__serial is None:
-			print(f"[UNABLE TO CONNECT WITH ARDUINO!!!]")
-			self.__hardware_is_connected = False
-		else:
-			self.__hardware_is_connected = True
-			self.restart_thread()
+					if data == "OK":
+						print(f"{possible_path}{usb_port} CONNECTION WAS SUCCESSFULLY!")
+						break
+					else:
+						print(f"{possible_path}{usb_port} DO NOT REPLY CORRECTLY, TRYING ONE MORE!")
+
+			if self.__serial is None:
+				print(f"[UNABLE TO CONNECT WITH ANY DEVICE {possible_path}!!!]")
+				self.__hardware_is_connected = False
+			else:
+				self.__hardware_is_connected = True
+				self.restart_thread()
+				break
 	
 	def __del__(self):
 		self.__hardware_is_connected = False
