@@ -14,6 +14,10 @@ import os
 from PySide2.QtWidgets import QApplication
 from PySide2.QtQml import QQmlApplicationEngine
 from PySide2.QtCore import QResource
+import PySide2
+
+MAIN_PATH = os.path.dirname(os.path.realpath(__file__))
+QML_PATH = os.path.join(MAIN_PATH, "qml.rcc")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -21,7 +25,8 @@ if __name__ == "__main__":
     app.setApplicationName("MechanicalRespiratorSoftware")
     app.setOrganizationName("UFAL")
     
-    QResource.registerResource("qml.rcc")
+    print(f"RCC FILE EXISTS :: {os.path.exists(QML_PATH)} -> {QML_PATH}")
+    QResource.registerResource(QML_PATH)
     engine = QQmlApplicationEngine()
 
     system = System()

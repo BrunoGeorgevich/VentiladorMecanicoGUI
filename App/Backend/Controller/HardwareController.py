@@ -11,7 +11,7 @@ from Backend.Concurrent.HardwareThread import HardwareThread
 SERIAL_PATH = ""
 
 if system() == 'Linux':
-    SERIAL_PATH = ["/dev/ttyAMA", "/dev/ttyACM", "/dev/ttyUSB"]
+    SERIAL_PATH = ["/dev/ttyUSB", "/dev/ttyACM", "/dev/ttyAMA"]
 elif system() == 'Windows':
     SERIAL_PATH = ["COM"]
 
@@ -26,9 +26,9 @@ class HardwareController(QObject):
 		self._is_receiving_data = False
 
 		self._operation_mode_controller = operation_mode_controller
-		usb_port = 0
         
 		for possible_path in SERIAL_PATH:
+			usb_port = 0
 			while True:
 				try:
 					self.__serial = Serial(f'{possible_path}{usb_port}', 9600, timeout=0.25)
@@ -43,7 +43,7 @@ class HardwareController(QObject):
 					data = ""
 					counter = 0
 					timer = time()
-					while counter < 10:
+					while counter < 20:
 						self.__serial.write(b"CONNECT\n")
 						ret = self.__serial.readline().strip().decode()
 						if ret == "OK":
@@ -56,6 +56,7 @@ class HardwareController(QObject):
 						break
 					else:
 						print(f"{possible_path}{usb_port} DO NOT REPLY CORRECTLY, TRYING ONE MORE!")
+						usb_port += 1
 
 			if self.__serial is None:
 				print(f"[UNABLE TO CONNECT WITH ANY DEVICE {possible_path}!!!]")
