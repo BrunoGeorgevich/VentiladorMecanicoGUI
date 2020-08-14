@@ -11,7 +11,7 @@ import "qrc:/pages"
 ApplicationWindow {
     id: root
     visible: true
-    // visibility: "FullScreen"
+    visibility: "FullScreen"
     width: 800; height: 480
     
     property string accentColor : "#ecdeb2"
