@@ -98,6 +98,7 @@ ToolBar {
                     }
                     onClicked: { 
                         if (closeButtonIsVisible) {
+                            system.hardware_controller.quit()
                             Qt.quit()
                         }
                     }

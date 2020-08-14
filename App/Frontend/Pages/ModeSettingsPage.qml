@@ -169,9 +169,9 @@ Page {
 		    operationModeTabBar.currentIndex = getParsedCurrentIndex()
 
                     if (currentElement.elementText === "PCV") {
-                        system.alarm_controller.init_pcv_alarm()
+                        system.alarm_controller.init_pcv_alarm(currentElement.elementText)
                     } else if (currentElement.elementText === "VCV") {
-                        system.alarm_controller.init_vcv_alarm()
+                        system.alarm_controller.init_vcv_alarm(currentElement.elementText)
                     } 
                 }
                 

@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/pages">
         <file alias="main.qml">Pages/main.qml</file>
+        <file alias="splash.qml">Pages/splash.qml</file>
         <file alias="DashboardPage.qml">Pages/DashboardPage.qml</file>
         <file alias="ModeSettingsPage.qml">Pages/ModeSettingsPage.qml</file>
         <file alias="AlarmSettingsPage.qml">Pages/AlarmSettingsPage.qml</file>
@@ -10,18 +11,19 @@
         <file alias="notification.mp3">assets/notification.mp3</file>
     </qresource>
     <qresource prefix="/images">
-        <file alias="arrow_left">assets/arrow_left.png</file>
-        <file alias="arrow_right">assets/arrow_right.png</file>
-        <file alias="battery">assets/battery.png</file>
+        <file alias="close">assets/close.png</file> 
         <file alias="alert">assets/alert.png</file>
-        <file alias="plug">assets/power-plug.png</file>
         <file alias="locked">assets/locked.png</file>
+        <file alias="plug">assets/power-plug.png</file>
+        <file alias="battery">assets/battery.png</file>
         <file alias="unlocked">assets/unlocked.png</file>
-        <file alias="square-wave">assets/square-wave.png</file>
         <file alias="ramp-wave">assets/ramp-wave.png</file>
         <file alias="volume-on">assets/volume-on.png</file>
         <file alias="volume-off">assets/volume-off.png</file> 
-        <file alias="close">assets/close.png</file> 
+        <file alias="arrow_left">assets/arrow_left.png</file>
+        <file alias="arrow_right">assets/arrow_right.png</file>
+        <file alias="square-wave">assets/square-wave.png</file>
+        <file alias="splash_image">assets/splash_image.png</file> 
     </qresource>
     <qresource prefix="/functions">
         <file alias="utils.js">assets/utils.js</file>
@@ -34,11 +36,13 @@
         <file alias="SideBar.qml">Components/SideBar.qml</file>
         <file alias="MenuItem.qml">Components/MenuItem.qml</file>
         <file alias="LineChart.qml">Components/LineChart.qml</file>
+        <file alias="DataModal.qml">Components/DataModal.qml</file>
         <file alias="BottomBar.qml">Components/BottomBar.qml</file>
         <file alias="AlertSideBar.qml">Components/AlertSideBar.qml</file>
         <file alias="TouchSpinBox.qml">Components/TouchSpinBox.qml</file>
+        <file alias="SecondToolbar.qml">Components/SecondToolbar.qml</file>
         <file alias="SideBarButton.qml">Components/SideBarButton.qml</file>
-        <file alias="PersonDetailsTopBar.qml">Components/PersonDetailsTopBar.qml</file>
         <file alias="NotificationSystem.qml">Components/NotificationSystem.qml</file>
+        <file alias="PersonDetailsTopBar.qml">Components/PersonDetailsTopBar.qml</file>
     </qresource>
 </RCC>

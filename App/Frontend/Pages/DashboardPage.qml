@@ -4,12 +4,16 @@ import QtQuick.Layouts 1.12
 import QtCharts 2.12
 
 import "qrc:/components"
+import "qrc:/functions/utils.js" as Utils
 
 Page {
     objectName: "DashboardPage"
     id: dashboardPageRoot
     property string currentMode: system.operation_mode_controller.operation_mode.mode
+    property bool isRunning: system.dashboard_controller.dashboard_command['assisted'] || false
     property bool lockScreenStatus: false
+    property bool inspirationInit: false
+    property bool expirationInit: false
     property real sideBarWidth: 150
     property var models: {
                 "closedMenuPCV": closedMenuPCVModel,
@@ -21,6 +25,12 @@ Page {
                 "VCV": indicatorsVCVModel,
     }
     property var indicatorsValues: { 'fio2': '-', 've': '-', 'tInsp': '-' }
+
+    function clearCharts() {
+        pawChart.clear()
+        vtidalChart.clear()
+        flowChart.clear()
+    }
 
     Component.onCompleted: {
         // console.log(Object.keys(system.operation_mode_controller.operation_mode.parameters))
@@ -48,16 +58,40 @@ Page {
     onDataArrived: {
         console.log(Object.keys(data))
         console.log(Object.values(data))
-        if (Object.keys(data).indexOf('paw') !== -1){
-            pawChart.addPoint(data['paw'])
-        }
-        if (Object.keys(data).indexOf('vtidal') !== -1){
-            vtidalChart.addPoint(data['vtidal'])
-        }
-        if (Object.keys(data).indexOf('flow') !== -1){
-            flowChart.addPoint(data['flow'])
+        if (dashboardPageRoot.isRunning) {
+            if (Object.keys(data).indexOf('paw') !== -1){
+                pawChart.addPoint(data['paw'])
+            }
+            if (Object.keys(data).indexOf('vtidal') !== -1){
+                vtidalChart.addPoint(data['vtidal'])
+            }
+            if (Object.keys(data).indexOf('flow') !== -1){
+                flowChart.addPoint(data['flow'])
+            }
         }
         dashboardPageRoot.indicatorsValues = data
+        if (Object.keys(data).indexOf('plateau') !== -1) {
+            if (system.dashboard_controller.dashboard_command['inspiration'] && 
+                system.dashboard_controller.dashboard_command['assisted'] && 
+                !dashboardPageRoot.expirationInit) {
+                plateauDataModal.openModal()
+                dashboardPageRoot.expirationInit = true
+            }
+        } else { 
+            dashboardPageRoot.expirationInit = false
+            plateauDataModal.closeModal()
+        }
+        if (Object.keys(data).indexOf('autopeep') !== -1) {
+            if (system.dashboard_controller.dashboard_command['expiration'] &&
+                system.dashboard_controller.dashboard_command['assisted'] && 
+                !dashboardPageRoot.inspirationInit) {
+                autopeepDataModal.openModal()
+                dashboardPageRoot.inspirationInit = true
+            }
+        } else { 
+            dashboardPageRoot.inspirationInit = false
+            autopeepDataModal.closeModal()
+        }
     }
 
     ListModel {
@@ -246,7 +280,7 @@ Page {
                     }
         ListElement { type: "toggle"; 
                       key: "assisted";
-                      label: "Ventilação\nVCV";
+                      label: "Ventilação\nPCV";
                       actionName: "toggleAssistedVentilation"; 
                     }
     }
@@ -437,10 +471,12 @@ Page {
                     console.log(currentState)
                 },
                 "toggleAssistedVentilation": (currentState) => {
+                    dashboardPageRoot.isRunning = currentState
                     if (currentState) {
                         system.hardware_controller.write_data("START", "")
                     } else {
                         system.hardware_controller.write_data("STOP", "")
+                        dashboardPageRoot.clearCharts()
                     }
                     console.log(currentState)
                 }
@@ -470,5 +506,17 @@ Page {
             right: parent.right
             verticalCenter: parent.verticalCenter
         }
+    }
+
+    DataModal {
+        id: plateauDataModal
+        topTitle: "P. INSP. FINALIZADA"
+        body: `P. Plateau: ${Utils.parseNumber(dashboardPageRoot.indicatorsValues['plateau'])}`
+    }
+
+    DataModal {
+        id: autopeepDataModal
+        topTitle: "P. EXP. FINALIZADA"
+        body: `Auto-peep: ${Utils.parseNumber(dashboardPageRoot.indicatorsValues['autopeep'])}`
     }
 }

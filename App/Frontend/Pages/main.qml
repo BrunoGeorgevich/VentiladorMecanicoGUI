@@ -11,7 +11,7 @@ import "qrc:/pages"
 ApplicationWindow {
     id: root
     visible: true
-    visibility: "FullScreen"
+    // visibility: "FullScreen"
     width: 800; height: 480
     
     property string accentColor : "#ecdeb2"
@@ -21,12 +21,24 @@ ApplicationWindow {
     property string foregroundColor : "#FFFFFF"
 
     Component.onCompleted: {
-        if (system.hardware_controller.hardware_is_connected) {
-            rootTopBar.good("Arduino conectado com sucesso!")
-        } else {
-            rootTopBar.bad("Não foi possível conectar-se com o Arduino!")
-        }
+        system.hardware_controller.hardware_is_connected_changed.connect(root.changeSerial)
         system.alarm_message_controller.new_alarm_message_added.connect(root.newMessageAdded)
+        
+        connectionTest()
+    }
+    
+
+    function connectionTest() {
+        if (system.hardware_controller.hardware_is_connected) {
+            rootTopBar.good("Serial conectada com sucesso!")
+        } else {
+            rootTopBar.bad("Não foi possível conectar-se com a Serial!")
+        }
+    }
+
+    signal changeSerial(var status)
+    onChangeSerial: {
+        connectionTest()
     }
     
 

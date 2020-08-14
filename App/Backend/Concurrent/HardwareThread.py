@@ -24,10 +24,16 @@ class HardwareThread(QRunnable):
                 self.signals.error.emit((exctype, value, traceback.format_exc()))
         else:
             if self.parent.hardware_is_connected:
-                self.signals.result.emit(result)
+                try:
+                    self.signals.result.emit(result)
+                except:
+                    pass
         finally:
             if self.parent.hardware_is_connected:
-                self.signals.finished.emit()
+                try:
+                    self.signals.finished.emit()
+                except:
+                    pass
 
 
 class HardwareThreadSignals(QObject):

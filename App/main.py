@@ -7,6 +7,7 @@ Created on Fri Apr 17 17:29:24 2020
 """
 
 from Backend.System import System
+from Backend.Controller.SplashController import SplashController
 
 import sys
 import os
@@ -28,11 +29,17 @@ if __name__ == "__main__":
     print(f"RCC FILE EXISTS :: {os.path.exists(QML_PATH)} -> {QML_PATH}")
     QResource.registerResource(QML_PATH)
     engine = QQmlApplicationEngine()
+    ctx = engine.rootContext()
+
+    splash_controller = SplashController()
+    
+    ctx.setContextProperty("splash_controller", splash_controller)
+    engine.load('qrc:/pages/splash.qml')
 
     system = System()
-
-    ctx = engine.rootContext()
     ctx.setContextProperty("system", system)
+    
+    splash_controller.splash_is_opened = False
     
     engine.load('qrc:/pages/main.qml')
 

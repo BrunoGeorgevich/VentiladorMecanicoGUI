@@ -49,29 +49,34 @@ class AlarmController(Controller):
 	def __init__(self, alarm_message_controller):
 		super().__init__(AlarmItems())
 		self.clear()
-
 		self._alarm_message_controller = alarm_message_controller
+		self.current_mode = ""
+
+	@Slot(str)
+	def init_vcv_alarm(self, mode):
+		if self.current_mode != mode:
+			self.clear()
+			self.current_mode = mode
+			self.add_alarm(True, "Tempo de inspiração", 0, 100, "tInsp", "numerical")
+			self.add_alarm(True, "Pressão de Pico", 0, 100, "pe", "numerical")
+			self.add_alarm(True, "Volume Tidal", 0, 100, "ve", "numerical")
+			self.add_alarm(True, "Volume Minuto", 0, 100, "vol_min", "numerical")
+			self.add_alarm(True, "FIO2", 0, 100, "fio2", "numerical")
         
-	@Slot()
-	def init_vcv_alarm(self):
-		self.clear()
-		self.add_alarm(True, "Tempo de inspiração", 0, 100, "tInsp", "numerical")
-		self.add_alarm(True, "Pressão de Pico", 0, 100, "pe", "numerical")
-		self.add_alarm(True, "Volume Tidal", 0, 100, "ve", "numerical")
-		self.add_alarm(True, "Volume Minuto", 0, 100, "vol_min", "numerical")
-		self.add_alarm(True, "FIO2", 0, 100, "fio2", "numerical")
-        
-	@Slot()
-	def init_pcv_alarm(self):
-		self.clear()
-		self.add_alarm(True, "Pressão de Pico", 0, 100, "pe", "numerical")
-		self.add_alarm(True, "Volume Tidal", 0, 100, "ve", "numerical")
-		self.add_alarm(True, "Volume Minuto", 0, 100, "vol_min", "numerical")
-		self.add_alarm(True, "FIO2", 0, 100, "fio2", "numerical")
+	@Slot(str)
+	def init_pcv_alarm(self, mode):
+		if self.current_mode != mode:
+			self.clear()
+			self.current_mode = mode
+			self.add_alarm(True, "Pressão de Pico", 0, 100, "pe", "numerical")
+			self.add_alarm(True, "Volume Tidal", 0, 100, "ve", "numerical")
+			self.add_alarm(True, "Volume Minuto", 0, 100, "vol_min", "numerical")
+			self.add_alarm(True, "FIO2", 0, 100, "fio2", "numerical")
         
 	@Slot(bool, str, float, float)
 	def add_alarm(self, is_enabled, name, min_val, max_val, key, alarm_type):
 		self.add(Alarm(is_enabled, name, min_val, max_val, key, alarm_type))
+			
         
 	@Slot(int, bool)
 	def set_is_enabled(self, index, value):

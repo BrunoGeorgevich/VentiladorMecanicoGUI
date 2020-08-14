@@ -28,6 +28,14 @@ Item {
         ls.currentIndex += 1
     }
 
+    function clear() {
+        let i = 0
+        ls.currentIndex = 0
+        for (i = 0; i <= numOfPoints*2; i++) {
+            addPoint(0)
+        }
+    }
+
     Layout.fillHeight: true
     Layout.fillWidth: true
 
